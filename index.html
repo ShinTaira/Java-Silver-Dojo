@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 7.1 - AI Fix)</title>
+    <title>Java Silver 完全攻略道場 (Ver 7.2 - Custom Model)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <style>
@@ -85,7 +85,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 7.1 AI Parse Fix</p>
+                <p class="text-[10px] text-slate-400">Ver 7.2 Custom Model</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -239,7 +239,6 @@
                     </div>
 
                     <form id="create-form" onsubmit="creator.addQuestion(event)" class="p-6 space-y-6">
-
                         <!-- Chapter Select -->
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">カテゴリ（章）</label>
@@ -272,7 +271,6 @@
                             </div>
                             <input type="hidden" id="create-cat-name" value="基本構文">
                         </div>
-
                         <!-- Question Text -->
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">問題文</label>
@@ -280,7 +278,6 @@
                                 class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition"
                                 placeholder="ここに問題文を入力してください..." required></textarea>
                         </div>
-
                         <!-- Code (Optional) -->
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">Javaコード <span
@@ -289,7 +286,6 @@
                                 class="w-full bg-slate-800 text-slate-200 font-mono text-sm rounded-lg p-3 border border-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none transition"
                                 placeholder="public class Main { ... }"></textarea>
                         </div>
-
                         <!-- Options -->
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-3">選択肢と正解</label>
@@ -325,7 +321,6 @@
                             </div>
                             <p class="text-xs text-emerald-600 mt-2 font-bold ml-1">※ 正解のラジオボタンを選択してください</p>
                         </div>
-
                         <!-- Explanation -->
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">解説</label>
@@ -333,7 +328,6 @@
                                 class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition"
                                 placeholder="なぜその答えになるのか解説を入力してください..." required></textarea>
                         </div>
-
                         <!-- Submit -->
                         <div class="pt-4 border-t border-slate-100 flex justify-end">
                             <button type="submit"
@@ -370,12 +364,20 @@
                         </div>
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-bold text-slate-500">使用モデル</label>
-                            <select id="api-model-select"
-                                class="border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-white">
-                                <option value="gemini-1.5-flash">gemini-1.5-flash (推奨・高速)</option>
-                                <option value="gemini-1.5-pro">gemini-1.5-pro (高精度)</option>
-                                <option value="gemini-1.0-pro">gemini-1.0-pro (安定版)</option>
-                            </select>
+                            <div class="space-y-2">
+                                <select id="api-model-select"
+                                    class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-white focus:ring-2 focus:ring-indigo-500 transition"
+                                    onchange="aiTutor.toggleCustomModelInput()">
+                                    <option value="gemini-1.5-flash">gemini-1.5-flash (推奨・高速)</option>
+                                    <option value="gemini-1.5-pro">gemini-1.5-pro (高精度)</option>
+                                    <option value="gemini-pro">gemini-pro (旧安定版)</option>
+                                    <option value="custom">カスタム入力...</option>
+                                </select>
+                                <input type="text" id="api-model-custom"
+                                    class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-slate-50 hidden focus:ring-2 focus:ring-indigo-500"
+                                    placeholder="例: gemini-2.0-flash-exp">
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-1">※404エラーが出る場合はモデルを変更してください。</p>
                         </div>
                     </div>
                     <div id="key-status" class="text-xs text-slate-400 mt-3 flex items-center gap-1">
@@ -531,7 +533,7 @@
 
             init() {
                 try {
-                    const saved = localStorage.getItem('javaSilverAI_v7_1');
+                    const saved = localStorage.getItem('javaSilverAI_v7_2');
                     if (saved) {
                         const parsed = JSON.parse(saved);
                         this.data = { ...this.data, ...parsed };
@@ -546,7 +548,7 @@
             save() {
                 try {
                     if (this.data.history.length > 50) this.data.history = this.data.history.slice(-50);
-                    localStorage.setItem('javaSilverAI_v7_1', JSON.stringify(this.data));
+                    localStorage.setItem('javaSilverAI_v7_2', JSON.stringify(this.data));
                 } catch (e) { console.error("Save error", e); }
                 this.updateDashboard();
             },
@@ -594,7 +596,6 @@
                 grid.innerHTML = '';
                 const chapters = {};
 
-                // Grouping Logic
                 for (const q of this.data.questions) {
                     let key = 'others';
                     const lowerId = q.id.toLowerCase();
@@ -718,10 +719,6 @@
                 } else if (mode === 'mock') {
                     list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40);
                     modeName = '模擬試験';
-                } else {
-                    list = [...this.data.questions].filter(q => q.id.startsWith('ai'));
-                    if (list.length === 0) list = this.data.questions;
-                    modeName = 'AI/その他';
                 }
 
                 if (list.length === 0) return alert('該当する問題がありません。');
@@ -908,7 +905,6 @@
                 const explanation = document.getElementById('create-explanation').value;
 
                 // ID Generation Strategy: ch{num}-{timestamp}
-                // This ensures it falls into correct chapter category automatically
                 const idPrefix = chapterNum === '99' ? 'user-' : `ch${chapterNum}-user-`;
                 const newId = idPrefix + Date.now();
 
@@ -973,31 +969,56 @@
             },
             resetAll() {
                 if (confirm('全てのデータを削除しますか？')) {
-                    localStorage.removeItem('javaSilverAI_v7_1');
+                    localStorage.removeItem('javaSilverAI_v7_2');
                     location.reload();
                 }
             }
         };
 
         const aiTutor = {
-            apiKey: '', model: 'auto',
+            apiKey: '', model: 'gemini-1.5-flash',
             init() {
                 this.apiKey = localStorage.getItem('gemini_api_key') || '';
-                this.model = localStorage.getItem('gemini_api_model') || 'auto';
+                this.model = localStorage.getItem('gemini_api_model') || 'gemini-1.5-flash';
                 const select = document.getElementById('api-model-select');
-                if (select) select.value = this.model;
+                if (select) {
+                    if (['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.0-pro'].includes(this.model)) {
+                        select.value = this.model;
+                        document.getElementById('api-model-custom').classList.add('hidden');
+                    } else {
+                        select.value = 'custom';
+                        document.getElementById('api-model-custom').classList.remove('hidden');
+                        document.getElementById('api-model-custom').value = this.model;
+                    }
+                }
                 this.updateStatus();
+            },
+            toggleCustomModelInput() {
+                const val = document.getElementById('api-model-select').value;
+                const customInput = document.getElementById('api-model-custom');
+                if (val === 'custom') {
+                    customInput.classList.remove('hidden');
+                } else {
+                    customInput.classList.add('hidden');
+                }
             },
             saveKey() {
                 const key = document.getElementById('api-key-input').value.trim();
-                const model = document.getElementById('api-model-select').value;
-                if (key) { localStorage.setItem('gemini_api_key', key); localStorage.setItem('gemini_api_model', model); alert('保存しました'); this.init(); }
-                else { localStorage.setItem('gemini_api_model', model); this.model = model; alert('設定更新'); }
+                let model = document.getElementById('api-model-select').value;
+                if (model === 'custom') {
+                    model = document.getElementById('api-model-custom').value.trim();
+                }
+
+                if (key) localStorage.setItem('gemini_api_key', key);
+                localStorage.setItem('gemini_api_model', model);
+                this.model = model;
+                alert('設定を保存しました。');
+                this.init();
             },
             updateStatus() {
                 const statusEl = document.getElementById('key-status');
                 if (this.apiKey) {
-                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み';
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み (' + this.model + ')';
                     statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold';
                     document.getElementById('btn-generate').disabled = false;
                 } else {
@@ -1007,7 +1028,6 @@
                 }
             },
             analyzeWeakness() {
-                // Optimized analysis
                 if (app.data.questions.length === 0) return "Java Silver全般";
 
                 const cats = {};
@@ -1048,45 +1068,24 @@
                 出力は以下のJSON配列形式のみ。Markdown記法は含めないでください。
                 [{"id": "ai-${Date.now()}-1", "category": "...", "text": "...", "code": "...", "options": ["..."], "answer": 0, "explanation": "..."}]`;
 
-                const tryModel = async (model) => {
-                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${this.apiKey}`;
+
                     const res = await fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
                     });
+
                     if (!res.ok) {
                         const err = await res.json().catch(() => ({}));
                         throw new Error(err.error?.message || res.statusText);
                     }
-                    return res.json();
-                };
 
-                try {
-                    let data;
-                    if (this.model === 'auto') {
-                        try {
-                            data = await tryModel('gemini-1.5-flash');
-                        } catch (e) {
-                            console.warn('flash failed, retrying with pro', e);
-                            data = await tryModel('gemini-pro');
-                        }
-                    } else {
-                        data = await tryModel(this.model);
-                    }
-
+                    const data = await res.json();
                     let text = data.candidates[0].content.parts[0].text;
-
-                    // --- Powerful JSON Extraction ---
-                    // Extract only the array part using regex to avoid intro/outro text
                     const jsonMatch = text.match(/\[\s*\{.*\}\s*\]/s);
-                    if (!jsonMatch) {
-                        // Fallback simple clean
-                        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-                    } else {
-                        text = jsonMatch[0];
-                    }
-
+                    text = jsonMatch ? jsonMatch[0] : text.replace(/```json/g, '').replace(/```/g, '').trim();
                     const newQs = JSON.parse(text);
 
                     newQs.forEach((q, i) => {
@@ -1097,7 +1096,7 @@
                     alert('5問の問題を追加しました！「AI生成」カテゴリから演習できます。');
                     app.updateDashboard();
                 } catch (e) {
-                    alert(`AI生成エラー: ${e.message}\n\nAPIキーが正しいか確認してください。`);
+                    alert(`AI生成エラー: ${e.message}\n\nモデル名が存在しません。設定から別のモデルに変更してください。`);
                 } finally {
                     btn.classList.remove('hidden');
                     loading.classList.add('hidden');
@@ -1105,7 +1104,6 @@
             }
         };
         app.init();
-        // Bind creator initial label
         creator.updateCategoryLabel();
     </script>
 </body>
