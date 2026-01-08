@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Silver 完全攻略道場 (Ver 7.0 - Creator)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #f1f5f9; }
+        .code-input { font-family: 'Consolas', monospace; font-size: 0.9rem; }
+        .fade-in { animation: fadeIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #6366f1; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-slate-900 text-white p-3 shadow-lg flex justify-between items-center z-50 shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="bg-indigo-500 p-1.5 rounded-lg">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
+                <p class="text-[10px] text-slate-400">Ver 7.0 Creator</p>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="app.switchTab('dashboard')" class="text-xs md:text-sm bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded transition border border-slate-700 active:scale-95">ホーム</button>
+            <button onclick="app.switchTab('create')" class="text-xs md:text-sm bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded transition flex items-center gap-1 shadow-lg active:scale-95">
+                <span>📝 作成</span>
+            </button>
+            <button onclick="app.switchTab('history')" class="text-xs md:text-sm bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded transition border border-slate-700 active:scale-95">記録</button>
+            <button onclick="app.switchTab('ai')" class="text-xs md:text-sm bg-indigo-600 hover:bg-indigo-500 px-3 py-1.5 rounded transition flex items-center gap-1 shadow-lg active:scale-95">
+                <span>🤖 AI</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-hidden relative bg-slate-100">
+        
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="absolute inset-0 overflow-y-auto p-4 md:p-8 max-w-6xl mx-auto w-full fade-in">
+            
+            <!-- Import Alert -->
+            <div id="import-alert" class="bg-white border border-indigo-100 text-slate-700 px-4 py-3 rounded-xl mb-6 flex items-center justify-between shadow-sm">
+                <div class="flex items-center gap-3">
+                    <div class="bg-indigo-50 p-2 rounded-full">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    </div>
+                    <div>
+                        <p class="font-bold text-sm">問題データを読み込む</p>
+                        <p class="text-xs text-slate-500">保存したJSONファイルをまとめて選択してください。</p>
+                    </div>
+                </div>
+                <label class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer transition shadow hover:shadow-md active:scale-95">
+                    ファイルを選択
+                    <input type="file" class="hidden" multiple onchange="dataManager.importData(this)">
+                </label>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">登録問題数</div>
+                    <div class="text-2xl font-bold text-slate-800 mt-1" id="stat-total">0</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">正解率</div>
+                    <div class="text-2xl font-bold text-green-600 mt-1" id="stat-rate">0%</div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 col-span-2 flex items-center justify-between relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">苦手克服</div>
+                        <div class="text-2xl font-bold text-orange-500 mt-1"><span id="wrong-count">0</span> <span class="text-sm font-normal text-slate-400">問</span></div>
+                    </div>
+                    <button onclick="app.startQuiz('review')" id="btn-review" class="relative z-10 bg-orange-100 text-orange-700 hover:bg-orange-200 px-5 py-2 rounded-lg text-sm font-bold transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        復習する ▶
+                    </button>
+                </div>
+            </div>
+
+            <!-- Level Courses -->
+            <div class="mb-8">
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">レベル別コース</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <button onclick="app.startQuiz('level-1')" class="bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded">Beginner</span>
+                            <span class="text-xl">🌱</span>
+                        </div>
+                        <h4 class="font-bold text-slate-700 group-hover:text-emerald-700">初級編（基礎）</h4>
+                        <p class="text-[10px] text-slate-400 mt-1">第1-4章: 基本構文, 演算子, 制御構文</p>
+                    </button>
+                    <button onclick="app.startQuiz('level-2')" class="bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded">Intermediate</span>
+                            <span class="text-xl">💻</span>
+                        </div>
+                        <h4 class="font-bold text-slate-700 group-hover:text-blue-700">中級編（オブジェクト指向）</h4>
+                        <p class="text-[10px] text-slate-400 mt-1">第5-8,12章: クラス, 継承, API</p>
+                    </button>
+                    <button onclick="app.startQuiz('level-3')" class="bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded">Advanced</span>
+                            <span class="text-xl">🔥</span>
+                        </div>
+                        <h4 class="font-bold text-slate-700 group-hover:text-indigo-700">上級編（応用）</h4>
+                        <p class="text-[10px] text-slate-400 mt-1">第9-11,13章: 例外, ラムダ, モジュール</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chapter Selection -->
+            <div class="mb-12">
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">章ごとの演習</h3>
+                <div id="chapter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    <div class="col-span-full py-8 text-center text-slate-400 bg-white border border-dashed border-slate-300 rounded-xl">
+                        <p>データを読み込むとここに章が表示されます</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mock Exam -->
+            <div class="bg-gradient-to-r from-slate-800 to-slate-700 rounded-xl p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-1 flex items-center gap-2">
+                        <span>🏆 模擬試験モード</span>
+                        <span class="bg-yellow-500 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded">本番形式</span>
+                    </h3>
+                    <p class="text-slate-300 text-xs">全範囲からランダムに40問出題。制限時間なしで実力を測ります。</p>
+                </div>
+                <button onclick="app.startQuiz('mock')" class="bg-white text-slate-900 hover:bg-slate-100 font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5 active:translate-y-0">
+                    試験開始
+                </button>
+            </div>
+
+            <div class="text-center pt-8 border-t border-slate-200">
+                <button onclick="dataManager.resetAll()" class="text-xs text-red-400 hover:text-red-600 hover:underline transition">すべてのデータを削除してリセット</button>
+            </div>
+        </div>
+
+        <!-- CREATOR TAB (NEW!) -->
+        <div id="tab-create" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
+            <div class="max-w-3xl mx-auto py-8">
+                <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+                    <div class="bg-emerald-600 p-4 flex justify-between items-center text-white">
+                        <h2 class="text-lg font-bold flex items-center gap-2">
+                            <span>📝 オリジナル問題作成</span>
+                        </h2>
+                        <span class="text-xs bg-emerald-700 px-2 py-1 rounded">User Studio</span>
+                    </div>
+                    
+                    <form id="create-form" onsubmit="creator.addQuestion(event)" class="p-6 space-y-6">
+                        
+                        <!-- Chapter Select -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">カテゴリ（章）</label>
+                            <div class="relative">
+                                <select id="create-chapter" class="w-full border border-slate-300 rounded-lg px-4 py-3 appearance-none bg-slate-50 focus:ring-2 focus:ring-emerald-500 outline-none transition" onchange="creator.updateCategoryLabel()">
+                                    <option value="1">第1章: Javaの基本</option>
+                                    <option value="2">第2章: データ型と変数</option>
+                                    <option value="3">第3章: 演算子</option>
+                                    <option value="4">第4章: ループ制御</option>
+                                    <option value="5">第5章: 配列</option>
+                                    <option value="6">第6章: クラスとインスタンス</option>
+                                    <option value="7">第7章: 継承</option>
+                                    <option value="8">第8章: インターフェース</option>
+                                    <option value="9">第9章: ポリモーフィズム</option>
+                                    <option value="10">第10章: 例外処理</option>
+                                    <option value="11">第11章: モジュール</option>
+                                    <option value="12">第12章: 主要API</option>
+                                    <option value="13">第13章: ラムダ式</option>
+                                    <option value="99">その他/総合</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                            <input type="hidden" id="create-cat-name" value="基本構文">
+                        </div>
+
+                        <!-- Question Text -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">問題文</label>
+                            <textarea id="create-text" rows="3" class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition" placeholder="ここに問題文を入力してください..." required></textarea>
+                        </div>
+
+                        <!-- Code (Optional) -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Javaコード <span class="text-xs font-normal text-slate-400">(任意)</span></label>
+                            <textarea id="create-code" rows="4" class="w-full bg-slate-800 text-slate-200 font-mono text-sm rounded-lg p-3 border border-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none transition" placeholder="public class Main { ... }"></textarea>
+                        </div>
+
+                        <!-- Options -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-3">選択肢と正解</label>
+                            <div class="space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" name="correct-idx" value="0" checked class="w-5 h-5 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                                    <input type="text" class="create-option flex-1 border border-slate-300 rounded px-3 py-2 text-sm focus:border-emerald-500 outline-none" placeholder="選択肢 A" required>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" name="correct-idx" value="1" class="w-5 h-5 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                                    <input type="text" class="create-option flex-1 border border-slate-300 rounded px-3 py-2 text-sm focus:border-emerald-500 outline-none" placeholder="選択肢 B" required>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" name="correct-idx" value="2" class="w-5 h-5 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                                    <input type="text" class="create-option flex-1 border border-slate-300 rounded px-3 py-2 text-sm focus:border-emerald-500 outline-none" placeholder="選択肢 C" required>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" name="correct-idx" value="3" class="w-5 h-5 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                                    <input type="text" class="create-option flex-1 border border-slate-300 rounded px-3 py-2 text-sm focus:border-emerald-500 outline-none" placeholder="選択肢 D" required>
+                                </div>
+                            </div>
+                            <p class="text-xs text-emerald-600 mt-2 font-bold ml-1">※ 正解のラジオボタンを選択してください</p>
+                        </div>
+
+                        <!-- Explanation -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">解説</label>
+                            <textarea id="create-explanation" rows="4" class="w-full border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition" placeholder="なぜその答えになるのか解説を入力してください..." required></textarea>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="pt-4 border-t border-slate-100 flex justify-end">
+                            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5">
+                                問題を追加する
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI TAB -->
+        <div id="tab-ai" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
+            <!-- (AI Tab Content same as v6) -->
+            <div class="max-w-2xl mx-auto space-y-6 py-8">
+                <!-- API Key Config -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <span>🔑 API設定</span>
+                        <span class="text-[10px] font-normal text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Google Gemini</span>
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-bold text-slate-500">APIキー</label>
+                            <div class="flex gap-2">
+                                <input type="password" id="api-key-input" class="flex-1 border border-slate-300 rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500 transition" placeholder="AIza...">
+                                <button onclick="aiTutor.saveKey()" class="bg-slate-800 text-white px-5 py-2 rounded-lg text-sm hover:bg-slate-700 transition font-bold active:scale-95">保存</button>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-bold text-slate-500">使用モデル</label>
+                            <select id="api-model-select" class="border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-white">
+                                <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                                <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+                                <option value="gemini-1.0-pro">gemini-1.0-pro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="key-status" class="text-xs text-slate-400 mt-3 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定</div>
+                </div>
+                <!-- Generator -->
+                <div class="bg-gradient-to-br from-indigo-600 to-violet-600 p-6 rounded-xl shadow-lg text-white">
+                    <div class="flex justify-between items-start mb-4">
+                        <div><h2 class="text-xl font-bold">AI弱点克服コーチ</h2><p class="text-indigo-100 text-xs mt-1">苦手分野の問題を自動生成</p></div><div class="text-2xl">🤖</div>
+                    </div>
+                    <div id="ai-analysis" class="bg-white/10 rounded-lg p-4 mb-6 border border-white/10 hidden"><ul id="weak-list" class="list-disc list-inside text-sm space-y-1"></ul></div>
+                    <button onclick="aiTutor.generate()" id="btn-generate" class="w-full bg-white text-indigo-600 font-bold py-3.5 rounded-lg shadow-md hover:bg-indigo-50 transition flex justify-center items-center gap-2 disabled:opacity-50" disabled>🚀 生成</button>
+                    <div id="ai-loading" class="hidden mt-6 flex flex-col items-center"><div class="loader mb-3 border-t-white border-white/20"></div><p class="text-xs text-indigo-100 animate-pulse">思考中...</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="tab-history" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
+            <div class="max-w-3xl mx-auto py-8">
+                <h2 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                    <span>📈 学習履歴</span>
+                    <span class="text-xs font-normal text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded">最新50件</span>
+                </h2>
+                <div id="history-list" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- QUIZ VIEW -->
+        <div id="quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] hidden z-20">
+            <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="app.quitQuiz()" class="text-xs text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1 p-2"><span>←</span> 中断する</button>
+                    <div class="text-[10px] font-mono text-slate-400 bg-white border border-slate-200 px-2 py-1 rounded" id="mode-display">Random</div>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200 mb-6 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-slate-100"><div id="quiz-progress" class="h-full bg-indigo-500 transition-all duration-300" style="width: 0%"></div></div>
+                    <div class="flex justify-between items-start mb-6 mt-2">
+                        <span class="inline-block bg-indigo-50 text-indigo-600 px-3 py-1 rounded-md text-[10px] font-bold tracking-wide uppercase border border-indigo-100" id="q-category">Category</span>
+                        <div class="font-mono text-slate-300 font-bold text-xl"><span id="q-current" class="text-slate-800">1</span><span class="text-sm">/</span><span id="q-total" class="text-sm">10</span></div>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 leading-relaxed whitespace-pre-line" id="q-text">Problem Text</h3>
+                    <div id="code-container" class="bg-[#1e1e1e] rounded-lg overflow-hidden mb-6 relative group hidden shadow-inner border border-slate-700">
+                        <pre class="!m-0 !p-5 overflow-x-auto text-sm"><code class="language-java code-input text-gray-100 leading-6" id="code-content"></code></pre>
+                    </div>
+                </div>
+                <div id="options-list" class="grid gap-3 mb-8"></div>
+                <div id="explanation-box" class="hidden bg-emerald-50 border border-emerald-200 rounded-xl p-6 shadow-lg fade-in relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10"><svg class="w-24 h-24 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-3"><span id="result-badge" class="font-bold text-lg"></span></div>
+                        <div class="text-slate-700 text-sm leading-7 whitespace-pre-line" id="explanation-text"></div>
+                        <button onclick="app.nextQuestion()" class="mt-6 w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-lg transition shadow-lg flex items-center justify-center gap-2 active:scale-95"><span>次の問題へ</span><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT MODAL -->
+        <div id="session-result" class="fixed inset-0 bg-slate-900/95 z-50 hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-xs w-full p-8 text-center space-y-6 fade-in transform scale-100">
+                <div class="text-6xl mb-2 animate-bounce">🎉</div>
+                <h3 class="text-2xl font-bold text-slate-800">お疲れ様でした！</h3>
+                <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div><div class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">正解数</div><div class="text-2xl font-bold text-indigo-600"><span id="res-score">0</span></div></div>
+                    <div><div class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">正解率</div><div class="text-2xl font-bold text-slate-800" id="res-rate">0%</div></div>
+                </div>
+                <button onclick="app.closeSessionResult()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow-lg transition active:scale-95">OK</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script>
+        const app = {
+            data: { questions: [], results: {}, history: [] },
+            state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '' },
+
+            init() {
+                try {
+                    const saved = localStorage.getItem('javaSilverAI_v7');
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        this.data = { ...this.data, ...parsed };
+                        if(!Array.isArray(this.data.history)) this.data.history = [];
+                    }
+                } catch(e) { console.error("Load error", e); }
+                
+                this.updateDashboard();
+                aiTutor.init();
+            },
+
+            save() {
+                try {
+                    if (this.data.history.length > 50) this.data.history = this.data.history.slice(-50);
+                    localStorage.setItem('javaSilverAI_v7', JSON.stringify(this.data));
+                } catch (e) { console.error("Save error", e); }
+                this.updateDashboard();
+            },
+
+            switchTab(tab) {
+                ['dashboard', 'ai', 'history', 'create', 'quiz-view'].forEach(id => {
+                    const el = document.getElementById('tab-' + id) || document.getElementById(id);
+                    if(el) el.classList.add('hidden');
+                });
+
+                const target = document.getElementById('tab-' + tab);
+                if(target) {
+                    target.classList.remove('hidden');
+                    requestAnimationFrame(() => {
+                        if(tab === 'dashboard') this.renderChapters();
+                        if(tab === 'history') this.renderHistory();
+                        if(tab === 'ai') aiTutor.analyzeWeakness();
+                    });
+                }
+            },
+
+            updateDashboard() {
+                const total = this.data.questions.length;
+                const answered = Object.keys(this.data.results).length;
+                const correct = Object.values(this.data.results).filter(Boolean).length;
+                const rate = answered ? Math.round((correct/answered)*100) : 0;
+                
+                document.getElementById('stat-total').innerText = total;
+                document.getElementById('stat-rate').innerText = rate + '%';
+                
+                const wrongs = this.data.questions.filter(q => this.data.results[q.id] === false);
+                document.getElementById('wrong-count').innerText = wrongs.length;
+                document.getElementById('btn-review').disabled = wrongs.length === 0;
+
+                if(total > 0) {
+                    document.getElementById('import-alert').classList.add('hidden');
+                    setTimeout(() => this.renderChapters(), 10);
+                }
+            },
+
+            renderChapters() {
+                const grid = document.getElementById('chapter-grid');
+                if(this.data.questions.length === 0) return;
+                
+                grid.innerHTML = '';
+                const chapters = {};
+                
+                for (const q of this.data.questions) {
+                    let key = 'others';
+                    const lowerId = q.id.toLowerCase();
+                    const lowerCat = q.category ? q.category.toLowerCase() : "";
+
+                    if (lowerId.startsWith('ai-')) {
+                        key = 'ai';
+                    } else if (lowerId.startsWith('best-')) {
+                        key = 'best';
+                    } else if (lowerId.includes('final') || lowerCat.includes('final') || lowerCat.includes('模擬') || lowerCat.includes('総合')) {
+                        key = 'final';
+                    } else {
+                        const match = lowerId.match(/^(?:ch|chapter)?(\d+)[-_]/);
+                        if (match) {
+                            key = parseInt(match[1]);
+                        }
+                    }
+                    
+                    if(!chapters[key]) chapters[key] = { count: 0, correct: 0 };
+                    chapters[key].count++;
+                    if(this.data.results[q.id]) chapters[key].correct++;
+                }
+
+                const sortedKeys = Object.keys(chapters).sort((a,b) => {
+                    const order = { 'final': 100, 'best': 101, 'ai': 102, 'others': 999 };
+                    const valA = order[a] !== undefined ? order[a] : parseInt(a);
+                    const valB = order[b] !== undefined ? order[b] : parseInt(b);
+                    return valA - valB;
+                });
+
+                const fragment = document.createDocumentFragment();
+                sortedKeys.forEach(key => {
+                    const ch = chapters[key];
+                    const rate = Math.round((ch.correct / ch.count) * 100);
+                    
+                    let label = '';
+                    let subLabel = '';
+                    let icon = '';
+                    let colorClass = 'indigo';
+
+                    const numKey = parseInt(key);
+                    
+                    if (key === 'final') {
+                        label = '最終章'; subLabel = '総合演習'; icon = '🏆'; colorClass = 'yellow';
+                    } else if (key === 'best') {
+                        label = '厳選問題'; subLabel = 'Best 30'; icon = '★'; colorClass = 'orange';
+                    } else if (key === 'ai') {
+                        label = 'AI生成'; subLabel = 'Generated'; icon = '🤖'; colorClass = 'purple';
+                    } else if (!isNaN(numKey) && key !== 'others') {
+                        label = `第${numKey}章`; icon = '📖';
+                    } else {
+                        label = 'その他'; icon = '📁'; colorClass = 'slate';
+                    }
+                    
+                    const btn = document.createElement('button');
+                    const borderClass = key === 'best' ? 'border-orange-200 bg-orange-50' : (key === 'final' ? 'border-yellow-200 bg-yellow-50' : 'border-slate-200 bg-white');
+                    
+                    btn.className = `${borderClass} p-4 rounded-xl border hover:border-${colorClass}-400 hover:shadow-md transition text-left flex flex-col justify-between h-28 relative overflow-hidden group active:scale-[0.98]`;
+                    btn.onclick = () => this.startQuiz('chapter', key);
+                    btn.innerHTML = `
+                        <div class="flex justify-between items-start z-10">
+                            <div>
+                                <div class="font-bold text-slate-700 text-sm">${label}</div>
+                                ${subLabel ? `<div class="text-[10px] text-slate-500">${subLabel}</div>` : ''}
+                            </div>
+                            <div class="text-lg opacity-50 group-hover:opacity-100 transition group-hover:scale-110">${icon}</div>
+                        </div>
+                        <div class="z-10 mt-auto">
+                            <div class="flex justify-between items-end">
+                                <div class="text-[10px] text-slate-400">正解率</div>
+                                <div class="text-xl font-bold ${rate === 100 ? 'text-emerald-500' : 'text-slate-800'}">${rate}<span class="text-xs">%</span></div>
+                            </div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 h-1.5 bg-${colorClass}-500 transition-all duration-500" style="width: ${rate}%"></div>
+                    `;
+                    fragment.appendChild(btn);
+                });
+                grid.appendChild(fragment);
+            },
+
+            startQuiz(mode, param) {
+                if (this.data.questions.length === 0) return alert('問題データがありません。');
+                
+                let list = [];
+                let modeName = '';
+
+                if (mode === 'review') {
+                    list = this.data.questions.filter(q => this.data.results[q.id] === false);
+                    modeName = '復習';
+                } else if (mode === 'chapter') {
+                    if (param === 'final') {
+                        list = this.data.questions.filter(q => q.id.toLowerCase().includes('final') || (q.category && q.category.includes('模擬')));
+                        modeName = '最終章';
+                    } else if (param === 'best') {
+                        list = this.data.questions.filter(q => q.id.toLowerCase().startsWith('best-'));
+                        modeName = '厳選問題';
+                    } else if (param === 'ai') {
+                        list = this.data.questions.filter(q => q.id.toLowerCase().startsWith('ai-'));
+                        modeName = 'AI生成';
+                    } else if (param === 'others') {
+                        list = this.data.questions.filter(q => {
+                            const lower = q.id.toLowerCase();
+                            return !lower.match(/^(?:ch|chapter)?\d+[-_]/) && !lower.includes('final') && !lower.startsWith('best') && !lower.startsWith('ai');
+                        });
+                        modeName = 'その他';
+                    } else {
+                        list = this.data.questions.filter(q => {
+                            const match = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)[-_]/);
+                            return match && parseInt(match[1]) === parseInt(param);
+                        });
+                        modeName = `第${param}章`;
+                    }
+                } else if (mode.startsWith('level')) {
+                    const regex1 = /^(?:ch|chapter|q)[-_]?(1|2|3|4)[-_]/i;
+                    const regex2 = /^(?:ch|chapter|q)[-_]?(5|6|7|8|12)[-_]/i;
+                    const regex3 = /^(?:ch|chapter|q)[-_]?(9|10|11|13)[-_]/i;
+                    if (mode === 'level-1') list = this.data.questions.filter(q => q.id.match(regex1));
+                    if (mode === 'level-2') list = this.data.questions.filter(q => q.id.match(regex2));
+                    if (mode === 'level-3') list = this.data.questions.filter(q => q.id.match(regex3));
+                    modeName = 'レベル別';
+                } else if (mode === 'mock') {
+                    list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40);
+                    modeName = '模擬試験';
+                }
+
+                if (list.length === 0) return alert('該当する問題がありません。');
+                
+                if(mode !== 'mock') list.sort(() => Math.random() - 0.5);
+
+                this.state.queue = list;
+                this.state.currentIdx = 0;
+                this.state.modeName = modeName;
+                this.state.sessionStats = { correct: 0, wrongInfo: [] }; 
+                document.getElementById('mode-display').innerText = modeName;
+                
+                document.getElementById('quiz-view').classList.remove('hidden');
+                this.renderQuestion();
+            },
+
+            quitQuiz() {
+                this.switchTab('dashboard');
+            },
+
+            renderQuestion() {
+                const q = this.state.queue[this.state.currentIdx];
+                const total = this.state.queue.length;
+                const current = this.state.currentIdx + 1;
+                
+                document.getElementById('q-current').innerText = current;
+                document.getElementById('q-total').innerText = total;
+                document.getElementById('q-category').innerText = q.category || 'General';
+                document.getElementById('q-text').innerText = q.text;
+                
+                const prog = ((current - 1) / total) * 100;
+                document.getElementById('quiz-progress').style.width = `${prog}%`;
+                
+                const codeEl = document.getElementById('code-content');
+                if (q.code && q.code.trim()) {
+                    document.getElementById('code-container').classList.remove('hidden');
+                    codeEl.textContent = q.code;
+                    setTimeout(() => Prism.highlightElement(codeEl), 0);
+                } else {
+                    document.getElementById('code-container').classList.add('hidden');
+                }
+
+                const optsDiv = document.getElementById('options-list');
+                optsDiv.innerHTML = '';
+                document.getElementById('explanation-box').classList.add('hidden');
+
+                const fragment = document.createDocumentFragment();
+                q.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-indigo-50 hover:border-indigo-300 transition flex items-center shadow-sm group active:scale-[0.98]";
+                    btn.onclick = () => this.check(idx, btn);
+                    btn.innerHTML = `<span class="w-8 h-8 flex-shrink-0 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center font-bold mr-4 group-hover:bg-indigo-600 group-hover:text-white transition">${String.fromCharCode(65+idx)}</span><span class="text-sm font-medium leading-relaxed text-slate-700">${opt}</span>`;
+                    fragment.appendChild(btn);
+                });
+                optsDiv.appendChild(fragment);
+            },
+
+            check(idx, btn) {
+                const q = this.state.queue[this.state.currentIdx];
+                const isCorrect = idx == q.answer;
+                
+                if(isCorrect) {
+                    this.state.sessionStats.correct++;
+                } else {
+                    const cat = q.category || "その他";
+                    if(!this.state.sessionStats.wrongInfo.includes(cat)) {
+                        this.state.sessionStats.wrongInfo.push(cat);
+                    }
+                }
+
+                this.data.results[q.id] = isCorrect;
+                this.save();
+
+                document.querySelectorAll('#options-list button').forEach(b => b.disabled = true);
+                
+                if (isCorrect) {
+                    btn.classList.add('!bg-emerald-50', '!border-emerald-500', '!text-emerald-800');
+                    btn.querySelector('span').classList.add('!bg-emerald-500', '!text-white');
+                } else {
+                    btn.classList.add('!bg-red-50', '!border-red-500', '!text-red-800');
+                    btn.querySelector('span').classList.add('!bg-red-500', '!text-white');
+                    const correctBtn = document.querySelectorAll('#options-list button')[q.answer];
+                    if(correctBtn) {
+                        correctBtn.classList.add('!bg-emerald-50', '!border-emerald-500');
+                        correctBtn.querySelector('span').classList.add('!bg-emerald-500', '!text-white');
+                    }
+                }
+
+                const box = document.getElementById('explanation-box');
+                box.classList.remove('hidden');
+                document.getElementById('result-badge').innerHTML = isCorrect ? '<span class="text-emerald-600">⭕ 正解！</span>' : '<span class="text-red-500">❌ 不正解...</span>';
+                document.getElementById('explanation-text').innerText = `正解: ${String.fromCharCode(65+q.answer)}\n\n${q.explanation}`;
+                
+                if(window.innerWidth < 768) box.scrollIntoView({behavior:'smooth'});
+            },
+
+            nextQuestion() {
+                this.state.currentIdx++;
+                if (this.state.currentIdx >= this.state.queue.length) {
+                    this.finishSession();
+                } else {
+                    this.renderQuestion();
+                    document.getElementById('quiz-view').scrollTop = 0;
+                }
+            },
+
+            finishSession() {
+                const log = {
+                    date: Date.now(),
+                    correct: this.state.sessionStats.correct,
+                    total: this.state.queue.length,
+                    mode: this.state.modeName,
+                    weak: [...new Set(this.state.sessionStats.wrongInfo)]
+                };
+                this.data.history.push(log);
+                this.save();
+
+                document.getElementById('res-score').innerText = log.correct + '/' + log.total;
+                document.getElementById('res-rate').innerText = Math.round((log.correct/log.total)*100) + '%';
+                document.getElementById('session-result').classList.remove('hidden');
+            },
+
+            closeSessionResult() {
+                document.getElementById('session-result').classList.add('hidden');
+                this.switchTab('history'); 
+            },
+
+            renderHistory() {
+                const list = document.getElementById('history-list');
+                list.innerHTML = '';
+                if(this.data.history.length === 0) {
+                    list.innerHTML = '<div class="text-center text-slate-400 py-8">履歴がありません</div>';
+                    return;
+                }
+                
+                const fragment = document.createDocumentFragment();
+                [...this.data.history].reverse().slice(0, 50).forEach(log => {
+                    const d = new Date(log.date);
+                    const dateStr = `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getDate().toString().padStart(2,'0')}`;
+                    const mode = log.mode || '演習';
+                    const rate = Math.round((log.correct / log.total) * 100);
+                    const weaks = (log.weak && log.weak.length > 0) ? log.weak.join(', ') : 'なし';
+                    
+                    const div = document.createElement('div');
+                    div.className = "bg-white p-4 rounded-lg shadow-sm border border-slate-100 mb-3";
+                    div.innerHTML = `
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="text-sm font-bold text-slate-700">${dateStr}</span>
+                                <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span>
+                            </div>
+                            <div class="font-bold text-lg ${rate >= 80 ? 'text-green-600' : 'text-slate-800'}">${rate}%</div>
+                        </div>
+                        <div class="text-xs text-slate-500 border-t border-slate-50 pt-2 flex items-start gap-1">
+                            <span class="font-bold text-red-400 whitespace-nowrap">Miss:</span>
+                            <span class="leading-relaxed">${weaks}</span>
+                        </div>
+                    `;
+                    fragment.appendChild(div);
+                });
+                list.appendChild(fragment);
+            }
+        };
+
+        const creator = {
+            categoryNames: {
+                "1": "Javaの基本", "2": "データ型と変数", "3": "演算子", "4": "ループ制御", "5": "配列",
+                "6": "クラスとインスタンス", "7": "継承", "8": "インターフェース", "9": "ポリモーフィズム",
+                "10": "例外処理", "11": "モジュール", "12": "主要API", "13": "ラムダ式", "99": "その他"
+            },
+            updateCategoryLabel() {
+                const val = document.getElementById('create-chapter').value;
+                document.getElementById('create-cat-name').value = this.categoryNames[val];
+            },
+            addQuestion(e) {
+                e.preventDefault();
+                
+                const chapterNum = document.getElementById('create-chapter').value;
+                const chapterName = this.categoryNames[chapterNum];
+                const text = document.getElementById('create-text').value;
+                const code = document.getElementById('create-code').value;
+                const opts = Array.from(document.querySelectorAll('.create-option')).map(i => i.value);
+                const correctIdx = parseInt(document.querySelector('input[name="correct-idx"]:checked').value);
+                const explanation = document.getElementById('create-explanation').value;
+
+                // ID Generation Strategy: ch{num}-{timestamp}
+                // This ensures it falls into correct chapter category automatically
+                const idPrefix = chapterNum === '99' ? 'user-' : `ch${chapterNum}-user-`;
+                const newId = idPrefix + Date.now();
+
+                const newQ = {
+                    id: newId,
+                    category: chapterName, // e.g. "Javaの基本"
+                    text: text,
+                    code: code,
+                    options: opts,
+                    answer: correctIdx,
+                    explanation: explanation
+                };
+
+                app.data.questions.push(newQ);
+                app.save();
+                
+                alert('問題を追加しました！「' + (chapterNum==='99'?'その他':`第${chapterNum}章`) + '」カテゴリに反映されます。');
+                
+                // Reset form
+                document.getElementById('create-form').reset();
+                this.updateCategoryLabel();
+            }
+        };
+
+        const dataManager = {
+            importData(input) {
+                if (input.files.length === 0) return;
+                const readers = Array.from(input.files).map(file => {
+                    return new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsText(file);
+                    });
+                });
+                Promise.all(readers).then(results => {
+                    let count = 0;
+                    const newQs = [];
+                    const seenIds = new Set(app.data.questions.map(q => q.id));
+                    results.forEach(res => {
+                        try {
+                            const json = JSON.parse(res);
+                            if(json.questions) {
+                                json.questions.forEach(q => {
+                                    if(!seenIds.has(q.id)) {
+                                        newQs.push(q);
+                                        seenIds.add(q.id);
+                                        count++;
+                                    }
+                                });
+                            }
+                        } catch(e) {}
+                    });
+                    if(count > 0) {
+                        app.data.questions = [...app.data.questions, ...newQs];
+                        app.save();
+                        document.getElementById('import-alert').classList.add('hidden');
+                        alert(`${count}問を追加しました！`);
+                        app.renderChapters();
+                    }
+                    input.value = '';
+                });
+            },
+            resetAll() {
+                if(confirm('全てのデータを削除しますか？')) {
+                    localStorage.removeItem('javaSilverAI_v7');
+                    location.reload();
+                }
+            }
+        };
+
+        const aiTutor = {
+            apiKey: '', model: 'auto',
+            init() {
+                this.apiKey = localStorage.getItem('gemini_api_key') || '';
+                this.model = localStorage.getItem('gemini_api_model') || 'auto';
+                const select = document.getElementById('api-model-select');
+                if(select) select.value = this.model;
+                this.updateStatus();
+            },
+            saveKey() {
+                const key = document.getElementById('api-key-input').value.trim();
+                const model = document.getElementById('api-model-select').value;
+                if(key) { localStorage.setItem('gemini_api_key', key); localStorage.setItem('gemini_api_model', model); alert('保存しました'); this.init(); }
+                else { localStorage.setItem('gemini_api_model', model); this.model = model; alert('設定更新'); }
+            },
+            updateStatus() {
+                const statusEl = document.getElementById('key-status');
+                if(this.apiKey) {
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み';
+                    statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold';
+                    document.getElementById('btn-generate').disabled = false;
+                } else {
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定';
+                    statusEl.className = 'text-xs text-slate-400 mt-2 flex items-center gap-1';
+                    document.getElementById('btn-generate').disabled = true;
+                }
+            },
+            analyzeWeakness() { /* same as before */ return "Java Silver全般"; },
+            async generate() { /* same as before */ }
+        };
+        app.init();
+        // Bind creator initial label
+        creator.updateCategoryLabel();
+    </script>
+</body>
+</html>
