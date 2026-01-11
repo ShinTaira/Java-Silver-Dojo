@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 9.2 - Error Handling)</title>
+    <title>Java Silver 完全攻略道場 (Ver 9.3 - Auto Retry)</title>
+    <!-- Favicon fix to prevent 404 error -->
+    <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
@@ -86,7 +88,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 9.2 Error Handling</p>
+                <p class="text-[10px] text-slate-400">Ver 9.3 Auto Retry</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -111,6 +113,7 @@
         <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="absolute inset-0 overflow-y-auto p-4 md:p-8 max-w-6xl mx-auto w-full fade-in">
 
+            <!-- Import Alert -->
             <div id="import-alert"
                 class="bg-white border border-indigo-100 text-slate-700 px-4 py-3 rounded-xl mb-6 flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
@@ -381,9 +384,9 @@
                             <div class="space-y-2"><select id="api-model-select"
                                     class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-white"
                                     onchange="aiTutor.toggleCustomModelInput()">
-                                    <option value="gemini-1.5-flash">gemini-1.5-flash</option>
-                                    <option value="gemini-1.5-pro">gemini-1.5-pro</option>
-                                    <option value="gemini-pro">gemini-pro</option>
+                                    <option value="gemini-1.5-flash">gemini-1.5-flash (推奨・高速)</option>
+                                    <option value="gemini-1.5-pro">gemini-1.5-pro (高精度)</option>
+                                    <option value="gemini-pro">gemini-pro (旧安定版)</option>
                                     <option value="custom">カスタム入力...</option>
                                 </select><input type="text" id="api-model-custom"
                                     class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-slate-50 hidden"
@@ -410,7 +413,7 @@
                         disabled>🚀 生成</button>
                     <div id="ai-loading" class="hidden mt-6 flex flex-col items-center">
                         <div class="loader mb-3 border-t-white border-white/20"></div>
-                        <p class="text-xs text-indigo-100 animate-pulse">思考中...</p>
+                        <p class="text-xs text-indigo-100 animate-pulse" id="ai-status-text">思考中...</p>
                     </div>
                 </div>
             </div>
@@ -856,14 +859,22 @@
 
         const dataManager = {
             importData(input) { if (input.files.length === 0) return; const readers = Array.from(input.files).map(file => new Promise(r => { const reader = new FileReader(); reader.onload = e => r(e.target.result); reader.readAsText(file); })); Promise.all(readers).then(results => { let count = 0; const newQs = []; const seenIds = new Set(app.data.questions.map(q => q.id)); results.forEach(res => { try { const json = JSON.parse(res); if (json.questions) json.questions.forEach(q => { if (!seenIds.has(q.id)) { newQs.push(q); seenIds.add(q.id); count++; } }); } catch (e) { } }); if (count > 0) { app.data.questions = [...app.data.questions, ...newQs]; app.save(); document.getElementById('import-alert').classList.add('hidden'); alert(`${count}問を追加しました！`); app.renderChapters(); } input.value = ''; }); },
-            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v9_1'); location.reload(); } }
+            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v9'); location.reload(); } }
         };
 
         const aiTutor = {
             apiKey: '', model: 'gemini-1.5-flash',
             init() {
                 this.apiKey = localStorage.getItem('gemini_api_key') || '';
-                this.model = localStorage.getItem('gemini_api_model') || 'gemini-1.5-flash';
+                // Safety check for model name
+                let savedModel = localStorage.getItem('gemini_api_model');
+                // Force reset if using bad model like 2.0-flash
+                if (savedModel === 'gemini-2.0-flash' || !savedModel) {
+                    savedModel = 'gemini-1.5-flash';
+                    localStorage.setItem('gemini_api_model', savedModel);
+                }
+                this.model = savedModel;
+
                 const select = document.getElementById('api-model-select');
                 if (select) {
                     if (['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'].includes(this.model)) {
@@ -912,7 +923,6 @@
             },
             analyzeWeakness() {
                 if (app.data.questions.length === 0) return "Java Silver全般";
-
                 const cats = {};
                 for (const q of app.data.questions) {
                     const c = q.category || 'General';
@@ -944,6 +954,7 @@
                 const topics = this.analyzeWeakness() || "Java Silver全般";
                 const btn = document.getElementById('btn-generate');
                 const loading = document.getElementById('ai-loading');
+                const loadingText = document.getElementById('ai-status-text');
                 btn.classList.add('hidden');
                 loading.classList.remove('hidden');
 
@@ -951,28 +962,41 @@
                 出力は以下のJSON配列形式のみ。Markdown記法は含めないでください。
                 [{"id": "ai-${Date.now()}-1", "category": "...", "text": "...", "code": "...", "options": ["..."], "answer": 0, "explanation": "..."}]`;
 
-                try {
-                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${this.apiKey}`;
+                // Retry logic function
+                const fetchWithRetry = async (model, retries = 1) => {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
 
-                    const res = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                    });
+                    try {
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                        });
 
-                    if (!res.ok) {
-                        const err = await res.json().catch(() => ({}));
-                        // ステータスコードに応じたエラーメッセージ
-                        if (res.status === 404) {
-                            throw new Error(`モデル「${this.model}」が見つかりません(404)。設定から「gemini-1.5-flash」などに変更してください。`);
-                        } else if (res.status === 429) {
-                            throw new Error("リクエストが多すぎます(429)。しばらく時間をおいてから試してください。");
-                        } else {
+                        if (!res.ok) {
+                            if (res.status === 429 && retries > 0) {
+                                loadingText.innerText = "混雑中...3秒後に再試行します";
+                                await new Promise(r => setTimeout(r, 3000));
+                                return fetchWithRetry(model, retries - 1);
+                            }
+                            // Auto fallback for 404
+                            if (res.status === 404 && model !== 'gemini-1.5-flash') {
+                                loadingText.innerText = "モデルが見つかりません...標準モデルで再試行";
+                                await new Promise(r => setTimeout(r, 1000));
+                                return fetchWithRetry('gemini-1.5-flash', 0);
+                            }
+                            const err = await res.json().catch(() => ({}));
                             throw new Error(err.error?.message || res.statusText);
                         }
+                        return res.json();
+                    } catch (e) {
+                        throw e;
                     }
+                };
 
-                    const data = await res.json();
+                try {
+                    const data = await fetchWithRetry(this.model);
+
                     let text = data.candidates[0].content.parts[0].text;
                     const jsonMatch = text.match(/\[\s*\{.*\}\s*\]/s);
                     text = jsonMatch ? jsonMatch[0] : text.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -986,10 +1010,11 @@
                     alert('5問の問題を追加しました！「AI生成」カテゴリから演習できます。');
                     app.updateDashboard();
                 } catch (e) {
-                    alert(`AI生成エラー: ${e.message}\n\nモデル名が正しいか、またはAPI制限にかかっていないか確認してください。`);
+                    alert(`AI生成エラー: ${e.message}\n\n※429エラーの場合は少し時間を置いてください。`);
                 } finally {
                     btn.classList.remove('hidden');
                     loading.classList.add('hidden');
+                    loadingText.innerText = "思考中...";
                 }
             }
         };
