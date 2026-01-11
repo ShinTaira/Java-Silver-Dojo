@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 9.4 - Auto Recovery)</title>
+    <title>Java Silver 完全攻略道場 (Ver 9.5 - Model Fallback)</title>
     <!-- Favicon fix -->
     <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -88,7 +88,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 9.4 Auto Recovery</p>
+                <p class="text-[10px] text-slate-400">Ver 9.5 Model Fallback</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -980,10 +980,12 @@
                                 return fetchWithRetry(model, retries - 1);
                             }
                             // Auto fallback for 404
-                            if (res.status === 404 && model !== 'gemini-1.5-flash') {
-                                loadingText.innerText = "モデルが見つかりません...標準モデルで再試行";
-                                await new Promise(r => setTimeout(r, 1000));
-                                return fetchWithRetry('gemini-1.5-flash', 0);
+                            if (res.status === 404) {
+                                if (model === 'gemini-1.5-flash') {
+                                    loadingText.innerText = "最新モデルが使えません...旧安定版で再試行";
+                                    await new Promise(r => setTimeout(r, 1000));
+                                    return fetchWithRetry('gemini-pro', 0);
+                                }
                             }
                             const err = await res.json().catch(() => ({}));
                             throw new Error(err.error?.message || res.statusText);
