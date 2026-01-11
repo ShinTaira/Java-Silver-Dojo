@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 13.0 - Multi-Select)</title>
+    <title>Java Silver 完全攻略道場 (Ver 14.3 - Refined)</title>
     <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -71,7 +71,6 @@
             background: #94a3b8;
         }
 
-        /* Selected Option Style */
         .option-selected {
             background-color: #e0e7ff !important;
             border-color: #6366f1 !important;
@@ -100,7 +99,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 13.0 Multi-Select</p>
+                <p class="text-[10px] text-slate-400">Ver 14.3 Refined</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -124,7 +123,6 @@
 
         <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="absolute inset-0 overflow-y-auto p-4 md:p-8 max-w-6xl mx-auto w-full fade-in">
-            <!-- (Same Dashboard Content) -->
             <div id="import-alert"
                 class="bg-white border border-indigo-100 text-slate-700 px-4 py-3 rounded-xl mb-6 flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
@@ -142,7 +140,7 @@
                     class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg cursor-pointer transition shadow hover:shadow-md active:scale-95">ファイルを選択<input
                         type="file" class="hidden" multiple onchange="dataManager.importData(this)"></label>
             </div>
-            <!-- Stats -->
+
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                     <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">登録問題数</div>
@@ -164,7 +162,7 @@
                         disabled>復習する ▶</button>
                 </div>
             </div>
-            <!-- SEARCH & BOOKMARK -->
+
             <div class="grid md:grid-cols-2 gap-4 mb-8">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                     <h3 class="text-sm font-bold text-slate-700 mb-2 flex items-center gap-2"><svg
@@ -195,7 +193,7 @@
                         disabled>解く ▶</button>
                 </div>
             </div>
-            <!-- Mock Exam -->
+
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <span>🏆 模擬試験</span><span
@@ -212,7 +210,7 @@
                     </button>
                 </div>
             </div>
-            <!-- Level Courses -->
+
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">レベル別コース</h3>
                 <div class="grid md:grid-cols-3 gap-4">
@@ -242,7 +240,7 @@
                     </button>
                 </div>
             </div>
-            <!-- Chapter Selection -->
+
             <div class="mb-12">
                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">章ごとの演習</h3>
                 <div id="chapter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -269,6 +267,18 @@
                         <option value="mock">模擬試験</option>
                         <option value="level">レベル別演習</option>
                         <option value="1">第1章</option>
+                        <option value="2">第2章</option>
+                        <option value="3">第3章</option>
+                        <option value="4">第4章</option>
+                        <option value="5">第5章</option>
+                        <option value="6">第6章</option>
+                        <option value="7">第7章</option>
+                        <option value="8">第8章</option>
+                        <option value="9">第9章</option>
+                        <option value="10">第10章</option>
+                        <option value="11">第11章</option>
+                        <option value="12">第12章</option>
+                        <option value="13">第13章</option>
                         <option value="final">最終章</option>
                     </select>
                 </div>
@@ -328,7 +338,7 @@
                                 class="w-full bg-slate-800 text-slate-200 font-mono text-sm rounded-lg p-3 border border-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none transition"
                                 placeholder="public class Main { ... }"></textarea></div>
 
-                        <!-- Dynamic Options with Checkbox for Multi-Select -->
+                        <!-- Dynamic Options -->
                         <div>
                             <div class="flex justify-between items-center mb-3">
                                 <label class="block text-sm font-bold text-slate-700">選択肢と正解 <span
@@ -417,7 +427,7 @@
             </div>
         </div>
 
-        <!-- QUIZ VIEW (Multi-select enabled) -->
+        <!-- QUIZ VIEW -->
         <div id="quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] hidden z-20">
             <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
                 <div class="flex justify-between items-center mb-6"><button onclick="app.quitQuiz()"
@@ -426,6 +436,12 @@
                     <div class="text-[10px] font-mono text-slate-400 bg-white border border-slate-200 px-2 py-1 rounded"
                         id="mode-display">Random</div>
                 </div>
+                <!-- Timer Display -->
+                <div id="quiz-timer"
+                    class="hidden text-center text-2xl font-mono font-bold text-slate-700 mb-4 bg-yellow-100 py-2 rounded-lg border border-yellow-200 shadow-sm">
+                    ⏳ 90:00
+                </div>
+
                 <div
                     class="bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200 mb-6 relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-1 bg-slate-100">
@@ -482,7 +498,6 @@
             </div>
         </div>
 
-        <!-- Result Modal -->
         <div id="session-result" class="fixed inset-0 bg-slate-900/95 z-50 hidden flex items-center justify-center p-4">
             <div
                 class="bg-white rounded-2xl shadow-2xl max-w-xs w-full p-8 text-center space-y-6 fade-in transform scale-100">
@@ -511,10 +526,25 @@
             data: { questions: [], results: {}, history: [], bookmarks: [] },
             state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', timer: null, currentSelection: new Set() },
             chartInstance: null,
+            categoryLinks: {
+                "Javaの基本": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/package-summary.html",
+                "データ型と変数": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html",
+                "演算子": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
+                "ループ制御": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/flow.html",
+                "配列": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/util/Arrays.html",
+                "クラスとインスタンス": "https://docs.oracle.com/javase/tutorial/java/javaOO/classes.html",
+                "継承": "https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html",
+                "インターフェース": "https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html",
+                "ポリモーフィズム": "https://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html",
+                "例外処理": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/Exception.html",
+                "モジュール": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/module/package-summary.html",
+                "主要API": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/time/LocalDate.html",
+                "ラムダ式": "https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html"
+            },
 
             init() {
                 try {
-                    const saved = localStorage.getItem('javaSilverAI_v13');
+                    const saved = localStorage.getItem('javaSilverAI_v14_2');
                     if (saved) {
                         const parsed = JSON.parse(saved);
                         this.data = { ...this.data, ...parsed };
@@ -531,27 +561,25 @@
             save() {
                 try {
                     if (this.data.history.length > 100) this.data.history = this.data.history.slice(-100);
-                    localStorage.setItem('javaSilverAI_v13', JSON.stringify(this.data));
+                    localStorage.setItem('javaSilverAI_v14_2', JSON.stringify(this.data));
                 } catch (e) { console.error("Save error", e); }
                 this.updateDashboard();
             },
 
             switchTab(tab) {
-                // Safety: Hide all known tabs
                 ['dashboard', 'ai', 'history', 'create', 'quiz-view'].forEach(id => {
                     const el = document.getElementById('tab-' + id) || document.getElementById(id);
                     if (el) el.classList.add('hidden');
                 });
-
                 const target = document.getElementById('tab-' + tab);
                 if (target) {
                     target.classList.remove('hidden');
-                    try {
+                    requestAnimationFrame(() => {
                         if (tab === 'dashboard') this.renderChapters();
                         if (tab === 'history') this.renderHistory();
                         if (tab === 'create') creator.renderUserQuestions();
                         if (tab === 'ai') aiTutor.analyzeWeakness();
-                    } catch (e) { console.error("Render error:", e); }
+                    });
                 }
             },
 
@@ -583,10 +611,25 @@
                         const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
                         const mode = log.mode || '演習';
                         const rate = Math.round((log.correct / log.total) * 100);
-                        const weaks = (log.weak && log.weak.length > 0) ? log.weak.join(', ') : 'なし';
+
+                        let weaksHtml = '<span class="text-slate-400 ml-1">なし</span>';
+                        if (log.weak && log.weak.length > 0) {
+                            weaksHtml = log.weak.map(cat => {
+                                const url = app.categoryLinks[cat];
+                                if (url) {
+                                    return `<a href="${url}" target="_blank" class="text-blue-500 hover:underline hover:text-blue-700 ml-1 inline-flex items-center gap-0.5">${cat}<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a>`;
+                                } else {
+                                    return `<span class="ml-1">${cat}</span>`;
+                                }
+                            }).join(', ');
+                        }
+
                         const div = document.createElement('div');
                         div.className = "bg-white p-4 rounded-lg shadow-sm border border-slate-100 mb-2";
-                        div.innerHTML = `<div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><span class="text-xs text-slate-500">${dateStr}</span><span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span></div><div class="font-bold text-lg ${rate >= 63 ? 'text-green-600' : 'text-slate-700'}">${rate}%</div></div><div class="text-[10px] text-slate-400 flex items-start gap-1"><span class="font-bold text-red-400 whitespace-nowrap">Miss:</span><span class="leading-tight">${weaks}</span></div>`;
+                        div.innerHTML = `
+                            <div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><span class="text-xs text-slate-500">${dateStr}</span><span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span></div><div class="font-bold text-lg ${rate >= 63 ? 'text-green-600' : 'text-slate-700'}">${rate}%</div></div>
+                            <div class="text-[10px] text-slate-500 flex items-start gap-1 flex-wrap"><span class="font-bold text-red-400 whitespace-nowrap">Miss:</span><span class="leading-tight">${weaksHtml}</span></div>
+                        `;
                         fragment.appendChild(div);
                     });
                     list.appendChild(fragment);
@@ -604,7 +647,7 @@
                             options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } } }, plugins: { legend: { labels: { font: { size: 10 } } } } }
                         });
                     }
-                } catch (e) { console.error("Chart Error", e); }
+                } catch (e) { console.error("History Error", e); }
             },
 
             updateDashboard() {
@@ -719,9 +762,7 @@
                 this.state.currentIdx = 0;
                 this.state.modeName = modeName;
                 this.state.sessionStats = { correct: 0, wrongInfo: [] };
-                // Reset selection for new quiz
                 this.state.currentSelection = new Set();
-
                 document.getElementById('mode-display').innerText = modeName;
 
                 if (this.state.timer) clearInterval(this.state.timer);
@@ -743,7 +784,6 @@
                 document.getElementById('quiz-view').classList.remove('hidden');
                 this.renderQuestion();
             },
-
             quitQuiz() {
                 if (this.state.timer) clearInterval(this.state.timer);
                 this.switchTab('dashboard');
@@ -791,9 +831,8 @@
                 optsDiv.innerHTML = '';
                 document.getElementById('explanation-box').classList.add('hidden');
                 document.getElementById('btn-submit-answer').classList.add('hidden');
-                this.state.currentSelection = new Set(); // Reset selection
+                this.state.currentSelection = new Set();
 
-                // Determine if multi-select
                 const isMulti = Array.isArray(q.answer);
                 if (isMulti) {
                     document.getElementById('q-text').innerText += "\n(※ 複数選択)";
@@ -814,7 +853,6 @@
                 const isMulti = Array.isArray(q.answer);
 
                 if (isMulti) {
-                    // Toggle selection
                     if (this.state.currentSelection.has(idx)) {
                         this.state.currentSelection.delete(idx);
                         btn.classList.remove('option-selected');
@@ -822,15 +860,10 @@
                         this.state.currentSelection.add(idx);
                         btn.classList.add('option-selected');
                     }
-                    // Show submit button if any selected
                     const submitBtn = document.getElementById('btn-submit-answer');
-                    if (this.state.currentSelection.size > 0) {
-                        submitBtn.classList.remove('hidden');
-                    } else {
-                        submitBtn.classList.add('hidden');
-                    }
+                    if (this.state.currentSelection.size > 0) submitBtn.classList.remove('hidden');
+                    else submitBtn.classList.add('hidden');
                 } else {
-                    // Single select - immediate check
                     this.check([idx]);
                 }
             },
@@ -852,11 +885,9 @@
 
             check(userAnswers) {
                 const q = this.state.queue[this.state.currentIdx];
-                // Normalize answers to arrays of numbers
                 const correctAns = Array.isArray(q.answer) ? q.answer : [q.answer];
                 const userAnsSorted = userAnswers.sort((a, b) => a - b);
                 const correctAnsSorted = correctAns.sort((a, b) => a - b);
-
                 const isCorrect = JSON.stringify(userAnsSorted) === JSON.stringify(correctAnsSorted);
 
                 if (isCorrect) { this.state.sessionStats.correct++; }
@@ -864,27 +895,22 @@
                 this.data.results[q.id] = isCorrect;
                 this.save();
 
-                // UI Updates
                 document.querySelectorAll('#options-list button').forEach(b => b.disabled = true);
                 document.getElementById('btn-submit-answer').classList.add('hidden');
 
-                // Highlight user answers and correct answers
                 userAnswers.forEach(idx => {
                     const btn = document.getElementById(`option-btn-${idx}`);
                     if (btn) {
                         if (correctAns.includes(idx)) {
-                            // Correct choice
                             btn.classList.add('!bg-emerald-50', '!border-emerald-500', '!text-emerald-800');
                             btn.querySelector('span').classList.add('!bg-emerald-500', '!text-white');
                         } else {
-                            // Wrong choice
                             btn.classList.add('!bg-red-50', '!border-red-500', '!text-red-800');
                             btn.querySelector('span').classList.add('!bg-red-500', '!text-white');
                         }
                     }
                 });
 
-                // Highlight missed correct answers
                 correctAns.forEach(idx => {
                     if (!userAnswers.includes(idx)) {
                         const btn = document.getElementById(`option-btn-${idx}`);
@@ -897,7 +923,6 @@
 
                 const box = document.getElementById('explanation-box');
                 box.classList.remove('hidden');
-
                 const correctLabel = correctAns.map(i => String.fromCharCode(65 + i)).join(', ');
                 document.getElementById('result-badge').innerHTML = isCorrect ? '<span class="text-emerald-600">⭕ 正解！</span>' : '<span class="text-red-500">❌ 不正解...</span>';
                 document.getElementById('explanation-text').innerText = `正解: ${correctLabel}\n\n${q.explanation}`;
@@ -926,7 +951,6 @@
         const creator = {
             categoryNames: { "1": "Javaの基本", "2": "データ型と変数", "3": "演算子", "4": "ループ制御", "5": "配列", "6": "クラスとインスタンス", "7": "継承", "8": "インターフェース", "9": "ポリモーフィズム", "10": "例外処理", "11": "モジュール", "12": "主要API", "13": "ラムダ式", "mock1": "模擬試験①", "mock2": "模擬試験②", "mock3": "模擬試験③", "99": "その他" },
             updateCategoryLabel() { const val = document.getElementById('create-chapter').value; document.getElementById('create-cat-name').value = this.categoryNames[val]; },
-
             addOption() {
                 const container = document.getElementById('options-container');
                 const idx = container.children.length;
@@ -939,35 +963,25 @@
                 `;
                 container.appendChild(div);
             },
-
-            removeOption(btn) {
-                btn.closest('.option-row').remove();
-                this.reindexOptions();
-            },
-
+            removeOption(btn) { btn.closest('.option-row').remove(); this.reindexOptions(); },
             reindexOptions() {
                 const rows = document.querySelectorAll('.option-row');
                 rows.forEach((row, index) => {
-                    const check = row.querySelector('input[type="checkbox"]');
-                    const input = row.querySelector('input[type="text"]');
-                    check.value = index;
-                    input.placeholder = `選択肢 ${String.fromCharCode(65 + index)}`;
+                    row.querySelector('input[type="checkbox"]').value = index;
+                    row.querySelector('input[type="text"]').placeholder = `選択肢 ${String.fromCharCode(65 + index)}`;
                 });
             },
-
             resetForm() {
                 document.getElementById('create-form').reset();
                 document.getElementById('edit-id').value = '';
                 document.getElementById('options-container').innerHTML = '';
                 for (let i = 0; i < 4; i++) this.addOption();
-
                 const btn = document.getElementById('btn-save-question');
                 btn.innerText = "追加する";
                 btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5";
                 document.getElementById('btn-cancel-edit').classList.add('hidden');
                 this.updateCategoryLabel();
             },
-
             renderUserQuestions() {
                 const listEl = document.getElementById('user-questions-list');
                 const userQs = app.data.questions.filter(q => q.id.includes('user'));
@@ -980,7 +994,6 @@
                     listEl.appendChild(div);
                 });
             },
-
             editQuestion(id) {
                 const q = app.data.questions.find(x => x.id === id);
                 if (!q) return;
@@ -1004,9 +1017,7 @@
 
                 const checkboxes = document.querySelectorAll('input[name="correct-idx"]');
                 const correctArr = Array.isArray(q.answer) ? q.answer : [q.answer];
-                correctArr.forEach(idx => {
-                    if (checkboxes[idx]) checkboxes[idx].checked = true;
-                });
+                correctArr.forEach(idx => { if (checkboxes[idx]) checkboxes[idx].checked = true; });
 
                 const btn = document.getElementById('btn-save-question');
                 btn.innerText = "更新する";
@@ -1014,16 +1025,13 @@
                 document.getElementById('btn-cancel-edit').classList.remove('hidden');
                 document.getElementById('tab-create').scrollTop = 0;
             },
-
             cancelEdit() { this.resetForm(); },
-
             deleteQuestion(id) {
                 if (!confirm('この問題を削除しますか？')) return;
                 app.data.questions = app.data.questions.filter(q => q.id !== id);
                 app.save();
                 this.renderUserQuestions();
             },
-
             saveQuestion(e) {
                 e.preventDefault();
                 const editId = document.getElementById('edit-id').value;
@@ -1033,16 +1041,10 @@
                 const code = document.getElementById('create-code').value;
 
                 const opts = Array.from(document.querySelectorAll('.create-option')).map(i => i.value);
-
-                // Get all checked values
                 const checkedBoxes = document.querySelectorAll('input[name="correct-idx"]:checked');
                 if (checkedBoxes.length === 0) return alert("正解を少なくとも1つ選択してください");
 
                 const correctIdxs = Array.from(checkedBoxes).map(cb => parseInt(cb.value));
-                // If single answer, store as number to keep compatibility? Or always array?
-                // Let's store as array if length > 1, or number if length == 1 to mimic old style, OR just array.
-                // To be safe with new check logic, storing single as number is fine, but array is better.
-                // Let's store as array if > 1, else number (to look nice in JSON), but check logic handles both.
                 const finalAnswer = correctIdxs.length === 1 ? correctIdxs[0] : correctIdxs;
 
                 const explanation = document.getElementById('create-explanation').value;
@@ -1071,16 +1073,13 @@
 
         const dataManager = {
             importData(input) { if (input.files.length === 0) return; const readers = Array.from(input.files).map(file => new Promise(r => { const reader = new FileReader(); reader.onload = e => r(e.target.result); reader.readAsText(file); })); Promise.all(readers).then(results => { let count = 0; const newQs = []; const seenIds = new Set(app.data.questions.map(q => q.id)); results.forEach(res => { try { const json = JSON.parse(res); if (json.questions) json.questions.forEach(q => { if (!seenIds.has(q.id)) { newQs.push(q); seenIds.add(q.id); count++; } }); } catch (e) { } }); if (count > 0) { app.data.questions = [...app.data.questions, ...newQs]; app.save(); document.getElementById('import-alert').classList.add('hidden'); alert(`${count}問を追加しました！`); app.renderChapters(); } input.value = ''; }); },
-            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v13'); location.reload(); } }
+            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v14_2'); location.reload(); } }
         };
 
         const aiTutor = {
-            apiKey: '', model: 'gemini-1.5-flash',
-            init() { /* same as before */ }, toggleCustomModelInput() { /* same as before */ }, saveKey() { /* same as before */ }, updateStatus() { /* same as before */ }, analyzeWeakness() { /* same as before */ }, async generate() { /* same as before */ }
-        };
+            apiKey: '',
+            model: 'gemini-1.5-flash',
 
-        // Restore AI logic
-        Object.assign(aiTutor, {
             init() {
                 this.apiKey = localStorage.getItem('gemini_api_key') || '';
                 let savedModel = localStorage.getItem('gemini_api_model');
@@ -1093,12 +1092,140 @@
                 }
                 this.updateStatus();
             },
-            toggleCustomModelInput() { const val = document.getElementById('api-model-select').value; const customInput = document.getElementById('api-model-custom'); if (val === 'custom') customInput.classList.remove('hidden'); else customInput.classList.add('hidden'); },
-            saveKey() { const key = document.getElementById('api-key-input').value.trim(); let model = document.getElementById('api-model-select').value; if (model === 'custom') model = document.getElementById('api-model-custom').value.trim(); if (key) localStorage.setItem('gemini_api_key', key); localStorage.setItem('gemini_api_model', model); this.model = model; alert('設定を保存しました。'); this.init(); },
-            updateStatus() { const statusEl = document.getElementById('key-status'); if (this.apiKey) { statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み'; statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold'; document.getElementById('btn-generate').disabled = false; } else { statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定'; statusEl.className = 'text-xs text-slate-400 mt-2 flex items-center gap-1'; document.getElementById('btn-generate').disabled = true; } },
-            analyzeWeakness() { /* same */ return "Java Silver全般"; },
-            async generate() { /* same */ }
-        });
+
+            toggleCustomModelInput() {
+                const val = document.getElementById('api-model-select').value;
+                const customInput = document.getElementById('api-model-custom');
+                if (val === 'custom') customInput.classList.remove('hidden');
+                else customInput.classList.add('hidden');
+            },
+
+            saveKey() {
+                const key = document.getElementById('api-key-input').value.trim();
+                let model = document.getElementById('api-model-select').value;
+                if (model === 'custom') model = document.getElementById('api-model-custom').value.trim();
+                if (key) localStorage.setItem('gemini_api_key', key);
+                localStorage.setItem('gemini_api_model', model);
+                this.model = model;
+                alert('設定を保存しました。');
+                this.init();
+            },
+
+            updateStatus() {
+                const statusEl = document.getElementById('key-status');
+                if (this.apiKey) {
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み';
+                    statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold';
+                    document.getElementById('btn-generate').disabled = false;
+                } else {
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定';
+                    statusEl.className = 'text-xs text-slate-400 mt-2 flex items-center gap-1';
+                    document.getElementById('btn-generate').disabled = true;
+                }
+            },
+
+            analyzeWeakness() {
+                // シンプルな弱点分析ロジック
+                if (app.data.results.length === 0) return "Java Silver全般";
+
+                // 間違えた回数が多いカテゴリを集計
+                const wrongCounts = {};
+                for (const q of app.data.questions) {
+                    if (app.data.results[q.id] === false) {
+                        const cat = q.category || "その他";
+                        wrongCounts[cat] = (wrongCounts[cat] || 0) + 1;
+                    }
+                }
+
+                // 上位3つを抽出
+                const sortedWeakness = Object.entries(wrongCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 3)
+                    .map(entry => entry[0]);
+
+                const listEl = document.getElementById('weak-list');
+                const analysisBox = document.getElementById('ai-analysis');
+
+                if (sortedWeakness.length > 0) {
+                    analysisBox.classList.remove('hidden');
+                    listEl.innerHTML = sortedWeakness.map(w => `<li>${w}</li>`).join('');
+                    return sortedWeakness.join('、');
+                } else {
+                    analysisBox.classList.add('hidden');
+                    return "Java Silver全般";
+                }
+            },
+
+            async generate() {
+                const topics = this.analyzeWeakness() || "Java Silver全般";
+                const btn = document.getElementById('btn-generate');
+                const loading = document.getElementById('ai-loading');
+                const loadingText = document.getElementById('ai-status-text');
+                btn.classList.add('hidden');
+                loading.classList.remove('hidden');
+
+                const prompt = `Java Silver SE11の試験対策として、ユーザーの苦手分野【${topics}】に関する4択問題を5問作成してください。
+                出力は以下のJSON配列形式のみ。Markdown記法は含めないでください。
+                [{"id": "ai-${Date.now()}-1", "category": "...", "text": "...", "code": "...", "options": ["..."], "answer": 0, "explanation": "..."}]`;
+
+                // Retry logic function
+                const fetchWithRetry = async (model, retries = 1) => {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
+
+                    try {
+                        const res = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                        });
+
+                        if (!res.ok) {
+                            if (res.status === 429 && retries > 0) {
+                                loadingText.innerText = "混雑中...3秒後に再試行します";
+                                await new Promise(r => setTimeout(r, 3000));
+                                return fetchWithRetry(model, retries - 1);
+                            }
+                            // Auto fallback for 404
+                            if (res.status === 404) {
+                                if (model === 'gemini-1.5-flash') {
+                                    loadingText.innerText = "最新モデルが使えません...旧安定版で再試行";
+                                    await new Promise(r => setTimeout(r, 1000));
+                                    return fetchWithRetry('gemini-pro', 0);
+                                }
+                            }
+                            const err = await res.json().catch(() => ({}));
+                            throw new Error(err.error?.message || res.statusText);
+                        }
+                        return res.json();
+                    } catch (e) {
+                        throw e;
+                    }
+                };
+
+                try {
+                    const data = await fetchWithRetry(this.model);
+
+                    let text = data.candidates[0].content.parts[0].text;
+                    const jsonMatch = text.match(/\[\s*\{.*\}\s*\]/s);
+                    text = jsonMatch ? jsonMatch[0] : text.replace(/```json/g, '').replace(/```/g, '').trim();
+                    const newQs = JSON.parse(text);
+
+                    newQs.forEach((q, i) => {
+                        q.id = `ai-${Date.now()}-${i}`;
+                        app.data.questions.push(q);
+                    });
+                    app.save();
+                    alert('5問の問題を追加しました！「AI生成」カテゴリから演習できます。');
+                    app.updateDashboard();
+                } catch (e) {
+                    alert(`AI生成エラー: ${e.message}\n\n※429エラーの場合は少し時間を置いてください。`);
+                } finally {
+                    btn.classList.remove('hidden');
+                    loading.classList.add('hidden');
+                    loadingText.innerText = "思考中...";
+                }
+            }
+        };
 
         // Initialize
         app.init();
