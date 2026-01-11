@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 12.0 - Custom Options)</title>
+    <title>Java Silver 完全攻略道場 (Ver 12.1 - Stability Fix)</title>
     <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -87,7 +87,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 12.0 Custom Options</p>
+                <p class="text-[10px] text-slate-400">Ver 12.1 Stability Fix</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -111,7 +111,7 @@
 
         <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="absolute inset-0 overflow-y-auto p-4 md:p-8 max-w-6xl mx-auto w-full fade-in">
-            <!-- (Same Dashboard Content) -->
+            <!-- Import Alert -->
             <div id="import-alert"
                 class="bg-white border border-indigo-100 text-slate-700 px-4 py-3 rounded-xl mb-6 flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
@@ -186,8 +186,7 @@
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <span>🏆 模擬試験</span><span
-                        class="bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded">Timer付き (90分)</span>
-                </h3>
+                        class="bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded">Timer付き (90分)</span></h3>
                 <div id="mock-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <button onclick="app.startQuiz('mock')"
                         class="bg-gradient-to-r from-slate-800 to-slate-700 text-white hover:from-slate-700 hover:to-slate-600 p-5 rounded-xl text-left transition shadow-lg group active:scale-[0.98]">
@@ -199,40 +198,14 @@
                     </button>
                 </div>
             </div>
-            <!-- Level Courses -->
-            <div class="mb-8">
-                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">レベル別コース</h3>
-                <div class="grid md:grid-cols-3 gap-4">
-                    <button onclick="app.startQuiz('level-1')"
-                        class="bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
-                        <div class="flex justify-between items-center mb-2"><span
-                                class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded">Beginner</span><span
-                                class="text-xl">🌱</span></div>
-                        <h4 class="font-bold text-slate-700 group-hover:text-emerald-700">初級編（基礎）</h4>
-                        <p class="text-[10px] text-slate-400 mt-1">第1-4章: 基本構文, 演算子, 制御構文</p>
-                    </button>
-                    <button onclick="app.startQuiz('level-2')"
-                        class="bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
-                        <div class="flex justify-between items-center mb-2"><span
-                                class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded">Intermediate</span><span
-                                class="text-xl">💻</span></div>
-                        <h4 class="font-bold text-slate-700 group-hover:text-blue-700">中級編（オブジェクト指向）</h4>
-                        <p class="text-[10px] text-slate-400 mt-1">第5-8,12章: クラス, 継承, API</p>
-                    </button>
-                    <button onclick="app.startQuiz('level-3')"
-                        class="bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
-                        <div class="flex justify-between items-center mb-2"><span
-                                class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded">Advanced</span><span
-                                class="text-xl">🔥</span></div>
-                        <h4 class="font-bold text-slate-700 group-hover:text-indigo-700">上級編（応用）</h4>
-                        <p class="text-[10px] text-slate-400 mt-1">第9-11,13章: 例外, ラムダ, モジュール</p>
-                    </button>
-                </div>
-            </div>
             <!-- Chapter Selection -->
             <div class="mb-12">
                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">章ごとの演習</h3>
                 <div id="chapter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    <div
+                        class="col-span-full py-8 text-center text-slate-400 bg-white border border-dashed border-slate-300 rounded-xl">
+                        <p>データを読み込むとここに章が表示されます</p>
+                    </div>
                 </div>
             </div>
             <div class="text-center pt-8 border-t border-slate-200"><button onclick="dataManager.resetAll()"
@@ -250,7 +223,6 @@
                         onchange="app.renderHistory()">
                         <option value="all">すべて表示</option>
                         <option value="mock">模擬試験</option>
-                        <option value="level">レベル別演習</option>
                         <option value="1">第1章</option>
                         <option value="final">最終章</option>
                     </select>
@@ -261,7 +233,7 @@
             </div>
         </div>
 
-        <!-- CREATOR TAB (Updated) -->
+        <!-- CREATOR TAB -->
         <div id="tab-create" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
             <div class="max-w-3xl mx-auto py-8 space-y-8">
                 <!-- Create Form -->
@@ -299,8 +271,7 @@
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </div>
+                                    </svg></div>
                             </div><input type="hidden" id="create-cat-name" value="基本構文">
                         </div>
                         <div><label class="block text-sm font-bold text-slate-700 mb-2">問題文</label><textarea
@@ -312,7 +283,7 @@
                                 class="w-full bg-slate-800 text-slate-200 font-mono text-sm rounded-lg p-3 border border-slate-700 focus:ring-2 focus:ring-emerald-500 outline-none transition"
                                 placeholder="public class Main { ... }"></textarea></div>
 
-                        <!-- Dynamic Options Section -->
+                        <!-- Dynamic Options -->
                         <div>
                             <div class="flex justify-between items-center mb-3">
                                 <label class="block text-sm font-bold text-slate-700">選択肢と正解</label>
@@ -320,9 +291,7 @@
                                     class="text-xs bg-indigo-50 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-100 transition font-bold">＋
                                     選択肢を追加</button>
                             </div>
-                            <div id="options-container" class="space-y-3">
-                                <!-- Options will be injected here -->
-                            </div>
+                            <div id="options-container" class="space-y-3"></div>
                             <p class="text-xs text-emerald-600 mt-2 font-bold ml-1">※ 正解のラジオボタンを選択してください</p>
                         </div>
 
@@ -351,7 +320,6 @@
 
         <!-- AI TAB -->
         <div id="tab-ai" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
-            <!-- (AI Content Same as v9.5) -->
             <div class="max-w-2xl mx-auto space-y-6 py-8">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2"><span>🔑 API設定</span>
@@ -368,9 +336,9 @@
                             <div class="space-y-2"><select id="api-model-select"
                                     class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-white"
                                     onchange="aiTutor.toggleCustomModelInput()">
-                                    <option value="gemini-1.5-flash">gemini-1.5-flash</option>
-                                    <option value="gemini-1.5-pro">gemini-1.5-pro</option>
-                                    <option value="gemini-pro">gemini-pro</option>
+                                    <option value="gemini-1.5-flash">gemini-1.5-flash (推奨・高速)</option>
+                                    <option value="gemini-1.5-pro">gemini-1.5-pro (高精度)</option>
+                                    <option value="gemini-pro">gemini-pro (旧安定版)</option>
                                     <option value="custom">カスタム入力...</option>
                                 </select><input type="text" id="api-model-custom"
                                     class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-slate-50 hidden"
@@ -490,7 +458,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script>
-        // ... (App, DataManager, AI Logic same as v9.5) ...
         const app = {
             data: { questions: [], results: {}, history: [], bookmarks: [] },
             state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', timer: null },
@@ -498,7 +465,7 @@
 
             init() {
                 try {
-                    const saved = localStorage.getItem('javaSilverAI_v12');
+                    const saved = localStorage.getItem('javaSilverAI_v12_1');
                     if (saved) {
                         const parsed = JSON.parse(saved);
                         this.data = { ...this.data, ...parsed };
@@ -509,80 +476,92 @@
 
                 this.updateDashboard();
                 aiTutor.init();
-                // Initialize creator options (default 4)
                 creator.resetForm();
             },
+
             save() {
                 try {
                     if (this.data.history.length > 100) this.data.history = this.data.history.slice(-100);
-                    localStorage.setItem('javaSilverAI_v12', JSON.stringify(this.data));
+                    localStorage.setItem('javaSilverAI_v12_1', JSON.stringify(this.data));
                 } catch (e) { console.error("Save error", e); }
                 this.updateDashboard();
             },
+
             switchTab(tab) {
+                // Safety: Hide all known tabs
                 ['dashboard', 'ai', 'history', 'create', 'quiz-view'].forEach(id => {
                     const el = document.getElementById('tab-' + id) || document.getElementById(id);
                     if (el) el.classList.add('hidden');
                 });
+
                 const target = document.getElementById('tab-' + tab);
                 if (target) {
                     target.classList.remove('hidden');
-                    requestAnimationFrame(() => {
+                    // Use try-catch to prevent UI freeze on render error
+                    try {
                         if (tab === 'dashboard') this.renderChapters();
                         if (tab === 'history') this.renderHistory();
                         if (tab === 'create') creator.renderUserQuestions();
                         if (tab === 'ai') aiTutor.analyzeWeakness();
-                    });
+                    } catch (e) {
+                        console.error("Render error:", e);
+                    }
                 }
             },
+
             renderHistory() {
-                const filter = document.getElementById('history-filter').value;
-                const list = document.getElementById('history-list');
-                const canvas = document.getElementById('historyChart');
-                list.innerHTML = '';
+                try {
+                    const filter = document.getElementById('history-filter').value;
+                    const list = document.getElementById('history-list');
+                    const canvas = document.getElementById('historyChart');
+                    list.innerHTML = '';
 
-                let logs = this.data.history.filter(log => {
-                    if (filter === 'all') return true;
-                    if (filter === 'mock') return log.mode && log.mode.includes('模擬');
-                    if (filter === 'level') return log.mode && log.mode.includes('レベル');
-                    if (filter === 'final') return log.mode && log.mode.includes('最終');
-                    if (!isNaN(parseInt(filter))) return log.mode && log.mode.includes(`第${filter}章`);
-                    return true;
-                });
+                    let logs = this.data.history.filter(log => {
+                        if (filter === 'all') return true;
+                        if (filter === 'mock') return log.mode && log.mode.includes('模擬');
+                        if (filter === 'level') return log.mode && log.mode.includes('レベル');
+                        if (filter === 'final') return log.mode && log.mode.includes('最終');
+                        if (!isNaN(parseInt(filter))) return log.mode && log.mode.includes(`第${filter}章`);
+                        return true;
+                    });
 
-                if (logs.length === 0) {
-                    list.innerHTML = '<div class="text-center text-slate-400 py-8">該当する履歴がありません</div>';
-                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
-                    return;
-                }
+                    if (logs.length === 0) {
+                        list.innerHTML = '<div class="text-center text-slate-400 py-8">該当する履歴がありません</div>';
+                        if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
+                        return;
+                    }
 
-                const fragment = document.createDocumentFragment();
-                [...logs].reverse().slice(0, 30).forEach(log => {
-                    const d = new Date(log.date);
-                    const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
-                    const mode = log.mode || '演習';
-                    const rate = Math.round((log.correct / log.total) * 100);
-                    const weaks = (log.weak && log.weak.length > 0) ? log.weak.join(', ') : 'なし';
+                    const fragment = document.createDocumentFragment();
+                    [...logs].reverse().slice(0, 30).forEach(log => {
+                        const d = new Date(log.date);
+                        const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+                        const mode = log.mode || '演習';
+                        const rate = Math.round((log.correct / log.total) * 100);
+                        const weaks = (log.weak && log.weak.length > 0) ? log.weak.join(', ') : 'なし';
+                        const div = document.createElement('div');
+                        div.className = "bg-white p-4 rounded-lg shadow-sm border border-slate-100 mb-2";
+                        div.innerHTML = `<div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><span class="text-xs text-slate-500">${dateStr}</span><span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span></div><div class="font-bold text-lg ${rate >= 63 ? 'text-green-600' : 'text-slate-700'}">${rate}%</div></div><div class="text-[10px] text-slate-400 flex items-start gap-1"><span class="font-bold text-red-400 whitespace-nowrap">Miss:</span><span class="leading-tight">${weaks}</span></div>`;
+                        fragment.appendChild(div);
+                    });
+                    list.appendChild(fragment);
 
-                    const div = document.createElement('div');
-                    div.className = "bg-white p-4 rounded-lg shadow-sm border border-slate-100 mb-2";
-                    div.innerHTML = `<div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><span class="text-xs text-slate-500">${dateStr}</span><span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span></div><div class="font-bold text-lg ${rate >= 63 ? 'text-green-600' : 'text-slate-700'}">${rate}%</div></div><div class="text-[10px] text-slate-400 flex items-start gap-1"><span class="font-bold text-red-400 whitespace-nowrap">Miss:</span><span class="leading-tight">${weaks}</span></div>`;
-                    fragment.appendChild(div);
-                });
-                list.appendChild(fragment);
+                    // Safe Chart Rendering
+                    if (typeof Chart !== 'undefined') {
+                        const chartLogs = logs.slice(-20);
+                        const labels = chartLogs.map(l => { const d = new Date(l.date); return `${d.getMonth() + 1}/${d.getDate()}`; });
+                        const dataPoints = chartLogs.map(l => Math.round((l.correct / l.total) * 100));
+                        const passingLine = Array(chartLogs.length).fill(63);
 
-                const chartLogs = logs.slice(-20);
-                const labels = chartLogs.map(l => { const d = new Date(l.date); return `${d.getMonth() + 1}/${d.getDate()}`; });
-                const dataPoints = chartLogs.map(l => Math.round((l.correct / l.total) * 100));
-                const passingLine = Array(chartLogs.length).fill(63);
-
-                if (this.chartInstance) this.chartInstance.destroy();
-                this.chartInstance = new Chart(canvas, {
-                    type: 'line',
-                    data: { labels: labels, datasets: [{ label: '正答率 (%)', data: dataPoints, borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.1)', tension: 0.3, fill: true, pointRadius: 4, pointBackgroundColor: '#fff', pointBorderColor: '#4f46e5' }, { label: '合格ライン (63%)', data: passingLine, borderColor: '#ef4444', borderDash: [5, 5], pointRadius: 0, borderWidth: 2, fill: false }] },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } } }, plugins: { legend: { labels: { font: { size: 10 } } } } }
-                });
+                        if (this.chartInstance) this.chartInstance.destroy();
+                        this.chartInstance = new Chart(canvas, {
+                            type: 'line',
+                            data: { labels: labels, datasets: [{ label: '正答率 (%)', data: dataPoints, borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.1)', tension: 0.3, fill: true, pointRadius: 4 }, { label: '合格', data: passingLine, borderColor: '#ef4444', borderDash: [5, 5], pointRadius: 0, borderWidth: 2, fill: false }] },
+                            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } } }, plugins: { legend: { labels: { font: { size: 10 } } } } }
+                        });
+                    }
+                } catch (e) { console.error("Chart Error", e); }
             },
+
             updateDashboard() {
                 const total = this.data.questions.length;
                 const answered = Object.keys(this.data.results).length;
@@ -601,6 +580,7 @@
                     setTimeout(() => this.renderChapters(), 10);
                 }
             },
+
             renderChapters() {
                 const grid = document.getElementById('chapter-grid');
                 const mockGrid = document.getElementById('mock-grid');
@@ -808,8 +788,7 @@
             categoryNames: { "1": "Javaの基本", "2": "データ型と変数", "3": "演算子", "4": "ループ制御", "5": "配列", "6": "クラスとインスタンス", "7": "継承", "8": "インターフェース", "9": "ポリモーフィズム", "10": "例外処理", "11": "モジュール", "12": "主要API", "13": "ラムダ式", "mock1": "模擬試験①", "mock2": "模擬試験②", "mock3": "模擬試験③", "99": "その他" },
             updateCategoryLabel() { const val = document.getElementById('create-chapter').value; document.getElementById('create-cat-name').value = this.categoryNames[val]; },
 
-            // --- Custom Options Implementation ---
-
+            // --- UPDATED METHOD FOR DYNAMIC OPTIONS ---
             addOption() {
                 const container = document.getElementById('options-container');
                 const idx = container.children.length;
@@ -822,40 +801,31 @@
                 `;
                 container.appendChild(div);
             },
-
             removeOption(btn) {
-                const row = btn.closest('.option-row');
-                row.remove();
+                btn.closest('.option-row').remove();
                 this.reindexOptions();
             },
-
             reindexOptions() {
                 const rows = document.querySelectorAll('.option-row');
                 rows.forEach((row, index) => {
-                    const radio = row.querySelector('input[type="radio"]');
-                    const input = row.querySelector('input[type="text"]');
-                    radio.value = index;
-                    input.placeholder = `選択肢 ${String.fromCharCode(65 + index)}`;
+                    row.querySelector('input[type="radio"]').value = index;
+                    row.querySelector('input[type="text"]').placeholder = `選択肢 ${String.fromCharCode(65 + index)}`;
                 });
             },
-
             resetForm() {
                 document.getElementById('create-form').reset();
                 document.getElementById('edit-id').value = '';
                 document.getElementById('options-container').innerHTML = '';
-                // Default 4 options
-                for (let i = 0; i < 4; i++) this.addOption();
-                // Select first by default
+                for (let i = 0; i < 4; i++) this.addOption(); // Default 4 options
                 const firstRadio = document.querySelector('input[name="correct-idx"]');
                 if (firstRadio) firstRadio.checked = true;
 
-                document.getElementById('btn-save-question').innerText = "追加する";
-                document.getElementById('btn-save-question').classList.replace('bg-blue-600', 'bg-emerald-600');
-                document.getElementById('btn-save-question').classList.replace('hover:bg-blue-700', 'hover:bg-emerald-700');
+                const btn = document.getElementById('btn-save-question');
+                btn.innerText = "追加する";
+                btn.className = "bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5";
                 document.getElementById('btn-cancel-edit').classList.add('hidden');
                 this.updateCategoryLabel();
             },
-
             renderUserQuestions() {
                 const listEl = document.getElementById('user-questions-list');
                 const userQs = app.data.questions.filter(q => q.id.includes('user'));
@@ -868,7 +838,6 @@
                     listEl.appendChild(div);
                 });
             },
-
             editQuestion(id) {
                 const q = app.data.questions.find(x => x.id === id);
                 if (!q) return;
@@ -882,7 +851,7 @@
                 document.getElementById('create-chapter').value = foundKey;
                 this.updateCategoryLabel();
 
-                // Rebuild Options
+                // Rebuild Options Dynamically
                 const container = document.getElementById('options-container');
                 container.innerHTML = '';
                 q.options.forEach((optText) => {
@@ -894,22 +863,19 @@
                 const radios = document.querySelectorAll('input[name="correct-idx"]');
                 if (radios[q.answer]) radios[q.answer].checked = true;
 
-                document.getElementById('btn-save-question').innerText = "更新する";
-                document.getElementById('btn-save-question').classList.replace('bg-emerald-600', 'bg-blue-600');
-                document.getElementById('btn-save-question').classList.replace('hover:bg-emerald-700', 'hover:bg-blue-700');
+                const btn = document.getElementById('btn-save-question');
+                btn.innerText = "更新する";
+                btn.className = "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5";
                 document.getElementById('btn-cancel-edit').classList.remove('hidden');
                 document.getElementById('tab-create').scrollTop = 0;
             },
-
             cancelEdit() { this.resetForm(); },
-
             deleteQuestion(id) {
                 if (!confirm('この問題を削除しますか？')) return;
                 app.data.questions = app.data.questions.filter(q => q.id !== id);
                 app.save();
                 this.renderUserQuestions();
             },
-
             saveQuestion(e) {
                 e.preventDefault();
                 const editId = document.getElementById('edit-id').value;
@@ -951,7 +917,7 @@
 
         const dataManager = {
             importData(input) { if (input.files.length === 0) return; const readers = Array.from(input.files).map(file => new Promise(r => { const reader = new FileReader(); reader.onload = e => r(e.target.result); reader.readAsText(file); })); Promise.all(readers).then(results => { let count = 0; const newQs = []; const seenIds = new Set(app.data.questions.map(q => q.id)); results.forEach(res => { try { const json = JSON.parse(res); if (json.questions) json.questions.forEach(q => { if (!seenIds.has(q.id)) { newQs.push(q); seenIds.add(q.id); count++; } }); } catch (e) { } }); if (count > 0) { app.data.questions = [...app.data.questions, ...newQs]; app.save(); document.getElementById('import-alert').classList.add('hidden'); alert(`${count}問を追加しました！`); app.renderChapters(); } input.value = ''; }); },
-            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v12'); location.reload(); } }
+            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v12_1'); location.reload(); } }
         };
 
         const aiTutor = {
