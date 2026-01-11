@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 8.0 - Graph Master)</title>
+    <title>Java Silver 完全攻略道場 (Ver 9.0 - Ultimate)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
         }
 
         .code-input {
@@ -86,7 +86,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 8.0 Graph Master</p>
+                <p class="text-[10px] text-slate-400">Ver 9.0 Ultimate</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -111,7 +111,6 @@
         <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="absolute inset-0 overflow-y-auto p-4 md:p-8 max-w-6xl mx-auto w-full fade-in">
 
-            <!-- Import Alert -->
             <div id="import-alert"
                 class="bg-white border border-indigo-100 text-slate-700 px-4 py-3 rounded-xl mb-6 flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
@@ -158,37 +157,73 @@
                 </div>
             </div>
 
-            <!-- Level Courses -->
+            <!-- Search & Bookmark -->
+            <div class="grid md:grid-cols-2 gap-4 mb-8">
+                <!-- Search -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        キーワード検索演習
+                    </h3>
+                    <div class="flex gap-2">
+                        <input type="text" id="search-input"
+                            class="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="例: ラムダ, 例外...">
+                        <button onclick="app.startSearchQuiz()"
+                            class="bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-700 transition active:scale-95">検索</button>
+                    </div>
+                </div>
+                <!-- Bookmark -->
+                <div
+                    class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 20 20">
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                </path>
+                            </svg>
+                            ブックマーク
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">保存した問題: <span id="bookmark-count"
+                                class="font-bold text-slate-700">0</span> 問</p>
+                    </div>
+                    <button onclick="app.startQuiz('bookmark')" id="btn-bookmark"
+                        class="bg-yellow-100 text-yellow-700 hover:bg-yellow-200 px-5 py-2 rounded-lg text-sm font-bold transition disabled:opacity-50"
+                        disabled>
+                        解く ▶
+                    </button>
+                </div>
+            </div>
+
+            <!-- Level Courses (Same as before) -->
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">レベル別コース</h3>
                 <div class="grid md:grid-cols-3 gap-4">
                     <button onclick="app.startQuiz('level-1')"
                         class="bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
-                        <div class="flex justify-between items-center mb-2">
-                            <span
-                                class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded">Beginner</span>
-                            <span class="text-xl">🌱</span>
-                        </div>
+                        <div class="flex justify-between items-center mb-2"><span
+                                class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded">Beginner</span><span
+                                class="text-xl">🌱</span></div>
                         <h4 class="font-bold text-slate-700 group-hover:text-emerald-700">初級編（基礎）</h4>
                         <p class="text-[10px] text-slate-400 mt-1">第1-4章: 基本構文, 演算子, 制御構文</p>
                     </button>
                     <button onclick="app.startQuiz('level-2')"
                         class="bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
-                        <div class="flex justify-between items-center mb-2">
-                            <span
-                                class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded">Intermediate</span>
-                            <span class="text-xl">💻</span>
-                        </div>
+                        <div class="flex justify-between items-center mb-2"><span
+                                class="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded">Intermediate</span><span
+                                class="text-xl">💻</span></div>
                         <h4 class="font-bold text-slate-700 group-hover:text-blue-700">中級編（オブジェクト指向）</h4>
                         <p class="text-[10px] text-slate-400 mt-1">第5-8,12章: クラス, 継承, API</p>
                     </button>
                     <button onclick="app.startQuiz('level-3')"
                         class="bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-400 p-4 rounded-xl text-left transition group shadow-sm active:scale-[0.98]">
-                        <div class="flex justify-between items-center mb-2">
-                            <span
-                                class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded">Advanced</span>
-                            <span class="text-xl">🔥</span>
-                        </div>
+                        <div class="flex justify-between items-center mb-2"><span
+                                class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded">Advanced</span><span
+                                class="text-xl">🔥</span></div>
                         <h4 class="font-bold text-slate-700 group-hover:text-indigo-700">上級編（応用）</h4>
                         <p class="text-[10px] text-slate-400 mt-1">第9-11,13章: 例外, ラムダ, モジュール</p>
                     </button>
@@ -212,13 +247,14 @@
                 <div>
                     <h3 class="text-lg font-bold mb-1 flex items-center gap-2">
                         <span>🏆 模擬試験モード</span>
-                        <span class="bg-yellow-500 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded">本番形式</span>
+                        <span
+                            class="bg-yellow-500 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded">Timer付き</span>
                     </h3>
-                    <p class="text-slate-300 text-xs">全範囲からランダムに40問出題。制限時間なしで実力を測ります。</p>
+                    <p class="text-slate-300 text-xs">全範囲からランダムに40問。本番と同じく時間制限あり。</p>
                 </div>
                 <button onclick="app.startQuiz('mock')"
                     class="bg-white text-slate-900 hover:bg-slate-100 font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5 active:translate-y-0">
-                    試験開始
+                    試験開始 (90分)
                 </button>
             </div>
 
@@ -228,13 +264,12 @@
             </div>
         </div>
 
-        <!-- HISTORY TAB (Updated) -->
+        <!-- HISTORY TAB -->
         <div id="tab-history" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
             <div class="max-w-4xl mx-auto py-8">
+                <!-- (Same history filter as before) -->
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                        <span>📈 学習記録</span>
-                    </h2>
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><span>📈 学習記録</span></h2>
                     <select id="history-filter"
                         class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white outline-none focus:ring-2 focus:ring-indigo-500"
                         onchange="app.renderHistory()">
@@ -257,21 +292,14 @@
                         <option value="final">最終章</option>
                     </select>
                 </div>
-
-                <!-- Graph Container -->
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 h-64 md:h-80">
-                    <canvas id="historyChart"></canvas>
-                </div>
-
-                <div id="history-list" class="space-y-3">
-                    <div class="text-center text-slate-400 py-12 text-sm">履歴がありません</div>
-                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 h-64 md:h-80"><canvas
+                        id="historyChart"></canvas></div>
+                <div id="history-list" class="space-y-3"></div>
             </div>
         </div>
 
-        <!-- CREATOR TAB, AI TAB, QUIZ VIEW, RESULT MODAL (Same as before) -->
+        <!-- CREATOR TAB -->
         <div id="tab-create" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
-            <!-- (Creator Tab Content) -->
             <div class="max-w-3xl mx-auto py-8">
                 <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
                     <div class="bg-emerald-600 p-4 flex justify-between items-center text-white">
@@ -306,7 +334,8 @@
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
-                                    </svg></div>
+                                    </svg>
+                                </div>
                             </div>
                             <input type="hidden" id="create-cat-name" value="基本構文">
                         </div>
@@ -364,9 +393,10 @@
             </div>
         </div>
 
+        <!-- AI TAB -->
         <div id="tab-ai" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
-            <!-- (AI Tab Same as v7.2) -->
             <div class="max-w-2xl mx-auto space-y-6 py-8">
+                <!-- (Same API Config & Generator as before) -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2"><span>🔑
                             API設定</span><span
@@ -380,18 +410,17 @@
                                     class="bg-slate-800 text-white px-5 py-2 rounded-lg text-sm hover:bg-slate-700 transition font-bold active:scale-95">保存</button>
                             </div>
                         </div>
-                        <div class="flex flex-col gap-1"><label class="text-xs font-bold text-slate-500">使用モデル</label>
-                            <div class="space-y-2"><select id="api-model-select"
-                                    class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-white"
-                                    onchange="aiTutor.toggleCustomModelInput()">
-                                    <option value="gemini-1.5-flash">gemini-1.5-flash (推奨・高速)</option>
-                                    <option value="gemini-1.5-pro">gemini-1.5-pro (高精度)</option>
-                                    <option value="gemini-pro">gemini-pro (旧安定版)</option>
-                                    <option value="custom">カスタム入力...</option>
-                                </select><input type="text" id="api-model-custom"
-                                    class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-slate-50 hidden"
-                                    placeholder="例: gemini-2.0-flash-exp"></div>
-                        </div>
+                        <div class="flex flex-col gap-1"><label
+                                class="text-xs font-bold text-slate-500">使用モデル</label><select id="api-model-select"
+                                class="border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-white"
+                                onchange="aiTutor.toggleCustomModelInput()">
+                                <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                                <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+                                <option value="gemini-pro">gemini-pro</option>
+                                <option value="custom">カスタム入力...</option>
+                            </select><input type="text" id="api-model-custom"
+                                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-slate-50 hidden"
+                                placeholder="例: gemini-2.0-flash-exp"></div>
                     </div>
                     <div id="key-status" class="text-xs text-slate-400 mt-3 flex items-center gap-1"><span
                             class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定</div>
@@ -419,27 +448,46 @@
             </div>
         </div>
 
+        <!-- QUIZ VIEW -->
         <div id="quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] hidden z-20">
-            <!-- (Quiz View Same as v7.2) -->
             <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
-                <div class="flex justify-between items-center mb-6"><button onclick="app.quitQuiz()"
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="app.quitQuiz()"
                         class="text-xs text-slate-500 hover:text-slate-800 font-bold flex items-center gap-1 p-2"><span>←</span>
                         中断する</button>
-                    <div class="text-[10px] font-mono text-slate-400 bg-white border border-slate-200 px-2 py-1 rounded"
-                        id="mode-display">Random</div>
+                    <div class="flex items-center gap-3">
+                        <div id="quiz-timer"
+                            class="hidden bg-slate-800 text-white text-sm font-mono font-bold px-3 py-1 rounded shadow animate-pulse">
+                            ⏳ 90:00</div>
+                        <div class="text-[10px] font-mono text-slate-400 bg-white border border-slate-200 px-2 py-1 rounded"
+                            id="mode-display">Random</div>
+                    </div>
                 </div>
+
                 <div
                     class="bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-slate-200 mb-6 relative overflow-hidden">
                     <div class="absolute top-0 left-0 w-full h-1 bg-slate-100">
                         <div id="quiz-progress" class="h-full bg-indigo-500 transition-all duration-300"
                             style="width: 0%"></div>
                     </div>
-                    <div class="flex justify-between items-start mb-6 mt-2"><span
+                    <div class="flex justify-between items-start mb-6 mt-2">
+                        <span
                             class="inline-block bg-indigo-50 text-indigo-600 px-3 py-1 rounded-md text-[10px] font-bold tracking-wide uppercase border border-indigo-100"
                             id="q-category">Category</span>
-                        <div class="font-mono text-slate-300 font-bold text-xl"><span id="q-current"
-                                class="text-slate-800">1</span><span class="text-sm">/</span><span id="q-total"
-                                class="text-sm">10</span></div>
+                        <div class="flex items-center gap-2">
+                            <!-- Bookmark Button -->
+                            <button onclick="app.toggleBookmark()" id="btn-quiz-bookmark"
+                                class="text-slate-300 hover:text-yellow-400 transition transform hover:scale-110 focus:outline-none">
+                                <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                            </button>
+                            <div class="font-mono text-slate-300 font-bold text-xl"><span id="q-current"
+                                    class="text-slate-800">1</span><span class="text-sm">/</span><span id="q-total"
+                                    class="text-sm">10</span></div>
+                        </div>
                     </div>
                     <h3 class="text-lg font-bold text-slate-800 mb-6 leading-relaxed whitespace-pre-line" id="q-text">
                         Problem</h3>
@@ -473,8 +521,8 @@
             </div>
         </div>
 
+        <!-- RESULT MODAL -->
         <div id="session-result" class="fixed inset-0 bg-slate-900/95 z-50 hidden flex items-center justify-center p-4">
-            <!-- (Result Modal Same as v7.2) -->
             <div
                 class="bg-white rounded-2xl shadow-2xl max-w-xs w-full p-8 text-center space-y-6 fade-in transform scale-100">
                 <div class="text-6xl mb-2 animate-bounce">🎉</div>
@@ -499,17 +547,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script>
         const app = {
-            data: { questions: [], results: {}, history: [] },
-            state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '' },
+            data: { questions: [], results: {}, history: [], bookmarks: [] }, // Added bookmarks
+            state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', timer: null },
             chartInstance: null,
 
             init() {
                 try {
-                    const saved = localStorage.getItem('javaSilverAI_v8');
+                    const saved = localStorage.getItem('javaSilverAI_v9');
                     if (saved) {
                         const parsed = JSON.parse(saved);
                         this.data = { ...this.data, ...parsed };
                         if (!Array.isArray(this.data.history)) this.data.history = [];
+                        if (!Array.isArray(this.data.bookmarks)) this.data.bookmarks = [];
                     }
                 } catch (e) { console.error("Load error", e); }
 
@@ -520,7 +569,7 @@
             save() {
                 try {
                     if (this.data.history.length > 100) this.data.history = this.data.history.slice(-100);
-                    localStorage.setItem('javaSilverAI_v8', JSON.stringify(this.data));
+                    localStorage.setItem('javaSilverAI_v9', JSON.stringify(this.data));
                 } catch (e) { console.error("Save error", e); }
                 this.updateDashboard();
             },
@@ -542,7 +591,6 @@
                 }
             },
 
-            // --- Updated History Render Logic with Chart.js ---
             renderHistory() {
                 const filter = document.getElementById('history-filter').value;
                 const list = document.getElementById('history-list');
@@ -550,17 +598,12 @@
 
                 list.innerHTML = '';
 
-                // Filter logs
                 let logs = this.data.history.filter(log => {
                     if (filter === 'all') return true;
                     if (filter === 'mock') return log.mode && log.mode.includes('模擬');
                     if (filter === 'level') return log.mode && log.mode.includes('レベル');
                     if (filter === 'final') return log.mode && log.mode.includes('最終');
-
-                    // Chapter matching (e.g. filter="1" matches "第1章")
-                    if (!isNaN(parseInt(filter))) {
-                        return log.mode && log.mode.includes(`第${filter}章`);
-                    }
+                    if (!isNaN(parseInt(filter))) return log.mode && log.mode.includes(`第${filter}章`);
                     return true;
                 });
 
@@ -570,7 +613,6 @@
                     return;
                 }
 
-                // Render List
                 const fragment = document.createDocumentFragment();
                 [...logs].reverse().slice(0, 30).forEach(log => {
                     const d = new Date(log.date);
@@ -583,84 +625,35 @@
                     div.className = "bg-white p-4 rounded-lg shadow-sm border border-slate-100 mb-2";
                     div.innerHTML = `
                         <div class="flex justify-between items-center mb-1">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs text-slate-500">${dateStr}</span>
-                                <span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span>
-                            </div>
+                            <div class="flex items-center gap-2"><span class="text-xs text-slate-500">${dateStr}</span><span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span></div>
                             <div class="font-bold text-lg ${rate >= 63 ? 'text-green-600' : 'text-slate-700'}">${rate}%</div>
                         </div>
-                        <div class="text-[10px] text-slate-400 flex items-start gap-1">
-                            <span class="font-bold text-red-400 whitespace-nowrap">Miss:</span>
-                            <span class="leading-tight">${weaks}</span>
-                        </div>
+                        <div class="text-[10px] text-slate-400 flex items-start gap-1"><span class="font-bold text-red-400 whitespace-nowrap">Miss:</span><span class="leading-tight">${weaks}</span></div>
                     `;
                     fragment.appendChild(div);
                 });
                 list.appendChild(fragment);
 
-                // Render Chart
-                // Use last 20 attempts for the graph, chronological order
                 const chartLogs = logs.slice(-20);
-                const labels = chartLogs.map(l => {
-                    const d = new Date(l.date);
-                    return `${d.getMonth() + 1}/${d.getDate()}`;
-                });
+                const labels = chartLogs.map(l => { const d = new Date(l.date); return `${d.getMonth() + 1}/${d.getDate()}`; });
                 const dataPoints = chartLogs.map(l => Math.round((l.correct / l.total) * 100));
-
-                // Passing Line (63%)
                 const passingLine = Array(chartLogs.length).fill(63);
 
-                if (this.chartInstance) {
-                    this.chartInstance.destroy();
-                }
+                if (this.chartInstance) this.chartInstance.destroy();
 
                 this.chartInstance = new Chart(canvas, {
                     type: 'line',
                     data: {
                         labels: labels,
                         datasets: [
-                            {
-                                label: '正答率 (%)',
-                                data: dataPoints,
-                                borderColor: '#4f46e5', // Indigo
-                                backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                                tension: 0.3,
-                                fill: true,
-                                pointRadius: 4,
-                                pointBackgroundColor: '#fff',
-                                pointBorderColor: '#4f46e5'
-                            },
-                            {
-                                label: '合格ライン (63%)',
-                                data: passingLine,
-                                borderColor: '#ef4444', // Red
-                                borderDash: [5, 5],
-                                pointRadius: 0,
-                                borderWidth: 2,
-                                fill: false
-                            }
+                            { label: '正答率 (%)', data: dataPoints, borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.1)', tension: 0.3, fill: true, pointRadius: 4, pointBackgroundColor: '#fff', pointBorderColor: '#4f46e5' },
+                            { label: '合格ライン (63%)', data: passingLine, borderColor: '#ef4444', borderDash: [5, 5], pointRadius: 0, borderWidth: 2, fill: false }
                         ]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: { stepSize: 20 }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                labels: { font: { size: 10 } }
-                            }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } } }, plugins: { legend: { labels: { font: { size: 10 } } } } }
                 });
             },
 
-            // --- Existing Methods (Dashboard, Quiz, etc.) ---
             updateDashboard() {
                 const total = this.data.questions.length;
                 const answered = Object.keys(this.data.results).length;
@@ -673,6 +666,11 @@
                 const wrongs = this.data.questions.filter(q => this.data.results[q.id] === false);
                 document.getElementById('wrong-count').innerText = wrongs.length;
                 document.getElementById('btn-review').disabled = wrongs.length === 0;
+
+                // Update Bookmark Count
+                const bCount = this.data.bookmarks ? this.data.bookmarks.length : 0;
+                document.getElementById('bookmark-count').innerText = bCount;
+                document.getElementById('btn-bookmark').disabled = bCount === 0;
 
                 if (total > 0) {
                     document.getElementById('import-alert').classList.add('hidden');
@@ -692,17 +690,12 @@
                     const lowerId = q.id.toLowerCase();
                     const lowerCat = q.category ? q.category.toLowerCase() : "";
 
-                    if (lowerId.startsWith('ai-')) {
-                        key = 'ai';
-                    } else if (lowerId.startsWith('best-')) {
-                        key = 'best';
-                    } else if (lowerId.includes('final') || lowerCat.includes('final') || lowerCat.includes('模擬') || lowerCat.includes('総合')) {
-                        key = 'final';
-                    } else {
+                    if (lowerId.startsWith('ai-')) key = 'ai';
+                    else if (lowerId.startsWith('best-')) key = 'best';
+                    else if (lowerId.includes('final') || lowerCat.includes('final') || lowerCat.includes('模擬') || lowerCat.includes('総合')) key = 'final';
+                    else {
                         const match = lowerId.match(/^(?:ch|chapter)?(\d+)[-_]/);
-                        if (match) {
-                            key = parseInt(match[1]);
-                        }
+                        if (match) key = parseInt(match[1]);
                     }
                     if (!chapters[key]) chapters[key] = { count: 0, correct: 0 };
                     chapters[key].count++;
@@ -744,36 +737,20 @@
 
             startQuiz(mode, param) {
                 if (this.data.questions.length === 0) return alert('問題データがありません。');
-
-                let list = [];
-                let modeName = '';
+                let list = []; let modeName = '';
 
                 if (mode === 'review') {
                     list = this.data.questions.filter(q => this.data.results[q.id] === false);
                     modeName = '復習';
+                } else if (mode === 'bookmark') { // New!
+                    list = this.data.questions.filter(q => this.data.bookmarks.includes(q.id));
+                    modeName = 'ブックマーク';
                 } else if (mode === 'chapter') {
-                    if (param === 'final') {
-                        list = this.data.questions.filter(q => q.id.toLowerCase().includes('final') || (q.category && q.category.includes('模擬')));
-                        modeName = '最終章';
-                    } else if (param === 'best') {
-                        list = this.data.questions.filter(q => q.id.toLowerCase().startsWith('best-'));
-                        modeName = '厳選問題';
-                    } else if (param === 'ai') {
-                        list = this.data.questions.filter(q => q.id.toLowerCase().startsWith('ai-'));
-                        modeName = 'AI生成';
-                    } else if (param === 'others') {
-                        list = this.data.questions.filter(q => {
-                            const lower = q.id.toLowerCase();
-                            return !lower.match(/^(?:ch|chapter)?\d+[-_]/) && !lower.includes('final') && !lower.startsWith('best') && !lower.startsWith('ai');
-                        });
-                        modeName = 'その他';
-                    } else {
-                        list = this.data.questions.filter(q => {
-                            const match = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)[-_]/);
-                            return match && parseInt(match[1]) === parseInt(param);
-                        });
-                        modeName = `第${param}章`;
-                    }
+                    if (param === 'final') { list = this.data.questions.filter(q => q.id.toLowerCase().includes('final') || (q.category && q.category.includes('模擬'))); modeName = '最終章'; }
+                    else if (param === 'best') { list = this.data.questions.filter(q => q.id.toLowerCase().startsWith('best-')); modeName = '厳選問題'; }
+                    else if (param === 'ai') { list = this.data.questions.filter(q => q.id.toLowerCase().startsWith('ai-')); modeName = 'AI生成'; }
+                    else if (param === 'others') { list = this.data.questions.filter(q => { const lower = q.id.toLowerCase(); return !lower.match(/^(?:ch|chapter)?\d+[-_]/) && !lower.includes('final') && !lower.startsWith('best') && !lower.startsWith('ai'); }); modeName = 'その他'; }
+                    else { list = this.data.questions.filter(q => { const match = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)[-_]/); return match && parseInt(match[1]) === parseInt(param); }); modeName = `第${param}章`; }
                 } else if (mode.startsWith('level')) {
                     const regex1 = /^(?:ch|chapter|q)[-_]?(1|2|3|4)[-_]/i;
                     const regex2 = /^(?:ch|chapter|q)[-_]?(5|6|7|8|12)[-_]/i;
@@ -796,11 +773,57 @@
                 this.state.sessionStats = { correct: 0, wrongInfo: [] };
                 document.getElementById('mode-display').innerText = modeName;
 
+                // Timer Logic
+                if (this.state.timer) clearInterval(this.state.timer);
+                const timerEl = document.getElementById('quiz-timer');
+                if (mode === 'mock') {
+                    timerEl.classList.remove('hidden');
+                    let timeLeft = 90 * 60; // 90 min
+                    this.state.timer = setInterval(() => {
+                        timeLeft--;
+                        const m = Math.floor(timeLeft / 60);
+                        const s = timeLeft % 60;
+                        timerEl.innerText = `⏳ ${m}:${s.toString().padStart(2, '0')}`;
+                        if (timeLeft <= 0) { clearInterval(this.state.timer); alert('時間切れです！'); this.finishSession(); }
+                    }, 1000);
+                } else {
+                    timerEl.classList.add('hidden');
+                }
+
                 document.getElementById('quiz-view').classList.remove('hidden');
                 this.renderQuestion();
             },
 
-            quitQuiz() { this.switchTab('dashboard'); },
+            quitQuiz() {
+                if (this.state.timer) clearInterval(this.state.timer);
+                this.switchTab('dashboard');
+            },
+
+            // --- Search Function ---
+            startSearchQuiz() {
+                const keyword = document.getElementById('search-input').value.trim().toLowerCase();
+                if (!keyword) return alert('キーワードを入力してください');
+
+                const list = this.data.questions.filter(q =>
+                    (q.text && q.text.toLowerCase().includes(keyword)) ||
+                    (q.explanation && q.explanation.toLowerCase().includes(keyword)) ||
+                    (q.category && q.category.toLowerCase().includes(keyword))
+                );
+
+                if (list.length === 0) return alert('該当する問題が見つかりませんでした。');
+
+                // Manually start quiz with this list
+                this.state.queue = list;
+                this.state.currentIdx = 0;
+                this.state.modeName = `検索: ${keyword}`;
+                this.state.sessionStats = { correct: 0, wrongInfo: [] };
+                document.getElementById('mode-display').innerText = this.state.modeName;
+
+                if (this.state.timer) clearInterval(this.state.timer);
+                document.getElementById('quiz-timer').classList.add('hidden');
+                document.getElementById('quiz-view').classList.remove('hidden');
+                this.renderQuestion();
+            },
 
             renderQuestion() {
                 const q = this.state.queue[this.state.currentIdx];
@@ -811,6 +834,16 @@
                 document.getElementById('q-category').innerText = q.category || 'General';
                 document.getElementById('q-text').innerText = q.text;
                 document.getElementById('quiz-progress').style.width = `${((current - 1) / total) * 100}%`;
+
+                // Bookmark UI
+                const bmBtn = document.getElementById('btn-quiz-bookmark');
+                if (this.data.bookmarks.includes(q.id)) {
+                    bmBtn.classList.add('text-yellow-400');
+                    bmBtn.classList.remove('text-slate-300');
+                } else {
+                    bmBtn.classList.remove('text-yellow-400');
+                    bmBtn.classList.add('text-slate-300');
+                }
 
                 const codeEl = document.getElementById('code-content');
                 if (q.code && q.code.trim()) {
@@ -832,6 +865,20 @@
                     btn.innerHTML = `<span class="w-8 h-8 flex-shrink-0 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center font-bold mr-4 group-hover:bg-indigo-600 group-hover:text-white transition">${String.fromCharCode(65 + idx)}</span><span class="text-sm font-medium leading-relaxed text-slate-700">${opt}</span>`;
                     optsDiv.appendChild(btn);
                 });
+            },
+
+            toggleBookmark() {
+                const q = this.state.queue[this.state.currentIdx];
+                if (!this.data.bookmarks) this.data.bookmarks = [];
+
+                const idx = this.data.bookmarks.indexOf(q.id);
+                if (idx > -1) {
+                    this.data.bookmarks.splice(idx, 1);
+                } else {
+                    this.data.bookmarks.push(q.id);
+                }
+                this.save();
+                this.renderQuestion(); // Re-render to update icon
             },
 
             check(idx, btn) {
@@ -882,6 +929,7 @@
             },
 
             finishSession() {
+                if (this.state.timer) clearInterval(this.state.timer);
                 const log = {
                     date: Date.now(),
                     correct: this.state.sessionStats.correct,
@@ -944,17 +992,135 @@
                     input.value = '';
                 });
             },
-            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v8'); location.reload(); } }
+            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v9'); location.reload(); } }
         };
 
         const aiTutor = {
             apiKey: '', model: 'gemini-1.5-flash',
-            init() { /* same as before */ },
-            toggleCustomModelInput() { /* same as before */ },
-            saveKey() { /* same as before */ },
-            updateStatus() { /* same as before */ },
-            analyzeWeakness() { /* same as before */ },
-            async generate() { /* same as before */ }
+            init() {
+                this.apiKey = localStorage.getItem('gemini_api_key') || '';
+                this.model = localStorage.getItem('gemini_api_model') || 'gemini-1.5-flash';
+                const select = document.getElementById('api-model-select');
+                if (select) {
+                    if (['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'].includes(this.model)) {
+                        select.value = this.model;
+                        document.getElementById('api-model-custom').classList.add('hidden');
+                    } else {
+                        select.value = 'custom';
+                        document.getElementById('api-model-custom').classList.remove('hidden');
+                        document.getElementById('api-model-custom').value = this.model;
+                    }
+                }
+                this.updateStatus();
+            },
+            toggleCustomModelInput() {
+                const val = document.getElementById('api-model-select').value;
+                const customInput = document.getElementById('api-model-custom');
+                if (val === 'custom') {
+                    customInput.classList.remove('hidden');
+                } else {
+                    customInput.classList.add('hidden');
+                }
+            },
+            saveKey() {
+                const key = document.getElementById('api-key-input').value.trim();
+                let model = document.getElementById('api-model-select').value;
+                if (model === 'custom') {
+                    model = document.getElementById('api-model-custom').value.trim();
+                }
+                if (key) localStorage.setItem('gemini_api_key', key);
+                localStorage.setItem('gemini_api_model', model);
+                this.model = model;
+                alert('設定を保存しました。');
+                this.init();
+            },
+            updateStatus() {
+                const statusEl = document.getElementById('key-status');
+                if (this.apiKey) {
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み';
+                    statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold';
+                    document.getElementById('btn-generate').disabled = false;
+                } else {
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定';
+                    statusEl.className = 'text-xs text-slate-400 mt-2 flex items-center gap-1';
+                    document.getElementById('btn-generate').disabled = true;
+                }
+            },
+            analyzeWeakness() {
+                if (app.data.questions.length === 0) return "Java Silver全般";
+
+                const cats = {};
+                for (const q of app.data.questions) {
+                    const c = q.category || 'General';
+                    if (!cats[c]) cats[c] = { total: 0, correct: 0 };
+                    if (app.data.results[q.id] !== undefined) {
+                        cats[c].total++;
+                        if (app.data.results[q.id]) cats[c].correct++;
+                    }
+                }
+                const weaks = Object.keys(cats)
+                    .filter(k => cats[k].total > 0)
+                    .map(k => ({ name: k, rate: cats[k].correct / cats[k].total }))
+                    .sort((a, b) => a.rate - b.rate)
+                    .slice(0, 3);
+
+                const ul = document.getElementById('weak-list');
+                ul.innerHTML = '';
+                const area = document.getElementById('ai-analysis');
+                if (weaks.length > 0) {
+                    area.classList.remove('hidden');
+                    weaks.forEach(w => ul.innerHTML += `<li>${w.name} (${Math.round(w.rate * 100)}%)</li>`);
+                    return weaks.map(w => w.name).join(',');
+                } else {
+                    area.classList.add('hidden');
+                    return "Java Silver全般";
+                }
+            },
+            async generate() {
+                const topics = this.analyzeWeakness() || "Java Silver全般";
+                const btn = document.getElementById('btn-generate');
+                const loading = document.getElementById('ai-loading');
+                btn.classList.add('hidden');
+                loading.classList.remove('hidden');
+
+                const prompt = `Java Silver SE11の試験対策として、ユーザーの苦手分野【${topics}】に関する4択問題を5問作成してください。
+                出力は以下のJSON配列形式のみ。Markdown記法は含めないでください。
+                [{"id": "ai-${Date.now()}-1", "category": "...", "text": "...", "code": "...", "options": ["..."], "answer": 0, "explanation": "..."}]`;
+
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${this.apiKey}`;
+
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    });
+
+                    if (!res.ok) {
+                        const err = await res.json().catch(() => ({}));
+                        throw new Error(err.error?.message || res.statusText);
+                    }
+
+                    const data = await res.json();
+                    let text = data.candidates[0].content.parts[0].text;
+                    const jsonMatch = text.match(/\[\s*\{.*\}\s*\]/s);
+                    text = jsonMatch ? jsonMatch[0] : text.replace(/```json/g, '').replace(/```/g, '').trim();
+                    const newQs = JSON.parse(text);
+
+                    newQs.forEach((q, i) => {
+                        q.id = `ai-${Date.now()}-${i}`;
+                        app.data.questions.push(q);
+                    });
+                    app.save();
+                    alert('5問の問題を追加しました！「AI生成」カテゴリから演習できます。');
+                    app.updateDashboard();
+                } catch (e) {
+                    alert(`AI生成エラー: ${e.message}\n\nモデル名が存在しません。設定から別のモデルに変更してください。`);
+                } finally {
+                    btn.classList.remove('hidden');
+                    loading.classList.add('hidden');
+                }
+            }
         };
 
         // Initialize
