@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 9.1 - Ultimate Fixed)</title>
+    <title>Java Silver 完全攻略道場 (Ver 9.2 - Error Handling)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
@@ -86,7 +86,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 9.1 Ultimate Fixed</p>
+                <p class="text-[10px] text-slate-400">Ver 9.2 Error Handling</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -111,7 +111,6 @@
         <!-- DASHBOARD TAB -->
         <div id="tab-dashboard" class="absolute inset-0 overflow-y-auto p-4 md:p-8 max-w-6xl mx-auto w-full fade-in">
 
-            <!-- Import Alert -->
             <div id="import-alert"
                 class="bg-white border border-indigo-100 text-slate-700 px-4 py-3 rounded-xl mb-6 flex items-center justify-between shadow-sm">
                 <div class="flex items-center gap-3">
@@ -158,9 +157,8 @@
                 </div>
             </div>
 
-            <!-- SEARCH & BOOKMARK (New Features) -->
+            <!-- SEARCH & BOOKMARK -->
             <div class="grid md:grid-cols-2 gap-4 mb-8">
-                <!-- Search -->
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                     <h3 class="text-sm font-bold text-slate-700 mb-2 flex items-center gap-2">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -177,7 +175,6 @@
                             class="bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-700 transition active:scale-95">検索</button>
                     </div>
                 </div>
-                <!-- Bookmark -->
                 <div
                     class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
                     <div>
@@ -242,7 +239,7 @@
                 </div>
             </div>
 
-            <!-- Mock Exam (With Timer) -->
+            <!-- Mock Exam -->
             <div
                 class="bg-gradient-to-r from-slate-800 to-slate-700 rounded-xl p-6 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
                 <div>
@@ -384,9 +381,9 @@
                             <div class="space-y-2"><select id="api-model-select"
                                     class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-white"
                                     onchange="aiTutor.toggleCustomModelInput()">
-                                    <option value="gemini-1.5-flash">gemini-1.5-flash (推奨・高速)</option>
-                                    <option value="gemini-1.5-pro">gemini-1.5-pro (高精度)</option>
-                                    <option value="gemini-pro">gemini-pro (旧安定版)</option>
+                                    <option value="gemini-1.5-flash">gemini-1.5-flash</option>
+                                    <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+                                    <option value="gemini-pro">gemini-pro</option>
                                     <option value="custom">カスタム入力...</option>
                                 </select><input type="text" id="api-model-custom"
                                     class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none bg-slate-50 hidden"
@@ -520,7 +517,7 @@
 
             init() {
                 try {
-                    const saved = localStorage.getItem('javaSilverAI_v9_1');
+                    const saved = localStorage.getItem('javaSilverAI_v9');
                     if (saved) {
                         const parsed = JSON.parse(saved);
                         this.data = { ...this.data, ...parsed };
@@ -536,7 +533,7 @@
             save() {
                 try {
                     if (this.data.history.length > 100) this.data.history = this.data.history.slice(-100);
-                    localStorage.setItem('javaSilverAI_v9_1', JSON.stringify(this.data));
+                    localStorage.setItem('javaSilverAI_v9', JSON.stringify(this.data));
                 } catch (e) { console.error("Save error", e); }
                 this.updateDashboard();
             },
@@ -556,6 +553,55 @@
                         if (tab === 'ai') aiTutor.analyzeWeakness();
                     });
                 }
+            },
+
+            renderHistory() {
+                const filter = document.getElementById('history-filter').value;
+                const list = document.getElementById('history-list');
+                const canvas = document.getElementById('historyChart');
+                list.innerHTML = '';
+
+                let logs = this.data.history.filter(log => {
+                    if (filter === 'all') return true;
+                    if (filter === 'mock') return log.mode && log.mode.includes('模擬');
+                    if (filter === 'level') return log.mode && log.mode.includes('レベル');
+                    if (filter === 'final') return log.mode && log.mode.includes('最終');
+                    if (!isNaN(parseInt(filter))) return log.mode && log.mode.includes(`第${filter}章`);
+                    return true;
+                });
+
+                if (logs.length === 0) {
+                    list.innerHTML = '<div class="text-center text-slate-400 py-8">該当する履歴がありません</div>';
+                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
+                    return;
+                }
+
+                const fragment = document.createDocumentFragment();
+                [...logs].reverse().slice(0, 30).forEach(log => {
+                    const d = new Date(log.date);
+                    const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+                    const mode = log.mode || '演習';
+                    const rate = Math.round((log.correct / log.total) * 100);
+                    const weaks = (log.weak && log.weak.length > 0) ? log.weak.join(', ') : 'なし';
+
+                    const div = document.createElement('div');
+                    div.className = "bg-white p-4 rounded-lg shadow-sm border border-slate-100 mb-2";
+                    div.innerHTML = `<div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><span class="text-xs text-slate-500">${dateStr}</span><span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span></div><div class="font-bold text-lg ${rate >= 63 ? 'text-green-600' : 'text-slate-700'}">${rate}%</div></div><div class="text-[10px] text-slate-400 flex items-start gap-1"><span class="font-bold text-red-400 whitespace-nowrap">Miss:</span><span class="leading-tight">${weaks}</span></div>`;
+                    fragment.appendChild(div);
+                });
+                list.appendChild(fragment);
+
+                const chartLogs = logs.slice(-20);
+                const labels = chartLogs.map(l => { const d = new Date(l.date); return `${d.getMonth() + 1}/${d.getDate()}`; });
+                const dataPoints = chartLogs.map(l => Math.round((l.correct / l.total) * 100));
+                const passingLine = Array(chartLogs.length).fill(63);
+
+                if (this.chartInstance) this.chartInstance.destroy();
+                this.chartInstance = new Chart(canvas, {
+                    type: 'line',
+                    data: { labels: labels, datasets: [{ label: '正答率 (%)', data: dataPoints, borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.1)', tension: 0.3, fill: true, pointRadius: 4, pointBackgroundColor: '#fff', pointBorderColor: '#4f46e5' }, { label: '合格ライン (63%)', data: passingLine, borderColor: '#ef4444', borderDash: [5, 5], pointRadius: 0, borderWidth: 2, fill: false }] },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } } }, plugins: { legend: { labels: { font: { size: 10 } } } } }
+                });
             },
 
             updateDashboard() {
@@ -799,55 +845,6 @@
             closeSessionResult() {
                 document.getElementById('session-result').classList.add('hidden');
                 this.switchTab('history');
-            },
-
-            renderHistory() {
-                const filter = document.getElementById('history-filter').value;
-                const list = document.getElementById('history-list');
-                const canvas = document.getElementById('historyChart');
-                list.innerHTML = '';
-
-                let logs = this.data.history.filter(log => {
-                    if (filter === 'all') return true;
-                    if (filter === 'mock') return log.mode && log.mode.includes('模擬');
-                    if (filter === 'level') return log.mode && log.mode.includes('レベル');
-                    if (filter === 'final') return log.mode && log.mode.includes('最終');
-                    if (!isNaN(parseInt(filter))) return log.mode && log.mode.includes(`第${filter}章`);
-                    return true;
-                });
-
-                if (logs.length === 0) {
-                    list.innerHTML = '<div class="text-center text-slate-400 py-8">該当する履歴がありません</div>';
-                    if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
-                    return;
-                }
-
-                const fragment = document.createDocumentFragment();
-                [...logs].reverse().slice(0, 30).forEach(log => {
-                    const d = new Date(log.date);
-                    const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
-                    const mode = log.mode || '演習';
-                    const rate = Math.round((log.correct / log.total) * 100);
-                    const weaks = (log.weak && log.weak.length > 0) ? log.weak.join(', ') : 'なし';
-
-                    const div = document.createElement('div');
-                    div.className = "bg-white p-4 rounded-lg shadow-sm border border-slate-100 mb-2";
-                    div.innerHTML = `<div class="flex justify-between items-center mb-1"><div class="flex items-center gap-2"><span class="text-xs text-slate-500">${dateStr}</span><span class="text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold">${mode}</span></div><div class="font-bold text-lg ${rate >= 63 ? 'text-green-600' : 'text-slate-700'}">${rate}%</div></div><div class="text-[10px] text-slate-400 flex items-start gap-1"><span class="font-bold text-red-400 whitespace-nowrap">Miss:</span><span class="leading-tight">${weaks}</span></div>`;
-                    fragment.appendChild(div);
-                });
-                list.appendChild(fragment);
-
-                const chartLogs = logs.slice(-20);
-                const labels = chartLogs.map(l => { const d = new Date(l.date); return `${d.getMonth() + 1}/${d.getDate()}`; });
-                const dataPoints = chartLogs.map(l => Math.round((l.correct / l.total) * 100));
-                const passingLine = Array(chartLogs.length).fill(63);
-
-                if (this.chartInstance) this.chartInstance.destroy();
-                this.chartInstance = new Chart(canvas, {
-                    type: 'line',
-                    data: { labels: labels, datasets: [{ label: '正答率 (%)', data: dataPoints, borderColor: '#4f46e5', backgroundColor: 'rgba(79, 70, 229, 0.1)', tension: 0.3, fill: true, pointRadius: 4, pointBackgroundColor: '#fff', pointBorderColor: '#4f46e5' }, { label: '合格ライン (63%)', data: passingLine, borderColor: '#ef4444', borderDash: [5, 5], pointRadius: 0, borderWidth: 2, fill: false }] },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } } }, plugins: { legend: { labels: { font: { size: 10 } } } } }
-                });
             }
         };
 
@@ -864,16 +861,6 @@
 
         const aiTutor = {
             apiKey: '', model: 'gemini-1.5-flash',
-            init() { /* same as fixed */ },
-            toggleCustomModelInput() { /* same as fixed */ },
-            saveKey() { /* same as fixed */ },
-            updateStatus() { /* same as fixed */ },
-            analyzeWeakness() { /* same as fixed */ },
-            async generate() { /* same as fixed */ }
-        };
-
-        // Restore AI logic fully from v8.1 fix
-        Object.assign(aiTutor, {
             init() {
                 this.apiKey = localStorage.getItem('gemini_api_key') || '';
                 this.model = localStorage.getItem('gemini_api_model') || 'gemini-1.5-flash';
@@ -925,6 +912,7 @@
             },
             analyzeWeakness() {
                 if (app.data.questions.length === 0) return "Java Silver全般";
+
                 const cats = {};
                 for (const q of app.data.questions) {
                     const c = q.category || 'General';
@@ -974,7 +962,14 @@
 
                     if (!res.ok) {
                         const err = await res.json().catch(() => ({}));
-                        throw new Error(err.error?.message || res.statusText);
+                        // ステータスコードに応じたエラーメッセージ
+                        if (res.status === 404) {
+                            throw new Error(`モデル「${this.model}」が見つかりません(404)。設定から「gemini-1.5-flash」などに変更してください。`);
+                        } else if (res.status === 429) {
+                            throw new Error("リクエストが多すぎます(429)。しばらく時間をおいてから試してください。");
+                        } else {
+                            throw new Error(err.error?.message || res.statusText);
+                        }
                     }
 
                     const data = await res.json();
@@ -991,13 +986,13 @@
                     alert('5問の問題を追加しました！「AI生成」カテゴリから演習できます。');
                     app.updateDashboard();
                 } catch (e) {
-                    alert(`AI生成エラー: ${e.message}\n\nモデル名が存在しません。設定から別のモデルに変更してください。`);
+                    alert(`AI生成エラー: ${e.message}\n\nモデル名が正しいか、またはAPI制限にかかっていないか確認してください。`);
                 } finally {
                     btn.classList.remove('hidden');
                     loading.classList.add('hidden');
                 }
             }
-        });
+        };
 
         // Initialize
         app.init();
