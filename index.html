@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 14.3 - Refined)</title>
+    <title>Java Silver 完全攻略道場 (Ver 14.4 - Support Area)</title>
     <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,13 +25,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .loader {
@@ -44,13 +39,8 @@
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         ::-webkit-scrollbar {
@@ -99,7 +89,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 14.3 Refined</p>
+                <p class="text-[10px] text-slate-400">Ver 14.4 Support Area</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -197,8 +187,7 @@
             <div class="mb-8">
                 <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <span>🏆 模擬試験</span><span
-                        class="bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded">Timer付き (90分)</span>
-                </h3>
+                        class="bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded">Timer付き (90分)</span></h3>
                 <div id="mock-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <button onclick="app.startQuiz('mock')"
                         class="bg-gradient-to-r from-slate-800 to-slate-700 text-white hover:from-slate-700 hover:to-slate-600 p-5 rounded-xl text-left transition shadow-lg group active:scale-[0.98]">
@@ -255,10 +244,11 @@
             </div>
         </div>
 
-        <!-- HISTORY TAB -->
+        <!-- HISTORY TAB (Updated Layout) -->
         <div id="tab-history" class="absolute inset-0 overflow-y-auto p-4 bg-slate-100 hidden fade-in">
-            <div class="max-w-4xl mx-auto py-8">
-                <div class="flex justify-between items-center mb-6">
+            <div class="max-w-6xl mx-auto py-8">
+                <!-- Header Area -->
+                <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-6 gap-4">
                     <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2"><span>📈 学習記録</span></h2>
                     <select id="history-filter"
                         class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 bg-white outline-none focus:ring-2 focus:ring-indigo-500"
@@ -282,9 +272,38 @@
                         <option value="final">最終章</option>
                     </select>
                 </div>
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 h-64 md:h-80"><canvas
-                        id="historyChart"></canvas></div>
-                <div id="history-list" class="space-y-3"></div>
+
+                <div class="grid md:grid-cols-12 gap-6">
+                    <!-- Main Content (Graph & List) -->
+                    <div class="md:col-span-8 space-y-6">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 h-64 md:h-80">
+                            <canvas id="historyChart"></canvas>
+                        </div>
+                        <div id="history-list" class="space-y-3"></div>
+                    </div>
+
+                    <!-- Sidebar (Weakness Support) -->
+                    <div class="md:col-span-4">
+                        <div id="history-sidebar" class="sticky top-6 space-y-4">
+                            <!-- Weakness Advice Card -->
+                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                                    <svg class="w-24 h-24 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2 relative z-10">
+                                    <span class="text-xl">🚑</span> 苦手克服サポート
+                                </h3>
+                                <div id="weakness-advice-list" class="space-y-4 relative z-10">
+                                    <p class="text-sm text-slate-400 text-center py-4">
+                                        学習履歴から苦手分野を分析し、<br>ここにアドバイスを表示します。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -325,8 +344,7 @@
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </div>
+                                    </svg></div>
                             </div><input type="hidden" id="create-cat-name" value="基本構文">
                         </div>
                         <div><label class="block text-sm font-bold text-slate-700 mb-2">問題文</label><textarea
@@ -588,7 +606,9 @@
                     const filter = document.getElementById('history-filter').value;
                     const list = document.getElementById('history-list');
                     const canvas = document.getElementById('historyChart');
+                    const adviceList = document.getElementById('weakness-advice-list');
                     list.innerHTML = '';
+                    adviceList.innerHTML = '<div class="flex flex-col items-center justify-center py-6 text-slate-400"><div class="loader mb-2"></div><span class="text-xs">分析中...</span></div>';
 
                     let logs = this.data.history.filter(log => {
                         if (filter === 'all') return true;
@@ -599,13 +619,19 @@
                         return true;
                     });
 
+                    // 履歴リストの描画
                     if (logs.length === 0) {
                         list.innerHTML = '<div class="text-center text-slate-400 py-8">該当する履歴がありません</div>';
+                        adviceList.innerHTML = '<p class="text-sm text-slate-400 text-center py-4">データ不足のため分析できません</p>';
                         if (this.chartInstance) { this.chartInstance.destroy(); this.chartInstance = null; }
                         return;
                     }
 
                     const fragment = document.createDocumentFragment();
+                    
+                    // 弱点分析用集計
+                    const weakCounts = {};
+
                     [...logs].reverse().slice(0, 30).forEach(log => {
                         const d = new Date(log.date);
                         const dateStr = `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -614,6 +640,11 @@
 
                         let weaksHtml = '<span class="text-slate-400 ml-1">なし</span>';
                         if (log.weak && log.weak.length > 0) {
+                            // 集計
+                            log.weak.forEach(cat => {
+                                weakCounts[cat] = (weakCounts[cat] || 0) + 1;
+                            });
+
                             weaksHtml = log.weak.map(cat => {
                                 const url = app.categoryLinks[cat];
                                 if (url) {
@@ -634,6 +665,7 @@
                     });
                     list.appendChild(fragment);
 
+                    // グラフ描画
                     if (typeof Chart !== 'undefined') {
                         const chartLogs = logs.slice(-20);
                         const labels = chartLogs.map(l => { const d = new Date(l.date); return `${d.getMonth() + 1}/${d.getDate()}`; });
@@ -647,6 +679,51 @@
                             options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } } }, plugins: { legend: { labels: { font: { size: 10 } } } } }
                         });
                     }
+
+                    // サイドバー：弱点アドバイスの生成
+                    const sortedWeaks = Object.entries(weakCounts)
+                        .sort((a, b) => b[1] - a[1]) // 回数が多い順
+                        .slice(0, 3); // Top 3
+
+                    adviceList.innerHTML = '';
+                    if (sortedWeaks.length === 0) {
+                         adviceList.innerHTML = `
+                            <div class="text-center py-6">
+                                <div class="text-4xl mb-2">🎉</div>
+                                <p class="text-sm font-bold text-slate-700">素晴らしい！</p>
+                                <p class="text-xs text-slate-500 mt-1">直近の学習で苦手分野は見つかりませんでした。</p>
+                            </div>`;
+                    } else {
+                        sortedWeaks.forEach(([cat, count]) => {
+                            const url = app.categoryLinks[cat];
+                            const card = document.createElement('div');
+                            card.className = "bg-slate-50 p-3 rounded-lg border border-slate-200";
+                            card.innerHTML = `
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-bold text-sm text-slate-700">${cat}</h4>
+                                    <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold">Miss: ${count}</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    ${url ? `<a href="${url}" target="_blank" class="text-center text-[10px] bg-white border border-slate-300 hover:bg-slate-50 hover:text-indigo-600 text-slate-600 py-2 rounded transition flex items-center justify-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                                        公式Doc
+                                    </a>` : ''}
+                                    <button onclick="document.getElementById('search-input').value='${cat}';app.switchTab('dashboard');" class="text-center text-[10px] bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded transition flex items-center justify-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                        問題を解く
+                                    </button>
+                                </div>
+                            `;
+                            adviceList.appendChild(card);
+                        });
+                        
+                        // AI誘導ボタン
+                        const aiBtn = document.createElement('div');
+                        aiBtn.className = "mt-4 pt-3 border-t border-slate-100 text-center";
+                        aiBtn.innerHTML = `<button onclick="app.switchTab('ai')" class="text-xs text-indigo-500 hover:text-indigo-700 font-bold hover:underline">🤖 AIコーチに弱点問題を頼む</button>`;
+                        adviceList.appendChild(aiBtn);
+                    }
+
                 } catch (e) { console.error("History Error", e); }
             },
 
@@ -1077,9 +1154,9 @@
         };
 
         const aiTutor = {
-            apiKey: '',
+            apiKey: '', 
             model: 'gemini-1.5-flash',
-
+            
             init() {
                 this.apiKey = localStorage.getItem('gemini_api_key') || '';
                 let savedModel = localStorage.getItem('gemini_api_model');
@@ -1092,42 +1169,42 @@
                 }
                 this.updateStatus();
             },
-
-            toggleCustomModelInput() {
-                const val = document.getElementById('api-model-select').value;
-                const customInput = document.getElementById('api-model-custom');
-                if (val === 'custom') customInput.classList.remove('hidden');
-                else customInput.classList.add('hidden');
+            
+            toggleCustomModelInput() { 
+                const val = document.getElementById('api-model-select').value; 
+                const customInput = document.getElementById('api-model-custom'); 
+                if (val === 'custom') customInput.classList.remove('hidden'); 
+                else customInput.classList.add('hidden'); 
             },
-
-            saveKey() {
-                const key = document.getElementById('api-key-input').value.trim();
-                let model = document.getElementById('api-model-select').value;
-                if (model === 'custom') model = document.getElementById('api-model-custom').value.trim();
-                if (key) localStorage.setItem('gemini_api_key', key);
-                localStorage.setItem('gemini_api_model', model);
-                this.model = model;
-                alert('設定を保存しました。');
-                this.init();
+            
+            saveKey() { 
+                const key = document.getElementById('api-key-input').value.trim(); 
+                let model = document.getElementById('api-model-select').value; 
+                if (model === 'custom') model = document.getElementById('api-model-custom').value.trim(); 
+                if (key) localStorage.setItem('gemini_api_key', key); 
+                localStorage.setItem('gemini_api_model', model); 
+                this.model = model; 
+                alert('設定を保存しました。'); 
+                this.init(); 
             },
-
-            updateStatus() {
-                const statusEl = document.getElementById('key-status');
-                if (this.apiKey) {
-                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み';
-                    statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold';
-                    document.getElementById('btn-generate').disabled = false;
-                } else {
-                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定';
-                    statusEl.className = 'text-xs text-slate-400 mt-2 flex items-center gap-1';
-                    document.getElementById('btn-generate').disabled = true;
-                }
+            
+            updateStatus() { 
+                const statusEl = document.getElementById('key-status'); 
+                if (this.apiKey) { 
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み'; 
+                    statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold'; 
+                    document.getElementById('btn-generate').disabled = false; 
+                } else { 
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定'; 
+                    statusEl.className = 'text-xs text-slate-400 mt-2 flex items-center gap-1'; 
+                    document.getElementById('btn-generate').disabled = true; 
+                } 
             },
-
+            
             analyzeWeakness() {
                 // シンプルな弱点分析ロジック
                 if (app.data.results.length === 0) return "Java Silver全般";
-
+                
                 // 間違えた回数が多いカテゴリを集計
                 const wrongCounts = {};
                 for (const q of app.data.questions) {
@@ -1136,16 +1213,16 @@
                         wrongCounts[cat] = (wrongCounts[cat] || 0) + 1;
                     }
                 }
-
+                
                 // 上位3つを抽出
                 const sortedWeakness = Object.entries(wrongCounts)
                     .sort((a, b) => b[1] - a[1])
                     .slice(0, 3)
                     .map(entry => entry[0]);
-
+                
                 const listEl = document.getElementById('weak-list');
                 const analysisBox = document.getElementById('ai-analysis');
-
+                
                 if (sortedWeakness.length > 0) {
                     analysisBox.classList.remove('hidden');
                     listEl.innerHTML = sortedWeakness.map(w => `<li>${w}</li>`).join('');
@@ -1155,7 +1232,7 @@
                     return "Java Silver全般";
                 }
             },
-
+            
             async generate() {
                 const topics = this.analyzeWeakness() || "Java Silver全般";
                 const btn = document.getElementById('btn-generate');
