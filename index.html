@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 14.4 - Support Area)</title>
+    <title>Java Silver 完全攻略道場 (Ver 14.5 - Demo Data)</title>
     <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -89,7 +89,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 14.4 Support Area</p>
+                <p class="text-[10px] text-slate-400">Ver 14.5 Demo Data</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -239,8 +239,10 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center pt-8 border-t border-slate-200"><button onclick="dataManager.resetAll()"
-                    class="text-xs text-red-400 hover:text-red-600 hover:underline transition">すべてのデータを削除してリセット</button>
+            <div class="text-center pt-8 border-t border-slate-200 flex justify-center gap-4">
+                <button onclick="dataManager.generateDemoData()" class="text-xs text-blue-500 hover:text-blue-700 font-bold hover:underline transition">🧪 テストデータを生成</button>
+                <span class="text-slate-300">|</span>
+                <button onclick="dataManager.resetAll()" class="text-xs text-red-400 hover:text-red-600 hover:underline transition">すべてのデータを削除してリセット</button>
             </div>
         </div>
 
@@ -1150,7 +1152,19 @@
 
         const dataManager = {
             importData(input) { if (input.files.length === 0) return; const readers = Array.from(input.files).map(file => new Promise(r => { const reader = new FileReader(); reader.onload = e => r(e.target.result); reader.readAsText(file); })); Promise.all(readers).then(results => { let count = 0; const newQs = []; const seenIds = new Set(app.data.questions.map(q => q.id)); results.forEach(res => { try { const json = JSON.parse(res); if (json.questions) json.questions.forEach(q => { if (!seenIds.has(q.id)) { newQs.push(q); seenIds.add(q.id); count++; } }); } catch (e) { } }); if (count > 0) { app.data.questions = [...app.data.questions, ...newQs]; app.save(); document.getElementById('import-alert').classList.add('hidden'); alert(`${count}問を追加しました！`); app.renderChapters(); } input.value = ''; }); },
-            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v14_2'); location.reload(); } }
+            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem('javaSilverAI_v14_2'); location.reload(); } },
+            generateDemoData() {
+                const now = Date.now();
+                const dummyHistory = [
+                    { date: now - 10000000, correct: 5, total: 10, mode: '第1章', weak: ['Javaの基本', 'データ型と変数'] },
+                    { date: now - 5000000, correct: 2, total: 5, mode: '第3章', weak: ['演算子', 'Javaの基本'] },
+                    { date: now, correct: 8, total: 10, mode: '模擬試験', weak: ['例外処理', 'ポリモーフィズム', 'Javaの基本'] }
+                ];
+                app.data.history = [...app.data.history, ...dummyHistory];
+                app.save();
+                alert('テスト用の学習履歴を追加しました。「記録」タブを確認してください。');
+                app.renderHistory();
+            }
         };
 
         const aiTutor = {
