@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 14.5 - Demo Data)</title>
+    <title>Java Silver 完全攻略道場 (Ver 14.6 - User Tab)</title>
     <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -89,7 +89,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 14.5 Demo Data</p>
+                <p class="text-[10px] text-slate-400">Ver 14.6 User Tab</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -181,6 +181,34 @@
                     <button onclick="app.startQuiz('bookmark')" id="btn-bookmark"
                         class="bg-yellow-100 text-yellow-700 hover:bg-yellow-200 px-5 py-2 rounded-lg text-sm font-bold transition disabled:opacity-50"
                         disabled>解く ▶</button>
+                </div>
+            </div>
+
+            <!-- オリジナル問題集セクション（黒本用） -->
+            <div class="mb-8">
+                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span>📚 オリジナル問題集</span>
+                    <span class="bg-slate-200 text-slate-600 text-[10px] px-2 py-0.5 rounded">User Created</span>
+                </h3>
+                <div class="bg-slate-800 rounded-xl p-5 shadow-lg text-white relative overflow-hidden group">
+                    <!-- 背景装飾 -->
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-9xl transform translate-x-10 -translate-y-10 select-none">📖</div>
+                    
+                    <div class="relative z-10">
+                        <h4 class="text-lg font-bold mb-2">My 問題集（黒本再現など）</h4>
+                        <p class="text-xs text-slate-400 mb-4">「作成」タブで作ったオリジナル問題のみを出題します。<br>※下のレベル別コースには混ざりません。</p>
+                        <div class="flex gap-3">
+                            <button onclick="app.startQuiz('user-all')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold px-4 py-2 rounded-lg transition shadow-md active:scale-95 flex items-center gap-2">
+                                <span>全問解く</span>
+                            </button>
+                            <button onclick="app.startQuiz('user-random')" class="bg-slate-600 hover:bg-slate-500 text-white text-sm font-bold px-4 py-2 rounded-lg transition shadow-md active:scale-95 flex items-center gap-2">
+                                <span>ランダム10問</span>
+                            </button>
+                        </div>
+                        <div class="mt-4 text-xs text-slate-500">
+                            登録数: <span id="user-q-count" class="font-bold text-slate-300">0</span> 問
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -742,6 +770,12 @@
                 const bCount = this.data.bookmarks ? this.data.bookmarks.length : 0;
                 document.getElementById('bookmark-count').innerText = bCount;
                 document.getElementById('btn-bookmark').disabled = bCount === 0;
+                
+                // 自作問題数のカウント更新
+                const userQCount = this.data.questions.filter(q => q.id.includes('user')).length;
+                const userQCountEl = document.getElementById('user-q-count');
+                if (userQCountEl) userQCountEl.innerText = userQCount;
+
                 if (total > 0) {
                     document.getElementById('import-alert').classList.add('hidden');
                     setTimeout(() => this.renderChapters(), 10);
@@ -827,11 +861,21 @@
                     const regex1 = /^(?:ch|chapter|q)[-_]?(1|2|3|4)[-_]/i;
                     const regex2 = /^(?:ch|chapter|q)[-_]?(5|6|7|8|12)[-_]/i;
                     const regex3 = /^(?:ch|chapter|q)[-_]?(9|10|11|13)[-_]/i;
-                    if (mode === 'level-1') { list = this.data.questions.filter(q => q.id.match(regex1)); modeName = '初級編'; }
-                    if (mode === 'level-2') { list = this.data.questions.filter(q => q.id.match(regex2)); modeName = '中級編'; }
-                    if (mode === 'level-3') { list = this.data.questions.filter(q => q.id.match(regex3)); modeName = '上級編'; }
+                    // レベル別コースからは自作問題を除外する
+                    if (mode === 'level-1') { list = this.data.questions.filter(q => q.id.match(regex1) && !q.id.includes('user')); modeName = '初級編'; }
+                    if (mode === 'level-2') { list = this.data.questions.filter(q => q.id.match(regex2) && !q.id.includes('user')); modeName = '中級編'; }
+                    if (mode === 'level-3') { list = this.data.questions.filter(q => q.id.match(regex3) && !q.id.includes('user')); modeName = '上級編'; }
                 } else if (mode === 'mock') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40); modeName = '模擬試験(ランダム)'; }
                 else if (mode === 'mock-set') { list = this.data.questions.filter(q => q.category === param); modeName = param; }
+                else if (mode === 'user-all') {
+                    // 自作問題すべて
+                    list = this.data.questions.filter(q => q.id.includes('user'));
+                    modeName = 'オリジナル全問';
+                } else if (mode === 'user-random') {
+                    // 自作問題からランダム10問
+                    list = this.data.questions.filter(q => q.id.includes('user')).sort(() => Math.random() - 0.5).slice(0, 10);
+                    modeName = 'オリジナル(10問)';
+                }
 
                 if (list.length === 0) return alert('該当する問題がありません。');
                 if (mode !== 'mock-set') list.sort(() => Math.random() - 0.5);
