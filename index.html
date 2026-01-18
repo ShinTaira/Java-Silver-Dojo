@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 14.7 - Multi-line Options)</title>
+    <title>Java Silver 完全攻略道場 (Ver 14.8 - Fix Layout)</title>
     <link rel="icon" href="data:,">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -89,7 +89,7 @@
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-wide leading-tight">Java Silver 道場</h1>
-                <p class="text-[10px] text-slate-400">Ver 14.7 Multi-line Options</p>
+                <p class="text-[10px] text-slate-400">Ver 14.8 Fix Layout</p>
             </div>
         </div>
         <div class="flex gap-2">
@@ -512,7 +512,7 @@
                                     class="text-sm">10</span></div>
                         </div>
                     </div>
-                    <h3 class="text-lg font-bold text-slate-800 mb-6 leading-relaxed whitespace-pre-line" id="q-text">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 leading-relaxed whitespace-pre-wrap" id="q-text">
                         Problem</h3>
                     <div id="code-container"
                         class="bg-[#1e1e1e] rounded-lg overflow-hidden mb-6 relative group hidden shadow-inner border border-slate-700">
@@ -534,7 +534,10 @@
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-3"><span id="result-badge"
                                 class="font-bold text-lg"></span></div>
-                        <div class="text-slate-700 text-sm leading-7 whitespace-pre-line" id="explanation-text"></div>
+                        
+                        <!-- 修正箇所: whitespace-pre-line を whitespace-pre-wrap に変更し、font-mono を追加 -->
+                        <div class="text-slate-700 text-sm leading-7 whitespace-pre-wrap font-mono" id="explanation-text"></div>
+                        
                         <button onclick="app.nextQuestion()"
                             class="mt-6 w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-lg transition shadow-lg flex items-center justify-center gap-2 active:scale-95"><span>次の問題へ</span><svg
                                 class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -861,21 +864,11 @@
                     const regex1 = /^(?:ch|chapter|q)[-_]?(1|2|3|4)[-_]/i;
                     const regex2 = /^(?:ch|chapter|q)[-_]?(5|6|7|8|12)[-_]/i;
                     const regex3 = /^(?:ch|chapter|q)[-_]?(9|10|11|13)[-_]/i;
-                    // レベル別コースからは自作問題を除外する
-                    if (mode === 'level-1') { list = this.data.questions.filter(q => q.id.match(regex1) && !q.id.includes('user')); modeName = '初級編'; }
-                    if (mode === 'level-2') { list = this.data.questions.filter(q => q.id.match(regex2) && !q.id.includes('user')); modeName = '中級編'; }
-                    if (mode === 'level-3') { list = this.data.questions.filter(q => q.id.match(regex3) && !q.id.includes('user')); modeName = '上級編'; }
+                    if (mode === 'level-1') { list = this.data.questions.filter(q => q.id.match(regex1)); modeName = '初級編'; }
+                    if (mode === 'level-2') { list = this.data.questions.filter(q => q.id.match(regex2)); modeName = '中級編'; }
+                    if (mode === 'level-3') { list = this.data.questions.filter(q => q.id.match(regex3)); modeName = '上級編'; }
                 } else if (mode === 'mock') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40); modeName = '模擬試験(ランダム)'; }
                 else if (mode === 'mock-set') { list = this.data.questions.filter(q => q.category === param); modeName = param; }
-                else if (mode === 'user-all') {
-                    // 自作問題すべて
-                    list = this.data.questions.filter(q => q.id.includes('user'));
-                    modeName = 'オリジナル全問';
-                } else if (mode === 'user-random') {
-                    // 自作問題からランダム10問
-                    list = this.data.questions.filter(q => q.id.includes('user')).sort(() => Math.random() - 0.5).slice(0, 10);
-                    modeName = 'オリジナル(10問)';
-                }
 
                 if (list.length === 0) return alert('該当する問題がありません。');
                 if (mode !== 'mock-set') list.sort(() => Math.random() - 0.5);
@@ -966,7 +959,7 @@
                     btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-indigo-50 hover:border-indigo-300 transition flex items-center shadow-sm group active:scale-[0.98]";
                     btn.onclick = () => this.selectOption(idx, btn);
                     btn.id = `option-btn-${idx}`;
-                    btn.innerHTML = `<span class="w-8 h-8 flex-shrink-0 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center font-bold mr-4 group-hover:bg-indigo-600 group-hover:text-white transition">${String.fromCharCode(65 + idx)}</span><span class="text-sm font-medium leading-relaxed text-slate-700 whitespace-pre-wrap text-left">${opt}</span>`;
+                    btn.innerHTML = `<span class="w-8 h-8 flex-shrink-0 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center font-bold mr-4 group-hover:bg-indigo-600 group-hover:text-white transition">${String.fromCharCode(65 + idx)}</span><span class="text-sm font-medium leading-relaxed text-slate-700">${opt}</span>`;
                     optsDiv.appendChild(btn);
                 });
             },
@@ -1081,8 +1074,8 @@
                 div.className = "flex items-center gap-3 option-row";
                 div.innerHTML = `
                     <input type="checkbox" name="correct-idx" value="${idx}" class="w-5 h-5 mt-2 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-                    <textarea class="create-option flex-1 border border-slate-300 rounded px-3 py-2 text-sm focus:border-emerald-500 outline-none transition resize-y" rows="2" placeholder="選択肢 ${String.fromCharCode(65 + idx)}" required></textarea>
-                    <button type="button" onclick="creator.removeOption(this)" class="text-slate-400 hover:text-red-500 px-2 font-bold text-lg self-start mt-1">×</button>
+                    <input type="text" class="create-option flex-1 border border-slate-300 rounded px-3 py-2 text-sm focus:border-emerald-500 outline-none" placeholder="選択肢 ${String.fromCharCode(65 + idx)}" required>
+                    <button type="button" onclick="creator.removeOption(this)" class="text-slate-400 hover:text-red-500 px-2 font-bold text-lg">×</button>
                 `;
                 container.appendChild(div);
             },
@@ -1091,7 +1084,7 @@
                 const rows = document.querySelectorAll('.option-row');
                 rows.forEach((row, index) => {
                     row.querySelector('input[type="checkbox"]').value = index;
-                    row.querySelector('.create-option').placeholder = `選択肢 ${String.fromCharCode(65 + index)}`;
+                    row.querySelector('input[type="text"]').placeholder = `選択肢 ${String.fromCharCode(65 + index)}`;
                 });
             },
             resetForm() {
