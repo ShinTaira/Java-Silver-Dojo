@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 15.14 - Final Fix)</title>
+    <title>Java Silver 完全攻略道場 (Ver 15.15 - ID Mismatch Fix)</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -170,7 +170,8 @@
                         ☕️</div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.14 Final Fix</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.15 ID Mismatch Fix
+                        </p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -611,7 +612,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 15.14</p>
+                    <p>Java Silver Dojo Ver 15.15</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -654,8 +655,8 @@
             </div>
         </div>
 
-        <!-- QUIZ VIEW -->
-        <div id="quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] dark:bg-darkbg hidden z-50">
+        <!-- QUIZ VIEW (CORRECTED ID) -->
+        <div id="tab-quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] dark:bg-darkbg hidden z-50">
             <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
                 <div class="flex justify-between items-center mb-6">
                     <button onclick="app.quitQuiz()"
