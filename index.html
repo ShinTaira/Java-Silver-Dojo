@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 15.7 - Fix Display)</title>
+    <title>Java Silver 完全攻略道場 (Ver 15.9 - Final Fix)</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -68,7 +68,7 @@
                     <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xl shadow-md">☕️</div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.7 Fix Display</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.9 Final Fix</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -373,7 +373,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 15.7</p>
+                    <p>Java Silver Dojo Ver 15.9</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -732,6 +732,11 @@
                     else if(key==='ai') { label='AI生成'; color='purple'; }
                     else if(key==='best') { label='厳選'; color='orange'; }
                     else if(key==='others') { label='その他'; color='slate'; }
+                    else {
+                        // 数値キーならそのまま「Chapter X」ではなく、元データのカテゴリ名を使いたいが
+                        // ここでは簡易的に「第X章」に変換するロジックを入れる
+                        label = `第${key}章`;
+                    }
                     
                     const btn = document.createElement('button');
                     btn.className = `drill-card bg-white dark:bg-darkcard p-4 rounded-xl border border-slate-200 dark:border-slate-700 border-b-${color}-500 text-left h-32 flex flex-col justify-between`;
@@ -750,7 +755,9 @@
                     else if(param==='ai') list = this.data.questions.filter(q => q.id.startsWith('ai-'));
                     else if(param==='others') list = this.data.questions.filter(q => !q.id.match(/^(?:ch|chapter)?\d+/) && !q.id.startsWith('ai-'));
                     else list = this.data.questions.filter(q => { const m=q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)/); return m && parseInt(m[1])===parseInt(param); });
-                    name = `Chapter ${param}`;
+                    
+                    // カテゴリ名表示の修正
+                    name = (typeof param === 'number') ? `第${param}章` : `Chapter ${param}`;
                 }
                 else if(mode.startsWith('level')) {
                     const r1=/^(?:ch|q)[-_]?(1|2|3|4)[-_]/i, r2=/^(?:ch|q)[-_]?(5|6|7|8|12)[-_]/i, r3=/^(?:ch|q)[-_]?(9|10|11|13)[-_]/i;
