@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 15.13 - Ref Fix)</title>
+    <title>Java Silver 完全攻略道場 (Ver 15.14 - Final Fix)</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -136,10 +136,28 @@
             line-height: 1.5;
             tab-size: 4;
         }
+
+        /* Error Overlay */
+        #global-error-display {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ef4444;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            z-index: 9999;
+        }
     </style>
 </head>
 
 <body class="h-screen flex flex-col overflow-hidden text-slate-800 bg-[#f8fafc] dark:bg-darkbg dark:text-slate-200">
+
+    <!-- Global Error Display -->
+    <div id="global-error-display"></div>
 
     <!-- Navbar -->
     <header
@@ -152,7 +170,7 @@
                         ☕️</div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.13 Ref Fix</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.14 Final Fix</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -593,7 +611,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 15.13</p>
+                    <p>Java Silver Dojo Ver 15.14</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -762,10 +780,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script>
-        const STORAGE_KEY = 'javaSilverDojo_GlobalData';
-        const LEGACY_KEYS = ['javaSilverAI_v14_2', 'javaSilverAI_v14_8'];
+        // Global Error Handler
+        window.onerror = function (message, source, lineno, colno, error) {
+            const errDiv = document.getElementById('global-error-display');
+            errDiv.style.display = 'block';
+            errDiv.innerText = `Error: ${message} at line ${lineno}`;
+            console.error('Global Error Caught:', error);
+        };
 
-        const codingDrills = [
+        var STORAGE_KEY = 'javaSilverDojo_GlobalData';
+        var LEGACY_KEYS = ['javaSilverAI_v14_2', 'javaSilverAI_v14_8'];
+
+        var codingDrills = [
             { id: 'c1', title: 'Hello World', tag: '基本', desc: 'Mainクラスを作成し、mainメソッド内で "Hello World" と出力してください。', keywords: ['class', 'Main', 'public', 'static', 'void', 'main', 'System.out.println', 'Hello World'], answer: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello World");\n    }\n}' },
             { id: 'c2', title: '変数の宣言', tag: '基本', desc: 'int型の変数 num を宣言して 10 を代入し、その値を出力してください。', keywords: ['int', 'num', '=', '10', 'System.out.println'], answer: 'public class Main {\n    public static void main(String[] args) {\n        int num = 10;\n        System.out.println(num);\n    }\n}' },
             { id: 'c3', title: '条件分岐 (if)', tag: '基本', desc: 'int型の変数 score が 80 以上の場合は "Pass"、それ以外は "Fail" と出力してください。', keywords: ['if', 'else', '>=', 'System.out.println'], answer: 'int score = 85;\nif (score >= 80) {\n    System.out.println("Pass");\n} else {\n    System.out.println("Fail");\n}' },
@@ -789,30 +815,32 @@
             { id: 'c21', title: 'Staticメソッド呼び出し', tag: '中級 (OOP)', desc: 'Mathクラスのmaxメソッドを使って、10と20のうち大きい方を表示してください。', keywords: ['Math.max', 'System.out.println'], answer: 'System.out.println(Math.max(10, 20));' }
         ];
 
-        // --- MODULES DEFINITIONS (Reordered for safety) ---
+        // --- MODULES DEFINITIONS (Changed to var to avoid TDZ issues) ---
 
-        const aiTutor = {
+        var aiTutor = {
             apiKey: '',
             model: 'gemini-1.5-flash',
-            init() {
-                this.apiKey = localStorage.getItem('gemini_api_key') || '';
-                this.model = localStorage.getItem('gemini_api_model') || 'gemini-1.5-flash';
-                const select = document.getElementById('api-model-select');
-                if (select) {
-                    if (['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'].includes(this.model)) { select.value = this.model; document.getElementById('api-model-custom').classList.add('hidden'); }
-                    else { select.value = 'custom'; document.getElementById('api-model-custom').classList.remove('hidden'); document.getElementById('api-model-custom').value = this.model; }
-                }
-                this.updateStatus();
+            init: function () {
+                try {
+                    this.apiKey = localStorage.getItem('gemini_api_key') || '';
+                    this.model = localStorage.getItem('gemini_api_model') || 'gemini-1.5-flash';
+                    var select = document.getElementById('api-model-select');
+                    if (select) {
+                        if (['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'].includes(this.model)) { select.value = this.model; document.getElementById('api-model-custom').classList.add('hidden'); }
+                        else { select.value = 'custom'; document.getElementById('api-model-custom').classList.remove('hidden'); document.getElementById('api-model-custom').value = this.model; }
+                    }
+                    this.updateStatus();
+                } catch (e) { console.warn("AI Init failed", e); }
             },
-            toggleCustomModelInput() {
-                const val = document.getElementById('api-model-select').value;
-                const customInput = document.getElementById('api-model-custom');
+            toggleCustomModelInput: function () {
+                var val = document.getElementById('api-model-select').value;
+                var customInput = document.getElementById('api-model-custom');
                 if (val === 'custom') customInput.classList.remove('hidden');
                 else customInput.classList.add('hidden');
             },
-            saveKey() {
-                const key = document.getElementById('api-key-input').value.trim();
-                let model = document.getElementById('api-model-select').value;
+            saveKey: function () {
+                var key = document.getElementById('api-key-input').value.trim();
+                var model = document.getElementById('api-model-select').value;
                 if (model === 'custom') model = document.getElementById('api-model-custom').value.trim();
                 if (key) localStorage.setItem('gemini_api_key', key);
                 localStorage.setItem('gemini_api_model', model);
@@ -820,8 +848,8 @@
                 alert('設定を保存しました。');
                 this.init();
             },
-            updateStatus() {
-                const statusEl = document.getElementById('key-status');
+            updateStatus: function () {
+                var statusEl = document.getElementById('key-status');
                 if (this.apiKey) {
                     statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み';
                     statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold';
@@ -832,42 +860,43 @@
                     document.getElementById('btn-generate').disabled = true;
                 }
             },
-            analyzeWeakness() {
-                // Accessing app.data here is fine because this is called AFTER app is defined and initialized.
+            analyzeWeakness: function () {
                 if (!app || !app.data || app.data.results.length === 0) return "Java Silver全般";
-                const wrongCounts = {};
-                for (const q of app.data.questions) {
+                var wrongCounts = {};
+                // Safe check loop
+                for (var i = 0; i < app.data.questions.length; i++) {
+                    var q = app.data.questions[i];
                     if (app.data.results[q.id] === false) {
-                        const cat = q.category || "その他";
+                        var cat = q.category || "その他";
                         wrongCounts[cat] = (wrongCounts[cat] || 0) + 1;
                     }
                 }
-                const sortedWeakness = Object.entries(wrongCounts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(e => e[0]);
-                const listEl = document.getElementById('weak-list');
-                const analysisBox = document.getElementById('ai-analysis');
+                var sortedWeakness = Object.entries(wrongCounts).sort(function (a, b) { return b[1] - a[1] }).slice(0, 3).map(function (e) { return e[0] });
+                var listEl = document.getElementById('weak-list');
+                var analysisBox = document.getElementById('ai-analysis');
                 if (sortedWeakness.length > 0) {
                     analysisBox.classList.remove('hidden');
-                    listEl.innerHTML = sortedWeakness.map(w => `<li>${w}</li>`).join('');
+                    listEl.innerHTML = sortedWeakness.map(function (w) { return '<li>' + w + '</li>' }).join('');
                     return sortedWeakness.join('、');
                 } else {
                     analysisBox.classList.add('hidden');
                     return "Java Silver全般";
                 }
             },
-            async generate() {
-                const topics = this.analyzeWeakness() || "Java Silver全般";
-                const btn = document.getElementById('btn-generate');
-                const loading = document.getElementById('ai-loading');
-                const loadingText = document.getElementById('ai-status-text');
+            generate: async function () {
+                var topics = this.analyzeWeakness() || "Java Silver全般";
+                var btn = document.getElementById('btn-generate');
+                var loading = document.getElementById('ai-loading');
+                var loadingText = document.getElementById('ai-status-text');
                 btn.classList.add('hidden');
                 loading.classList.remove('hidden');
 
-                const prompt = `Java Silver SE11の試験対策として、ユーザーの苦手分野【${topics}】に関する4択問題を5問作成してください。出力は以下のJSON配列形式のみ。Markdown記法は含めないでください。[{"id": "ai-${Date.now()}-1", "category": "AI生成", "text": "...", "code": "...", "options": ["..."], "answer": 0, "explanation": "..."}]`;
+                var prompt = `Java Silver SE11の試験対策として、ユーザーの苦手分野【${topics}】に関する4択問題を5問作成してください。出力は以下のJSON配列形式のみ。Markdown記法は含めないでください。[{"id": "ai-${Date.now()}-1", "category": "AI生成", "text": "...", "code": "...", "options": ["..."], "answer": 0, "explanation": "..."}]`;
 
-                const fetchWithRetry = async (model, retries = 1) => {
-                    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
+                var fetchWithRetry = async (model, retries = 1) => {
+                    var url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
                     try {
-                        const res = await fetch(url, {
+                        var res = await fetch(url, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -881,7 +910,7 @@
                             if (res.status === 404 && model === 'gemini-1.5-flash') {
                                 return fetchWithRetry('gemini-pro', 0);
                             }
-                            const err = await res.json().catch(() => ({}));
+                            var err = await res.json().catch(() => ({}));
                             throw new Error(err.error?.message || res.statusText);
                         }
                         return res.json();
@@ -889,11 +918,11 @@
                 };
 
                 try {
-                    const data = await fetchWithRetry(this.model);
-                    let text = data.candidates[0].content.parts[0].text;
-                    const jsonMatch = text.match(/\[\s*\{.*\}\s*\]/s);
+                    var data = await fetchWithRetry(this.model);
+                    var text = data.candidates[0].content.parts[0].text;
+                    var jsonMatch = text.match(/\[\s*\{.*\}\s*\]/s);
                     text = jsonMatch ? jsonMatch[0] : text.replace(/```json/g, '').replace(/```/g, '').trim();
-                    const newQs = JSON.parse(text);
+                    var newQs = JSON.parse(text);
                     newQs.forEach((q, i) => { q.id = `ai-${Date.now()}-${i}`; app.data.questions.push(q); });
                     app.save();
                     alert('5問の問題を追加しました！');
@@ -907,13 +936,13 @@
             }
         };
 
-        const creator = {
+        var creator = {
             categoryNames: { "1": "Javaの基本", "2": "データ型と変数", "3": "演算子", "4": "ループ制御", "5": "配列", "6": "クラスとインスタンス", "7": "継承", "8": "インターフェース", "9": "ポリモーフィズム", "10": "例外処理", "11": "モジュール", "12": "主要API", "13": "ラムダ式", "mock1": "模擬試験①", "mock2": "模擬試験②", "mock3": "模擬試験③", "99": "その他" },
-            updateCategoryLabel() { const val = document.getElementById('create-chapter').value; document.getElementById('create-cat-name').value = this.categoryNames[val]; },
-            addOption() {
-                const container = document.getElementById('options-container');
-                const idx = container.children.length;
-                const div = document.createElement('div');
+            updateCategoryLabel: function () { var val = document.getElementById('create-chapter').value; document.getElementById('create-cat-name').value = this.categoryNames[val]; },
+            addOption: function () {
+                var container = document.getElementById('options-container');
+                var idx = container.children.length;
+                var div = document.createElement('div');
                 div.className = "flex items-start gap-3 option-row";
                 div.innerHTML = `
                     <input type="checkbox" name="correct-idx" value="${idx}" class="w-5 h-5 mt-2 text-indigo-600 focus:ring-indigo-500 cursor-pointer">
@@ -922,124 +951,120 @@
                 `;
                 container.appendChild(div);
             },
-            removeOption(btn) { btn.closest('.option-row').remove(); this.reindexOptions(); },
-            reindexOptions() {
-                const rows = document.querySelectorAll('.option-row');
+            removeOption: function (btn) { btn.closest('.option-row').remove(); this.reindexOptions(); },
+            reindexOptions: function () {
+                var rows = document.querySelectorAll('.option-row');
                 rows.forEach((row, index) => {
                     row.querySelector('input[type="checkbox"]').value = index;
                     row.querySelector('.create-option').placeholder = `選択肢 ${String.fromCharCode(65 + index)}`;
                 });
             },
-            resetForm() {
+            resetForm: function () {
                 document.getElementById('create-form').reset();
                 document.getElementById('edit-id').value = '';
                 document.getElementById('options-container').innerHTML = '';
-                for (let i = 0; i < 4; i++) this.addOption();
-                const btn = document.getElementById('btn-save-question');
+                for (var i = 0; i < 4; i++) this.addOption();
+                var btn = document.getElementById('btn-save-question');
                 btn.innerText = "追加する";
                 btn.className = "bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5";
                 document.getElementById('btn-cancel-edit').classList.add('hidden');
                 this.updateCategoryLabel();
             },
-            renderUserQuestions() {
-                const listEl = document.getElementById('user-questions-list');
-                const userQs = app.data.questions.filter(q => q.id.includes('user'));
+            renderUserQuestions: function () {
+                var listEl = document.getElementById('user-questions-list');
+                var userQs = app.data.questions.filter(q => q.id.includes('user'));
                 listEl.innerHTML = '';
                 if (userQs.length === 0) { listEl.innerHTML = '<div class="text-center text-slate-400 py-8 text-sm">まだ自作問題はありません</div>'; return; }
                 [...userQs].reverse().forEach(q => {
-                    const div = document.createElement('div');
+                    var div = document.createElement('div');
                     div.className = "flex justify-between items-start bg-slate-50 dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-600 hover:border-indigo-300 dark:hover:border-indigo-700 transition";
                     div.innerHTML = `<div class="flex-1 pr-2"><div class="flex items-center gap-2 mb-1"><span class="text-[10px] bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded font-bold whitespace-nowrap">${q.category}</span></div><p class="text-sm text-slate-700 dark:text-slate-300 font-medium line-clamp-2">${q.text}</p></div><div class="flex flex-col gap-2"><button onclick="creator.editQuestion('${q.id}')" class="text-xs bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-500 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded hover:bg-indigo-50 dark:hover:bg-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-300 transition">編集</button><button onclick="creator.deleteQuestion('${q.id}')" class="text-xs bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-500 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900 hover:text-red-600 dark:hover:text-red-300 transition">削除</button></div>`;
                     listEl.appendChild(div);
                 });
             },
-            editQuestion(id) {
-                const q = app.data.questions.find(x => x.id === id);
+            editQuestion: function (id) {
+                var q = app.data.questions.find(x => x.id === id);
                 if (!q) return;
                 document.getElementById('edit-id').value = q.id;
                 document.getElementById('create-text').value = q.text;
                 document.getElementById('create-code').value = q.code || '';
                 document.getElementById('create-explanation').value = q.explanation;
 
-                // Chapter Select
-                const select = document.getElementById('create-chapter');
-                const options = Array.from(select.options);
-                const found = options.find(o => o.text.includes(q.category));
+                var select = document.getElementById('create-chapter');
+                var options = Array.from(select.options);
+                var found = options.find(o => o.text.includes(q.category));
                 if (found) select.value = found.value;
 
-                // Options
-                const container = document.getElementById('options-container');
+                var container = document.getElementById('options-container');
                 container.innerHTML = '';
                 q.options.forEach((optText) => {
                     this.addOption();
-                    const inputs = container.querySelectorAll('.create-option');
+                    var inputs = container.querySelectorAll('.create-option');
                     inputs[inputs.length - 1].value = optText;
                 });
 
-                const checkboxes = document.querySelectorAll('input[name="correct-idx"]');
-                const correctArr = Array.isArray(q.answer) ? q.answer : [q.answer];
+                var checkboxes = document.querySelectorAll('input[name="correct-idx"]');
+                var correctArr = Array.isArray(q.answer) ? q.answer : [q.answer];
                 correctArr.forEach(idx => { if (checkboxes[idx]) checkboxes[idx].checked = true; });
 
-                const btn = document.getElementById('btn-save-question');
+                var btn = document.getElementById('btn-save-question');
                 btn.innerText = "更新する";
                 btn.className = "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5";
                 document.getElementById('btn-cancel-edit').classList.remove('hidden');
-                // Scroll to top of create tab
                 document.getElementById('tab-create').scrollTop = 0;
             },
-            cancelEdit() { this.resetForm(); },
-            deleteQuestion(id) {
+            cancelEdit: function () { this.resetForm(); },
+            deleteQuestion: function (id) {
                 if (!confirm('この問題を削除しますか？')) return;
                 app.data.questions = app.data.questions.filter(q => q.id !== id);
                 app.save();
                 this.renderUserQuestions();
             },
-            saveQuestion(e) {
+            saveQuestion: function (e) {
                 e.preventDefault();
-                const editId = document.getElementById('edit-id').value;
-                const chapterNum = document.getElementById('create-chapter').value;
-                const select = document.getElementById('create-chapter');
-                const chapterName = select.options[select.selectedIndex].text.replace(/^\d+:\s*/, '');
+                var editId = document.getElementById('edit-id').value;
+                var chapterNum = document.getElementById('create-chapter').value;
+                var select = document.getElementById('create-chapter');
+                var chapterName = select.options[select.selectedIndex].text.replace(/^\d+:\s*/, '');
 
-                const text = document.getElementById('create-text').value;
-                const code = document.getElementById('create-code').value;
+                var text = document.getElementById('create-text').value;
+                var code = document.getElementById('create-code').value;
 
-                const opts = Array.from(document.querySelectorAll('.create-option')).map(i => i.value);
-                const checkedBoxes = document.querySelectorAll('input[name="correct-idx"]:checked');
+                var opts = Array.from(document.querySelectorAll('.create-option')).map(i => i.value);
+                var checkedBoxes = document.querySelectorAll('input[name="correct-idx"]:checked');
                 if (checkedBoxes.length === 0) return alert("正解を少なくとも1つ選択してください");
 
-                const correctIdxs = Array.from(checkedBoxes).map(cb => parseInt(cb.value));
-                const finalAnswer = correctIdxs.length === 1 ? correctIdxs[0] : correctIdxs;
+                var correctIdxs = Array.from(checkedBoxes).map(cb => parseInt(cb.value));
+                var finalAnswer = correctIdxs.length === 1 ? correctIdxs[0] : correctIdxs;
 
-                const explanation = document.getElementById('create-explanation').value;
+                var explanation = document.getElementById('create-explanation').value;
 
                 if (editId) {
-                    const index = app.data.questions.findIndex(q => q.id === editId);
+                    var index = app.data.questions.findIndex(q => q.id === editId);
                     if (index !== -1) {
                         app.data.questions[index] = { ...app.data.questions[index], category: chapterName, text: text, code: code, options: opts, answer: finalAnswer, explanation: explanation };
                         alert('問題を更新しました！');
                     }
                     this.cancelEdit();
                 } else {
-                    let idPrefix = `user-${chapterNum}-`;
-                    const newId = idPrefix + Date.now();
-                    const newQ = { id: newId, category: chapterName, text: text, code: code, options: opts, answer: finalAnswer, explanation: explanation };
+                    var idPrefix = `user-${chapterNum}-`;
+                    var newId = idPrefix + Date.now();
+                    var newQ = { id: newId, category: chapterName, text: text, code: code, options: opts, answer: finalAnswer, explanation: explanation };
                     app.data.questions.push(newQ);
                     alert(`問題を追加しました！`);
                     this.resetForm();
                 }
                 app.save();
                 this.renderUserQuestions();
-            },
-            updateCategoryLabel() { }
+            }
         };
 
-        const dataManager = {
-            importData(input) { if (input.files.length === 0) return; const readers = Array.from(input.files).map(file => new Promise(r => { const reader = new FileReader(); reader.onload = e => r(e.target.result); reader.readAsText(file); })); Promise.all(readers).then(results => { let count = 0; const newQs = []; const seenIds = new Set(app.data.questions.map(q => q.id)); results.forEach(res => { try { const json = JSON.parse(res); if (json.questions) json.questions.forEach(q => { if (!seenIds.has(q.id)) { newQs.push(q); seenIds.add(q.id); count++; } }); } catch (e) { } }); if (count > 0) { app.data.questions = [...app.data.questions, ...newQs]; app.save(); alert(`${count}問を追加しました！`); app.renderChapters(); } input.value = ''; }); },
-            resetAll() { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem(STORAGE_KEY); location.reload(); } },
-            generateDemoData() {
-                const now = Date.now();
-                const dummyHistory = [
+        var dataManager = {
+            importData: function (input) { if (input.files.length === 0) return; var readers = Array.from(input.files).map(file => new Promise(r => { var reader = new FileReader(); reader.onload = e => r(e.target.result); reader.readAsText(file); })); Promise.all(readers).then(results => { var count = 0; var newQs = []; var seenIds = new Set(app.data.questions.map(q => q.id)); results.forEach(res => { try { var json = JSON.parse(res); if (json.questions) json.questions.forEach(q => { if (!seenIds.has(q.id)) { newQs.push(q); seenIds.add(q.id); count++; } }); } catch (e) { } }); if (count > 0) { app.data.questions = [...app.data.questions, ...newQs]; app.save(); alert(`${count}問を追加しました！`); app.renderChapters(); } input.value = ''; }); },
+            resetAll: function () { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem(STORAGE_KEY); location.reload(); } },
+            generateDemoData: function () {
+                var now = Date.now();
+                var dummyHistory = [
                     { date: now - 10000000, correct: 5, total: 10, mode: '第1章', weak: ['Javaの基本', 'データ型と変数'] },
                     { date: now - 5000000, correct: 2, total: 5, mode: '第3章', weak: ['演算子', 'Javaの基本'] },
                     { date: now, correct: 8, total: 10, mode: '模擬試験', weak: ['例外処理', 'ポリモーフィズム', 'Javaの基本'] }
@@ -1049,25 +1074,25 @@
                 alert('テスト用の学習履歴を追加しました。「記録」タブを確認してください。');
                 app.renderHistory();
             },
-            exportData() {
-                const dataStr = JSON.stringify(app.data, null, 2);
-                const blob = new Blob([dataStr], { type: "application/json" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
+            exportData: function () {
+                var dataStr = JSON.stringify(app.data, null, 2);
+                var blob = new Blob([dataStr], { type: "application/json" });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
                 a.href = url;
                 a.download = `java_silver_data_${new Date().toISOString().slice(0, 10)}.json`;
                 a.click();
             }
         };
 
-        const codingApp = {
+        var codingApp = {
             currentDrill: null,
-            init() {
-                const menu = document.getElementById('coding-menu');
+            init: function () {
+                var menu = document.getElementById('coding-menu');
                 menu.innerHTML = '';
 
                 codingDrills.forEach(drill => {
-                    const btn = document.createElement('button');
+                    var btn = document.createElement('button');
                     btn.className = "bg-white dark:bg-darkcard border border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 rounded-xl p-5 text-left transition shadow-sm group active:scale-[0.99]";
                     btn.onclick = () => this.start(drill);
                     btn.innerHTML = `
@@ -1081,7 +1106,7 @@
                     menu.appendChild(btn);
                 });
             },
-            start(drill) {
+            start: function (drill) {
                 this.currentDrill = drill;
                 document.getElementById('coding-menu').classList.add('hidden');
                 document.getElementById('coding-workspace').classList.remove('hidden');
@@ -1090,30 +1115,30 @@
                 document.getElementById('coding-desc').innerText = drill.desc;
                 if (drill.keywords && drill.keywords.length > 0) {
                     document.getElementById('coding-hint-box').classList.remove('hidden');
-                    const kwDiv = document.getElementById('coding-keywords');
+                    var kwDiv = document.getElementById('coding-keywords');
                     kwDiv.innerHTML = drill.keywords.map(k => `<span class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] px-2 py-1 rounded border border-slate-200 dark:border-slate-600 font-mono">${k}</span>`).join('');
                 } else {
                     document.getElementById('coding-hint-box').classList.add('hidden');
                 }
-                const editor = document.getElementById('coding-editor');
+                var editor = document.getElementById('coding-editor');
                 editor.value = '';
                 editor.focus();
                 document.getElementById('coding-result').classList.add('hidden');
             },
-            close() {
+            close: function () {
                 document.getElementById('coding-menu').classList.remove('hidden');
                 document.getElementById('coding-workspace').classList.add('hidden');
                 this.currentDrill = null;
             },
-            check() {
+            check: function () {
                 if (!this.currentDrill) return;
-                const userCode = document.getElementById('coding-editor').value;
-                const keywords = this.currentDrill.keywords || [];
-                const missing = keywords.filter(k => !userCode.includes(k));
-                const isPerfect = missing.length === 0;
-                const resultTitle = document.getElementById('coding-result-title');
-                const resultMsg = document.getElementById('coding-result-msg');
-                const answerCode = document.getElementById('coding-answer-code');
+                var userCode = document.getElementById('coding-editor').value;
+                var keywords = this.currentDrill.keywords || [];
+                var missing = keywords.filter(k => !userCode.includes(k));
+                var isPerfect = missing.length === 0;
+                var resultTitle = document.getElementById('coding-result-title');
+                var resultMsg = document.getElementById('coding-result-msg');
+                var answerCode = document.getElementById('coding-answer-code');
                 if (isPerfect) {
                     resultTitle.innerHTML = '<span class="text-emerald-500">🎉 Excellent!</span>';
                     resultMsg.innerText = '必須キーワードがすべて含まれています。';
@@ -1125,11 +1150,11 @@
                 if (typeof Prism !== 'undefined') Prism.highlightElement(answerCode);
                 document.getElementById('coding-result').classList.remove('hidden');
             },
-            showAnswer() {
+            showAnswer: function () {
                 if (!this.currentDrill) return;
-                const resultTitle = document.getElementById('coding-result-title');
-                const resultMsg = document.getElementById('coding-result-msg');
-                const answerCode = document.getElementById('coding-answer-code');
+                var resultTitle = document.getElementById('coding-result-title');
+                var resultMsg = document.getElementById('coding-result-msg');
+                var answerCode = document.getElementById('coding-answer-code');
                 resultTitle.innerHTML = '<span class="text-indigo-500">👀 模範解答</span>';
                 resultMsg.innerText = '解答例を確認して、自分のコードと比較してみましょう。';
                 answerCode.textContent = this.currentDrill.answer;
@@ -1138,49 +1163,59 @@
             }
         };
 
-        const app = {
+        var app = {
             data: { questions: [], results: {}, history: [], bookmarks: [], theme: 'light' },
             state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', timer: null, currentSelection: new Set(), isQuizActive: false },
             chartInstance: null,
-            init() {
-                this.loadData();
-                this.applyTheme();
-                this.switchTab('dashboard');
-                if (typeof aiTutor !== 'undefined') aiTutor.init();
-                if (typeof creator !== 'undefined') creator.resetForm();
-                if (typeof codingApp !== 'undefined') codingApp.init();
-                this.setupKeyboardShortcuts();
+            init: function () {
+                try {
+                    this.loadData();
+                    this.applyTheme();
+                    this.switchTab('dashboard');
+
+                    // Safe init of modules
+                    if (typeof aiTutor !== 'undefined') {
+                        setTimeout(function () { aiTutor.init(); }, 100);
+                    }
+                    if (typeof creator !== 'undefined') creator.resetForm();
+                    if (typeof codingApp !== 'undefined') codingApp.init();
+
+                    this.setupKeyboardShortcuts();
+                } catch (e) {
+                    console.error("App Init Error:", e);
+                    alert("初期化エラー: " + e.message);
+                }
             },
-            setupKeyboardShortcuts() {
+            setupKeyboardShortcuts: function () {
                 document.addEventListener('keydown', (e) => {
                     if (!this.state.isQuizActive) return;
                     if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
-                    const key = e.key.toUpperCase();
-                    const map = { '1': 0, '2': 1, '3': 2, '4': 3, 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+                    var key = e.key.toUpperCase();
+                    var map = { '1': 0, '2': 1, '3': 2, '4': 3, 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
                     if (key in map) {
                         if (!document.getElementById('explanation-box').classList.contains('hidden')) return;
-                        const idx = map[key];
-                        const btn = document.getElementById(`option-btn-${idx}`);
+                        var idx = map[key];
+                        var btn = document.getElementById(`option-btn-${idx}`);
                         if (btn) this.selectOption(idx, btn);
                     }
                     if (key === 'ENTER') {
                         e.preventDefault();
-                        const submitBtn = document.getElementById('btn-submit-answer');
-                        const resultBox = document.getElementById('explanation-box');
+                        var submitBtn = document.getElementById('btn-submit-answer');
+                        var resultBox = document.getElementById('explanation-box');
                         if (!resultBox.classList.contains('hidden')) { this.nextQuestion(); return; }
                         if (submitBtn && !submitBtn.classList.contains('hidden')) { this.submitAnswer(); }
                     }
                     if (key === 'B') { this.toggleBookmark(); }
                 });
             },
-            toggleTheme() {
+            toggleTheme: function () {
                 this.data.theme = this.data.theme === 'dark' ? 'light' : 'dark';
                 this.applyTheme();
                 this.save();
             },
-            applyTheme() {
-                const html = document.documentElement;
-                const circle = document.getElementById('theme-toggle-circle');
+            applyTheme: function () {
+                var html = document.documentElement;
+                var circle = document.getElementById('theme-toggle-circle');
                 if (this.data.theme === 'dark') {
                     html.classList.add('dark');
                     if (circle) circle.classList.add('translate-x-5');
@@ -1189,13 +1224,13 @@
                     if (circle) circle.classList.remove('translate-x-5');
                 }
             },
-            loadData() {
+            loadData: function () {
                 try {
-                    const saved = localStorage.getItem(STORAGE_KEY);
+                    var saved = localStorage.getItem(STORAGE_KEY);
                     if (saved) { this.data = { ...this.data, ...JSON.parse(saved) }; }
                     else {
-                        for (const key of LEGACY_KEYS) {
-                            const d = localStorage.getItem(key);
+                        for (var i = 0; i < LEGACY_KEYS.length; i++) {
+                            var d = localStorage.getItem(LEGACY_KEYS[i]);
                             if (d) { this.data = { ...this.data, ...JSON.parse(d) }; this.save(); break; }
                         }
                     }
@@ -1205,24 +1240,24 @@
                     this.updateDashboard();
                 } catch (e) { console.error("Load error", e); }
             },
-            save() {
+            save: function () {
                 try {
                     if (this.data.history.length > 100) this.data.history = this.data.history.slice(-100);
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
                     this.updateDashboard();
                 } catch (e) { console.error("Save error", e); }
             },
-            switchTab(tab) {
+            switchTab: function (tab) {
                 if (tab !== 'quiz-view') this.state.isQuizActive = false;
                 ['dashboard', 'ai', 'history', 'create', 'quiz-view', 'settings', 'coding'].forEach(id => {
                     document.getElementById('tab-' + id)?.classList.add('hidden');
-                    const btn = document.getElementById('nav-' + id);
+                    var btn = document.getElementById('nav-' + id);
                     if (btn) { btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-white'); btn.classList.add('text-slate-600', 'dark:text-slate-400'); }
                 });
-                const target = document.getElementById('tab-' + tab);
+                var target = document.getElementById('tab-' + tab);
                 if (target) {
                     target.classList.remove('hidden');
-                    const activeBtn = document.getElementById('nav-' + tab);
+                    var activeBtn = document.getElementById('nav-' + tab);
                     if (activeBtn) {
                         activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
                         activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-white');
@@ -1235,26 +1270,26 @@
                     });
                 }
             },
-            renderHistory() {
-                const list = document.getElementById('history-list');
-                const adviceList = document.getElementById('weakness-advice-list');
+            renderHistory: function () {
+                var list = document.getElementById('history-list');
+                var adviceList = document.getElementById('weakness-advice-list');
                 list.innerHTML = ''; adviceList.innerHTML = '';
-                const logs = this.data.history.slice().reverse().slice(0, 30);
-                const weakCounts = {};
+                var logs = this.data.history.slice().reverse().slice(0, 30);
+                var weakCounts = {};
                 logs.forEach(log => {
-                    const rate = Math.round((log.correct / log.total) * 100);
-                    let weaks = '<span class="text-xs text-slate-400">なし</span>';
+                    var rate = Math.round((log.correct / log.total) * 100);
+                    var weaks = '<span class="text-xs text-slate-400">なし</span>';
                     if (log.weak && log.weak.length) {
                         log.weak.forEach(c => weakCounts[c] = (weakCounts[c] || 0) + 1);
                         weaks = log.weak.map(c => `<span class="text-xs bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-300 px-1.5 py-0.5 rounded border border-red-100 dark:border-red-800">${c}</span>`).join(' ');
                     }
-                    const div = document.createElement('div');
+                    var div = document.createElement('div');
                     div.className = "bg-white dark:bg-darkcard p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 mb-2";
                     div.innerHTML = `<div class="flex justify-between mb-2"><span class="text-xs font-bold bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded dark:text-slate-300">${log.mode}</span><span class="font-bold text-lg ${rate >= 63 ? 'text-emerald-500' : 'text-slate-700 dark:text-slate-300'}">${rate}%</span></div><div class="flex flex-wrap gap-1">${weaks}</div>`;
                     list.appendChild(div);
                 });
                 if (typeof Chart !== 'undefined' && this.data.history.length > 0) {
-                    const ctx = document.getElementById('historyChart');
+                    var ctx = document.getElementById('historyChart');
                     if (this.chartInstance) this.chartInstance.destroy();
                     this.chartInstance = new Chart(ctx, {
                         type: 'line',
@@ -1262,89 +1297,89 @@
                         options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 100, grid: { color: '#334155' } } }, plugins: { legend: { display: false } } }
                     });
                 }
-                const sortedWeaks = Object.entries(weakCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+                var sortedWeaks = Object.entries(weakCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
                 if (sortedWeaks.length === 0) adviceList.innerHTML = '<div class="text-center text-xs text-slate-400 py-4">データ不足です</div>';
                 else {
                     sortedWeaks.forEach(([cat, count]) => {
-                        const div = document.createElement('div');
+                        var div = document.createElement('div');
                         div.className = "bg-white dark:bg-slate-800 p-3 rounded-lg border border-red-100 dark:border-red-900/30 mb-2";
                         div.innerHTML = `<div class="flex justify-between"><span class="text-sm font-bold text-slate-700 dark:text-slate-200">${cat}</span><span class="text-xs bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 px-2 rounded-full">Miss:${count}</span></div>`;
                         adviceList.appendChild(div);
                     });
                 }
             },
-            updateDashboard() {
-                const total = this.data.questions.length;
-                const answered = Object.keys(this.data.results).length;
-                const correct = Object.values(this.data.results).filter(Boolean).length;
+            updateDashboard: function () {
+                var total = this.data.questions.length;
+                var answered = Object.keys(this.data.results).length;
+                var correct = Object.values(this.data.results).filter(Boolean).length;
                 document.getElementById('stat-total').innerText = total;
                 document.getElementById('stat-rate').innerText = answered ? Math.round((correct / answered) * 100) + '%' : '0%';
-                const wrongs = this.data.questions.filter(q => this.data.results[q.id] === false);
+                var wrongs = this.data.questions.filter(q => this.data.results[q.id] === false);
                 document.getElementById('wrong-count').innerText = wrongs.length;
                 document.getElementById('btn-review').disabled = wrongs.length === 0;
                 document.getElementById('bookmark-count').innerText = this.data.bookmarks.length;
                 document.getElementById('btn-bookmark').disabled = this.data.bookmarks.length === 0;
-                const userQCount = this.data.questions.filter(q => q.id.includes('user')).length;
+                var userQCount = this.data.questions.filter(q => q.id.includes('user')).length;
                 if (document.getElementById('user-q-count')) document.getElementById('user-q-count').innerText = userQCount;
                 setTimeout(() => this.renderChapters(), 10);
             },
-            renderChapters() {
-                const grid = document.getElementById('chapter-grid');
+            renderChapters: function () {
+                var grid = document.getElementById('chapter-grid');
                 if (!grid) return;
                 grid.innerHTML = '';
                 if (this.data.questions.length === 0) {
                     grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400 bg-white dark:bg-darkcard border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl"><p>データがありません。「データ読み込み」からJSONファイルを読み込んでください。</p></div>';
                     return;
                 }
-                const chapters = {};
+                var chapters = {};
                 this.data.questions.forEach(q => {
                     if (!q || !q.id) return;
-                    let key = 'others';
-                    const lower = q.id.toLowerCase();
-                    const cat = q.category || "";
+                    var key = 'others';
+                    var lower = q.id.toLowerCase();
+                    var cat = q.category || "";
                     if (cat.includes('模擬')) return;
                     if (lower.startsWith('ai-')) key = 'ai';
                     else if (lower.startsWith('best-')) key = 'best';
                     else if (lower.includes('final') || cat.includes('最終')) key = 'final';
-                    else { const m = lower.match(/^(?:ch|chapter)?(\d+)[-_]/); if (m) key = parseInt(m[1]); }
+                    else { var m = lower.match(/^(?:ch|chapter)?(\d+)[-_]/); if (m) key = parseInt(m[1]); }
                     if (!chapters[key]) chapters[key] = { count: 0, correct: 0 };
                     chapters[key].count++;
                     if (this.data.results[q.id]) chapters[key].correct++;
                 });
                 Object.keys(chapters).sort((a, b) => {
-                    const order = { 'final': 100, 'best': 101, 'ai': 102, 'others': 999 };
+                    var order = { 'final': 100, 'best': 101, 'ai': 102, 'others': 999 };
                     return (order[a] || parseInt(a)) - (order[b] || parseInt(b));
                 }).forEach(key => {
-                    const c = chapters[key];
-                    const rate = Math.round((c.correct / c.count) * 100);
-                    let label = `Chapter ${key}`;
-                    let color = 'indigo';
+                    var c = chapters[key];
+                    var rate = Math.round((c.correct / c.count) * 100);
+                    var label = `Chapter ${key}`;
+                    var color = 'indigo';
                     if (key === 'final') { label = '最終章'; color = 'yellow'; }
                     else if (key === 'ai') { label = 'AI生成'; color = 'purple'; }
                     else if (key === 'best') { label = '厳選'; color = 'orange'; }
                     else if (key === 'others') { label = 'その他'; color = 'slate'; }
                     else { label = `第${key}章`; }
-                    const btn = document.createElement('button');
+                    var btn = document.createElement('button');
                     btn.className = `drill-card bg-white dark:bg-darkcard p-4 rounded-xl border border-slate-200 dark:border-slate-700 border-b-${color}-500 text-left h-32 flex flex-col justify-between`;
                     btn.onclick = () => this.startQuiz('chapter', key);
                     btn.innerHTML = `<div class="font-bold text-slate-700 dark:text-slate-200">${label}</div><div><div class="flex justify-between text-xs text-slate-400 mb-1"><span>正解率</span><span>${rate}%</span></div><div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5"><div class="bg-${color}-500 h-1.5 rounded-full" style="width:${rate}%"></div></div></div>`;
                     grid.appendChild(btn);
                 });
             },
-            startQuiz(mode, param) {
+            startQuiz: function (mode, param) {
                 if (this.data.questions.length === 0) return alert('問題がありません');
-                let list = []; let name = '';
+                var list = []; var name = '';
                 if (mode === 'review') { list = this.data.questions.filter(q => this.data.results[q.id] === false); name = '復習'; }
                 else if (mode === 'bookmark') { list = this.data.questions.filter(q => this.data.bookmarks.includes(q.id)); name = 'ブックマーク'; }
                 else if (mode === 'chapter') {
                     if (param === 'final') list = this.data.questions.filter(q => q.id.includes('final') || (q.category && q.category.includes('模擬')));
                     else if (param === 'ai') list = this.data.questions.filter(q => q.id.startsWith('ai-'));
                     else if (param === 'others') list = this.data.questions.filter(q => !q.id.match(/^(?:ch|chapter)?\d+/) && !q.id.startsWith('ai-'));
-                    else list = this.data.questions.filter(q => { const m = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)/); return m && parseInt(m[1]) === parseInt(param); });
+                    else list = this.data.questions.filter(q => { var m = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)/); return m && parseInt(m[1]) === parseInt(param); });
                     name = (!isNaN(param)) ? `第${param}章` : `Chapter ${param}`;
                 }
                 else if (mode.startsWith('level')) {
-                    const r1 = /^(?:ch|q)[-_]?(1|2|3|4)[-_]/i, r2 = /^(?:ch|q)[-_]?(5|6|7|8|12)[-_]/i, r3 = /^(?:ch|q)[-_]?(9|10|11|13)[-_]/i;
+                    var r1 = /^(?:ch|q)[-_]?(1|2|3|4)[-_]/i, r2 = /^(?:ch|q)[-_]?(5|6|7|8|12)[-_]/i, r3 = /^(?:ch|q)[-_]?(9|10|11|13)[-_]/i;
                     if (mode === 'level-1') list = this.data.questions.filter(q => q.id.match(r1) && !q.id.includes('user'));
                     if (mode === 'level-2') list = this.data.questions.filter(q => q.id.match(r2) && !q.id.includes('user'));
                     if (mode === 'level-3') list = this.data.questions.filter(q => q.id.match(r3) && !q.id.includes('user'));
@@ -1367,7 +1402,7 @@
                 if (this.state.timer) clearInterval(this.state.timer);
                 if (mode === 'mock') {
                     document.getElementById('quiz-timer').classList.remove('hidden');
-                    let t = 90 * 60;
+                    var t = 90 * 60;
                     this.state.timer = setInterval(() => {
                         t--; document.getElementById('quiz-timer').innerText = `⏳ ${Math.floor(t / 60)}:${(t % 60).toString().padStart(2, '0')}`;
                         if (t <= 0) { clearInterval(this.state.timer); this.finishSession(); }
@@ -1376,15 +1411,15 @@
                 this.switchTab('quiz-view');
                 this.renderQuestion();
             },
-            quitQuiz() {
+            quitQuiz: function () {
                 if (this.state.timer) clearInterval(this.state.timer);
                 this.state.isQuizActive = false;
                 this.switchTab('dashboard');
             },
-            startSearchQuiz() {
-                const k = document.getElementById('search-input').value.toLowerCase();
+            startSearchQuiz: function () {
+                var k = document.getElementById('search-input').value.toLowerCase();
                 if (!k) return;
-                const list = this.data.questions.filter(q => (q.text + q.explanation + q.category).toLowerCase().includes(k));
+                var list = this.data.questions.filter(q => (q.text + q.explanation + q.category).toLowerCase().includes(k));
                 if (list.length === 0) return alert('見つかりませんでした');
                 this.state.queue = list;
                 this.state.currentIdx = 0;
@@ -1396,31 +1431,31 @@
                 this.switchTab('quiz-view');
                 this.renderQuestion();
             },
-            renderQuestion() {
-                const q = this.state.queue[this.state.currentIdx];
+            renderQuestion: function () {
+                var q = this.state.queue[this.state.currentIdx];
                 if (!q) return;
                 document.getElementById('q-current').innerText = this.state.currentIdx + 1;
                 document.getElementById('q-total').innerText = this.state.queue.length;
                 document.getElementById('q-category').innerText = q.category || 'General';
                 document.getElementById('q-text').innerText = q.text + (Array.isArray(q.answer) ? "\n(複数選択)" : "");
                 document.getElementById('quiz-progress').style.width = `${(this.state.currentIdx / this.state.queue.length) * 100}%`;
-                const bmBtn = document.getElementById('btn-quiz-bookmark');
+                var bmBtn = document.getElementById('btn-quiz-bookmark');
                 if (this.data.bookmarks.includes(q.id)) { bmBtn.classList.add('text-yellow-400'); bmBtn.classList.remove('text-slate-300'); }
                 else { bmBtn.classList.remove('text-yellow-400'); bmBtn.classList.add('text-slate-300'); }
-                const codeEl = document.getElementById('code-content');
+                var codeEl = document.getElementById('code-content');
                 if (q.code?.trim()) {
                     document.getElementById('code-container').classList.remove('hidden');
                     codeEl.textContent = q.code;
                     if (typeof Prism !== 'undefined') { Prism.highlightElement(codeEl); }
                 } else { document.getElementById('code-container').classList.add('hidden'); }
-                const optsDiv = document.getElementById('options-list');
+                var optsDiv = document.getElementById('options-list');
                 optsDiv.innerHTML = '';
                 document.getElementById('explanation-box').classList.add('hidden');
                 document.getElementById('btn-submit-answer').classList.add('hidden');
                 this.state.currentSelection = new Set();
                 if (Array.isArray(q.options)) {
                     q.options.forEach((opt, i) => {
-                        const btn = document.createElement('button');
+                        var btn = document.createElement('button');
                         btn.className = "option-btn w-full text-left p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-darkcard hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:border-indigo-300 dark:hover:border-indigo-700 flex items-center shadow-sm active:scale-[0.99]";
                         btn.onclick = () => this.selectOption(i, btn);
                         btn.id = `option-btn-${i}`;
@@ -1430,9 +1465,9 @@
                 }
                 document.getElementById('user-note-input').value = q.note || '';
             },
-            selectOption(i, btn) {
-                const q = this.state.queue[this.state.currentIdx];
-                const isMulti = Array.isArray(q.answer);
+            selectOption: function (i, btn) {
+                var q = this.state.queue[this.state.currentIdx];
+                var isMulti = Array.isArray(q.answer);
                 if (isMulti) {
                     if (this.state.currentSelection.has(i)) { this.state.currentSelection.delete(i); btn.classList.remove('option-selected'); }
                     else { this.state.currentSelection.add(i); btn.classList.add('option-selected'); }
@@ -1440,26 +1475,26 @@
                     else document.getElementById('btn-submit-answer').classList.add('hidden');
                 } else { this.check([i]); }
             },
-            submitAnswer() { this.check(Array.from(this.state.currentSelection)); },
-            toggleBookmark() {
-                const q = this.state.queue[this.state.currentIdx];
-                const idx = this.data.bookmarks.indexOf(q.id);
+            submitAnswer: function () { this.check(Array.from(this.state.currentSelection)); },
+            toggleBookmark: function () {
+                var q = this.state.queue[this.state.currentIdx];
+                var idx = this.data.bookmarks.indexOf(q.id);
                 if (idx > -1) { this.data.bookmarks.splice(idx, 1); document.getElementById('btn-quiz-bookmark').classList.remove('text-yellow-400'); document.getElementById('btn-quiz-bookmark').classList.add('text-slate-300'); }
                 else { this.data.bookmarks.push(q.id); document.getElementById('btn-quiz-bookmark').classList.add('text-yellow-400'); document.getElementById('btn-quiz-bookmark').classList.remove('text-slate-300'); }
                 this.save();
             },
-            check(userAns) {
-                const q = this.state.queue[this.state.currentIdx];
-                const cor = Array.isArray(q.answer) ? q.answer : [q.answer];
-                const isCor = JSON.stringify(userAns.sort()) === JSON.stringify(cor.sort());
+            check: function (userAns) {
+                var q = this.state.queue[this.state.currentIdx];
+                var cor = Array.isArray(q.answer) ? q.answer : [q.answer];
+                var isCor = JSON.stringify(userAns.sort()) === JSON.stringify(cor.sort());
                 if (isCor) this.state.sessionStats.correct++;
-                else { const c = q.category || "その他"; if (!this.state.sessionStats.wrongInfo.includes(c)) this.state.sessionStats.wrongInfo.push(c); }
+                else { var c = q.category || "その他"; if (!this.state.sessionStats.wrongInfo.includes(c)) this.state.sessionStats.wrongInfo.push(c); }
                 this.data.results[q.id] = isCor;
                 this.save();
                 document.querySelectorAll('#options-list button').forEach(b => b.disabled = true);
                 document.getElementById('btn-submit-answer').classList.add('hidden');
                 userAns.forEach(i => {
-                    const btn = document.getElementById(`option-btn-${i}`);
+                    var btn = document.getElementById(`option-btn-${i}`);
                     if (btn) {
                         if (cor.includes(i)) { btn.classList.add('!bg-emerald-50', '!border-emerald-500', 'dark:!bg-emerald-900/30', 'dark:!border-emerald-500'); btn.querySelector('.opt-mark').classList.add('!bg-emerald-500', '!text-white'); }
                         else { btn.classList.add('!bg-red-50', '!border-red-500', 'dark:!bg-red-900/30', 'dark:!border-red-500'); btn.querySelector('.opt-mark').classList.add('!bg-red-500', '!text-white'); }
@@ -1467,36 +1502,36 @@
                 });
                 cor.forEach(i => {
                     if (!userAns.includes(i)) {
-                        const btn = document.getElementById(`option-btn-${i}`);
+                        var btn = document.getElementById(`option-btn-${i}`);
                         if (btn) { btn.classList.add('!bg-emerald-50', '!border-emerald-500', 'dark:!bg-emerald-900/30', 'dark:!border-emerald-500'); btn.querySelector('.opt-mark').classList.add('!bg-emerald-500', '!text-white'); }
                     }
                 });
                 document.getElementById('explanation-box').classList.remove('hidden');
                 document.getElementById('result-badge').innerHTML = isCor ? '<span class="text-emerald-600">⭕ 正解！</span>' : '<span class="text-red-500">❌ 不正解...</span>';
                 document.getElementById('explanation-text').innerText = `正解: ${cor.map(i => String.fromCharCode(65 + i)).join(', ')}\n\n${q.explanation}`;
-                const explanationBox = document.getElementById('explanation-box');
+                var explanationBox = document.getElementById('explanation-box');
                 if (window.innerWidth < 768) explanationBox.scrollIntoView({ behavior: 'smooth' });
             },
-            nextQuestion() {
+            nextQuestion: function () {
                 this.state.currentIdx++;
                 if (this.state.currentIdx >= this.state.queue.length) this.finishSession();
                 else { this.renderQuestion(); document.getElementById('quiz-view').scrollTop = 0; }
             },
-            finishSession() {
+            finishSession: function () {
                 if (this.state.timer) clearInterval(this.state.timer);
                 this.state.isQuizActive = false;
-                const log = { date: Date.now(), correct: this.state.sessionStats.correct, total: this.state.queue.length, mode: this.state.modeName, weak: [...new Set(this.state.sessionStats.wrongInfo)] };
+                var log = { date: Date.now(), correct: this.state.sessionStats.correct, total: this.state.queue.length, mode: this.state.modeName, weak: [...new Set(this.state.sessionStats.wrongInfo)] };
                 this.data.history.push(log);
                 this.save();
                 document.getElementById('res-score').innerText = `${log.correct}/${log.total}`;
                 document.getElementById('res-rate').innerText = Math.round((log.correct / log.total) * 100) + '%';
                 document.getElementById('session-result').classList.remove('hidden');
             },
-            closeSessionResult() { document.getElementById('session-result').classList.add('hidden'); this.switchTab('history'); },
-            saveNote() {
-                const q = this.state.queue[this.state.currentIdx];
-                const note = document.getElementById('user-note-input').value;
-                const target = this.data.questions.find(item => item.id === q.id);
+            closeSessionResult: function () { document.getElementById('session-result').classList.add('hidden'); this.switchTab('history'); },
+            saveNote: function () {
+                var q = this.state.queue[this.state.currentIdx];
+                var note = document.getElementById('user-note-input').value;
+                var target = this.data.questions.find(item => item.id === q.id);
                 if (target) target.note = note;
                 this.save();
                 alert('メモを保存しました📝');
@@ -1505,10 +1540,11 @@
 
         // Initialize when DOM is ready to avoid reference errors
         window.addEventListener('DOMContentLoaded', () => {
+            // Safety Check
             if (typeof app !== 'undefined') {
                 app.init();
             } else {
-                console.error("App module not loaded correctly.");
+                alert("Critical Error: App module not loaded. Please check console.");
             }
         });
     </script>
