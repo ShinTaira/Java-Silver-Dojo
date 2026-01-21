@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 15.17 - User Question Isolation)</title>
+    <title>Java Silver 完全攻略道場 (Ver 15.18 - User Question Fix)</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -170,7 +170,7 @@
                         ☕️</div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.17 User Question
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.18 User Question
                             Isolation</p>
                     </div>
                 </div>
@@ -644,7 +644,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 15.16</p>
+                    <p>Java Silver Dojo Ver 15.18</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -1386,6 +1386,7 @@
                 var chapters = {};
                 this.data.questions.forEach(q => {
                     if (!q || !q.id) return;
+                    if (q.id.includes('user')) return; // ★追加：自作問題を集計から除外
                     var key = 'others';
                     var lower = q.id.toLowerCase();
                     var cat = q.category || "";
@@ -1426,7 +1427,7 @@
                 else if (mode === 'chapter') {
                     if (param === 'final') list = this.data.questions.filter(q => q.id.includes('final') || (q.category && q.category.includes('模擬')));
                     else if (param === 'ai') list = this.data.questions.filter(q => q.id.startsWith('ai-'));
-                    else if (param === 'others') list = this.data.questions.filter(q => !q.id.match(/^(?:ch|chapter)?\d+/) && !q.id.startsWith('ai-'));
+                    else if (param === 'others') list = this.data.questions.filter(q => !q.id.match(/^(?:ch|chapter)?\d+/) && !q.id.startsWith('ai-') && !q.id.includes('user'));
                     else list = this.data.questions.filter(q => { var m = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)/); return m && parseInt(m[1]) === parseInt(param); });
                     name = (!isNaN(param)) ? `第${param}章` : `Chapter ${param}`;
                 }
