@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 15.9 - Final Fix)</title>
+    <title>Java Silver 完全攻略道場 (Ver 15.11 - White Screen Fix)</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -68,7 +68,7 @@
                     <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xl shadow-md">☕️</div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.9 Final Fix</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.11 White Screen Fix</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -373,7 +373,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 15.9</p>
+                    <p>Java Silver Dojo Ver 15.11</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -627,15 +627,22 @@
                     const btn = document.getElementById('nav-' + id);
                     if (btn) { btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-white'); btn.classList.add('text-slate-600', 'dark:text-slate-400'); }
                 });
-                document.getElementById('tab-' + tab)?.classList.remove('hidden');
-                const activeBtn = document.getElementById('nav-' + tab);
-                if (activeBtn) { activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400'); activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-white'); }
-                requestAnimationFrame(() => {
-                    if (tab === 'dashboard') this.renderChapters();
-                    if (tab === 'history') this.renderHistory();
-                    if (tab === 'create') creator.renderUserQuestions();
-                    if (tab === 'ai') aiTutor.analyzeWeakness();
-                });
+                
+                const target = document.getElementById('tab-' + tab);
+                if (target) {
+                    target.classList.remove('hidden');
+                    const activeBtn = document.getElementById('nav-' + tab);
+                    if (activeBtn) { 
+                        activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400'); 
+                        activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-white'); 
+                    }
+                    requestAnimationFrame(() => {
+                        if (tab === 'dashboard') this.renderChapters();
+                        if (tab === 'history') this.renderHistory();
+                        if (tab === 'create') creator.renderUserQuestions();
+                        if (tab === 'ai') aiTutor.analyzeWeakness();
+                    });
+                }
             },
             renderHistory() {
                 const list = document.getElementById('history-list');
