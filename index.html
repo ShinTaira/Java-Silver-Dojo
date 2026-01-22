@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 16.0 - AI Tutor)</title>
+    <title>Java Silver 完全攻略道場 (Ver 16.1 - Java Icon Fix)</title>
+    <!-- Favicon: Java-like Coffee Cup -->
     <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕️</text></svg>">
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z' fill='%235382a1'/><path d='M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z' fill='%235382a1'/><path d='M75,45 H85 C90,45 90,55 85,60 H75 Z' fill='%235382a1'/><path d='M40,30 Q50,10 60,30 T80,30' fill='none' stroke='%23f89820' stroke-width='6' stroke-linecap='round'/><path d='M30,20 Q40,0 50,20 T70,20' fill='none' stroke='%23f89820' stroke-width='6' stroke-linecap='round'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -173,12 +174,19 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center gap-3">
-                    <div
-                        class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xl shadow-md">
-                        ☕️</div>
+                    <!-- Java-like Icon -->
+                    <div class="w-10 h-10 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-md">
+                            <path d="M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z" fill="#5382a1"/>
+                            <path d="M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z" fill="#5382a1"/>
+                            <path d="M75,45 H85 C90,45 90,55 85,60 H75 Z" fill="#5382a1"/>
+                            <path d="M40,30 Q50,10 60,30 T80,30" fill="none" stroke="#f89820" stroke-width="6" stroke-linecap="round"/>
+                            <path d="M30,20 Q40,0 50,20 T70,20" fill="none" stroke="#f89820" stroke-width="6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 16.0 AI Tutor Edition</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 16.1 AI Tutor & Fix</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -306,8 +314,8 @@
                             class="px-4 py-2 bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-700 rounded-lg text-sm font-bold hover:bg-indigo-50 dark:hover:bg-slate-700 transition">サンプルデータ作成</button>
                         <label
                             class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition cursor-pointer shadow-md">
-                            JSONファイルを読み込む
-                            <input type="file" class="hidden" onchange="dataManager.importData(this)">
+                            JSONファイルを読み込む (複数可)
+                            <input type="file" class="hidden" multiple onchange="dataManager.importData(this)">
                         </label>
                     </div>
                 </div>
@@ -667,7 +675,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 16.0</p>
+                    <p>Java Silver Dojo Ver 16.1</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -1175,6 +1183,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 Promise.all(readers).then(results => {
                     var qCount = 0;
                     var hCount = 0;
+                    var updateCount = 0;
                     var newQs = [];
                     // 既存の問題IDセット
                     var seenIds = new Set(app.data.questions.map(q => q.id));
@@ -1191,14 +1200,19 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                             
                             questionsSource.forEach(q => {
                                 // IDがあり、かつ未登録なら追加
-                                if (q.id && !seenIds.has(q.id)) {
-                                    newQs.push(q);
-                                    seenIds.add(q.id);
-                                    qCount++;
-                                } else if (q.id && seenIds.has(q.id) && q.id.includes('user')) {
-                                    // ユーザー作成問題(IDに'user'含む)に限り、内容を更新（上書き）するロジックを入れるか？
-                                    // 今回は安全のため「追加」のみとし、更新したい場合は削除してからインポートを促す運用にします。
-                                    // ※ここを実装すると複雑になるため。
+                                if (q.id) {
+                                    if (!seenIds.has(q.id)) {
+                                        newQs.push(q);
+                                        seenIds.add(q.id);
+                                        qCount++;
+                                    } else {
+                                        // IDが存在する場合、既存の問題を更新（上書き）
+                                        var idx = app.data.questions.findIndex(existing => existing.id === q.id);
+                                        if (idx !== -1) {
+                                            app.data.questions[idx] = q;
+                                            updateCount++;
+                                        }
+                                    }
                                 }
                             });
 
@@ -1228,7 +1242,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                         }
                     });
 
-                    if (qCount > 0 || hCount > 0) {
+                    if (qCount > 0 || hCount > 0 || updateCount > 0) {
                         // 新しい問題があれば結合
                         if (qCount > 0) app.data.questions = [...app.data.questions, ...newQs];
                         
@@ -1236,13 +1250,18 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                         app.data.history.sort((a, b) => a.date - b.date);
                         
                         app.save();
-                        alert(`読み込み完了！\n・問題: ${qCount}問 追加\n・履歴: ${hCount}件 同期`);
+                        var msg = `読み込み完了！\n`;
+                        if (qCount > 0) msg += `・新規追加: ${qCount}問\n`;
+                        if (updateCount > 0) msg += `・上書き更新: ${updateCount}問\n`;
+                        if (hCount > 0) msg += `・履歴同期: ${hCount}件\n`;
+                        alert(msg);
                         app.updateDashboard();
                         
                         // 画面更新
                         if(typeof aiTutor !== 'undefined') aiTutor.updateWeaknessDisplay();
+                        if(typeof creator !== 'undefined') creator.renderUserQuestions();
                     } else {
-                        alert('新しいデータは見つかりませんでした。\n（すでに全て登録済みか、データの形式が異なります）');
+                        alert('新しいデータは見つかりませんでした。\n（すでに全て最新の状態か、データの形式が異なります）');
                     }
                     input.value = '';
                 });
