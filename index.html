@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 16.2 - AI Fix)</title>
+    <title>Java Silver 完全攻略道場 (Ver 16.3 - AI Markdown View)</title>
     <!-- Favicon: Java-like Coffee Cup -->
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z' fill='%235382a1'/><path d='M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z' fill='%235382a1'/><path d='M75,45 H85 C90,45 90,55 85,60 H75 Z' fill='%235382a1'/><path d='M40,30 Q50,10 60,30 T80,30' fill='none' stroke='%23f89820' stroke-width='6' stroke-linecap='round'/><path d='M30,20 Q40,0 50,20 T70,20' fill='none' stroke='%23f89820' stroke-width='6' stroke-linecap='round'/></svg>">
@@ -23,6 +23,8 @@
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
@@ -153,13 +155,34 @@
             z-index: 9999;
         }
         
-        /* Markdown-like simple styling for AI response */
-        .ai-response h3 { font-weight: bold; margin-top: 1em; margin-bottom: 0.5em; font-size: 1.1em; color: #4f46e5; }
-        .dark .ai-response h3 { color: #818cf8; }
+        /* Markdown Styling for AI Response */
+        .ai-response { line-height: 1.7; }
+        .ai-response h3 { font-weight: bold; margin-top: 1.5em; margin-bottom: 0.8em; font-size: 1.2em; color: #4f46e5; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3em; }
+        .dark .ai-response h3 { color: #818cf8; border-color: #334155; }
+        .ai-response h4 { font-weight: bold; margin-top: 1.2em; margin-bottom: 0.5em; font-size: 1.1em; }
         .ai-response ul { list-style-type: disc; margin-left: 1.5em; margin-bottom: 1em; }
+        .ai-response ol { list-style-type: decimal; margin-left: 1.5em; margin-bottom: 1em; }
         .ai-response li { margin-bottom: 0.3em; }
-        .ai-response strong { font-weight: bold; color: #1e293b; }
-        .dark .ai-response strong { color: #e2e8f0; }
+        .ai-response strong { font-weight: bold; color: #1e293b; background: linear-gradient(transparent 70%, #fef3c7 70%); }
+        .dark .ai-response strong { color: #f1f5f9; background: linear-gradient(transparent 70%, #4b5563 70%); }
+        .ai-response p { margin-bottom: 1em; }
+        .ai-response blockquote { border-left: 4px solid #cbd5e1; padding-left: 1em; margin: 1em 0; color: #64748b; font-style: italic; }
+        .dark .ai-response blockquote { border-color: #475569; color: #94a3b8; }
+        
+        /* Table Styles for AI Response */
+        .ai-response table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.9em; }
+        .ai-response th, .ai-response td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
+        .dark .ai-response th, .dark .ai-response td { border-color: #475569; }
+        .ai-response th { background-color: #f1f5f9; font-weight: bold; color: #334155; }
+        .dark .ai-response th { background-color: #1e293b; color: #e2e8f0; }
+        .ai-response tr:nth-child(even) { background-color: #f8fafc; }
+        .dark .ai-response tr:nth-child(even) { background-color: #0f172a; }
+
+        /* Code Block in AI Response */
+        .ai-response pre { margin: 1em 0; border-radius: 8px; overflow-x: auto; background-color: #1e1e1e !important; }
+        .ai-response code { font-family: 'Roboto Mono', monospace; font-size: 0.9em; }
+        .ai-response p > code { background-color: #f1f5f9; padding: 0.2em 0.4em; border-radius: 4px; color: #ef4444; font-weight: bold; }
+        .dark .ai-response p > code { background-color: #334155; color: #fca5a5; }
     </style>
 </head>
 
@@ -186,7 +209,7 @@
                     </div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 16.2 AI Fix</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 16.3 AI Markdown Fix</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -674,7 +697,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 16.2</p>
+                    <p>Java Silver Dojo Ver 16.3</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -1011,7 +1034,8 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
 1. 生徒の苦手分野傾向を分析し、なぜそこでつまずきやすいか簡潔に解説してください。
 2. 今後の学習戦略（どの章を重点的にやるべきか）を提案してください。
 3. 「オリジナル問題作成」機能を使っている生徒に対して、「次は〇〇についてのひっかけ問題を作ってみよう」といった、理解を深めるための作問テーマを1つ提案してください。
-4. 口調は「～だね」「～しよう！」といった、親しみやすくも頼れる先生のトーンでお願いします。Markdown形式で見やすく整形してください。
+4. **重要**: アドバイス内にJavaのコード例を示す場合は、必ず \`\`\`java ... \`\`\` の形式で記述してください。
+5. 口調は「～だね」「～しよう！」といった、親しみやすくも頼れる先生のトーンでお願いします。Markdown形式で見やすく整形してください。
 `;
 
                 var fetchWithRetry = async (model, retries = 1) => {
@@ -1027,7 +1051,6 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                                 await new Promise(r => setTimeout(r, 3000));
                                 return fetchWithRetry(model, retries - 1);
                             }
-                            // 古いモデルへのフォールバック削除
                             var err = await res.json().catch(() => ({}));
                             throw new Error(err.error?.message || res.statusText);
                         }
@@ -1039,16 +1062,28 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     var data = await fetchWithRetry(this.model);
                     var text = data.candidates[0].content.parts[0].text;
                     
-                    // Simple Format processing (Basic Markdown to HTML)
-                    var formatted = text
-                        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-                        .replace(/^## (.*$)/gim, '<h3>$1</h3>')
-                        .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-                        .replace(/\* (.*)/gim, '<ul><li>$1</li></ul>')
-                        .replace(/<\/ul><ul>/gim, '') // Merge lists
-                        .replace(/\n/gim, '<br>');
+                    // Improved Formatting using Marked.js
+                    if (typeof marked !== 'undefined') {
+                        contentDiv.innerHTML = marked.parse(text);
+                        // Highlight Code Blocks
+                        if (typeof Prism !== 'undefined') {
+                            setTimeout(() => {
+                                contentDiv.querySelectorAll('pre code').forEach((block) => {
+                                    block.classList.add('language-java');
+                                    Prism.highlightElement(block);
+                                });
+                            }, 10);
+                        }
+                    } else {
+                        // Fallback simple format
+                        var formatted = text
+                            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                            .replace(/^## (.*$)/gim, '<h3>$1</h3>')
+                            .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                            .replace(/\n/gim, '<br>');
+                        contentDiv.innerHTML = formatted;
+                    }
 
-                    contentDiv.innerHTML = formatted;
                     outputBox.classList.remove('hidden');
                 } catch (e) {
                     alert(`AI通信エラー: ${e.message}`);
