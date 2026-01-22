@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 15.18 - User Question Fix)</title>
+    <title>Java Silver 完全攻略道場 (Ver 16.0 - AI Tutor)</title>
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -151,6 +151,14 @@
             font-size: 12px;
             z-index: 9999;
         }
+        
+        /* Markdown-like simple styling for AI response */
+        .ai-response h3 { font-weight: bold; margin-top: 1em; margin-bottom: 0.5em; font-size: 1.1em; color: #4f46e5; }
+        .dark .ai-response h3 { color: #818cf8; }
+        .ai-response ul { list-style-type: disc; margin-left: 1.5em; margin-bottom: 1em; }
+        .ai-response li { margin-bottom: 0.3em; }
+        .ai-response strong { font-weight: bold; color: #1e293b; }
+        .dark .ai-response strong { color: #e2e8f0; }
     </style>
 </head>
 
@@ -170,8 +178,7 @@
                         ☕️</div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 15.18 User Question
-                            Isolation</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 16.0 AI Tutor Edition</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -186,7 +193,7 @@
                         <button onclick="app.switchTab('history')" id="nav-history"
                             class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">記録</button>
                         <button onclick="app.switchTab('ai')" id="nav-ai"
-                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">AI</button>
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">AI先生</button>
                         <button onclick="app.switchTab('settings')" id="nav-settings"
                             class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">設定</button>
                     </nav>
@@ -225,7 +232,7 @@
                     </div>
                 </div>
 
-                <!-- Level Based Quizzes (RESTORED) -->
+                <!-- Level Based Quizzes -->
                 <div class="mb-8">
                     <h3 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
                         <span class="text-xl">📊</span> レベル別演習 (各30問)</h3>
@@ -305,7 +312,7 @@
                     </div>
                 </div>
 
-                <!-- NEW Coding Link -->
+                <!-- Coding Link -->
                 <div class="mb-10" onclick="app.switchTab('coding')">
                     <div
                         class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl p-6 text-white shadow-lg cursor-pointer hover:scale-[1.01] transition relative overflow-hidden group">
@@ -360,7 +367,7 @@
             </div>
         </div>
 
-        <!-- CODING TAB (NEW) -->
+        <!-- CODING TAB -->
         <div id="tab-coding" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
             <div class="max-w-5xl mx-auto h-full flex flex-col">
                 <div class="flex justify-between items-end mb-4">
@@ -534,9 +541,10 @@
             </div>
         </div>
 
-        <!-- AI TAB -->
+        <!-- AI TAB (UPDATED) -->
         <div id="tab-ai" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
-            <div class="max-w-2xl mx-auto space-y-6">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <!-- API Settings -->
                 <div
                     class="bg-white dark:bg-darkcard p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                     <h2 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
@@ -561,7 +569,6 @@
                                 onchange="aiTutor.toggleCustomModelInput()">
                                 <option value="gemini-1.5-flash">gemini-1.5-flash (推奨・高速)</option>
                                 <option value="gemini-1.5-pro">gemini-1.5-pro (高精度)</option>
-                                <option value="gemini-pro">gemini-pro (旧安定版)</option>
                                 <option value="custom">カスタム入力...</option>
                             </select>
                             <input type="text" id="api-model-custom"
@@ -572,26 +579,42 @@
                     <div id="key-status" class="text-xs text-slate-400 mt-4 flex items-center gap-1"><span
                             class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定</div>
                 </div>
-                <div
-                    class="bg-gradient-to-br from-indigo-600 to-violet-600 p-8 rounded-2xl shadow-lg text-white relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 text-9xl opacity-10 select-none">🤖</div>
+
+                <!-- AI Tutor Area -->
+                <div class="bg-gradient-to-br from-indigo-600 to-violet-600 p-8 rounded-2xl shadow-lg text-white relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-9xl opacity-10 select-none">🎓</div>
                     <div class="relative z-10">
-                        <h2 class="text-2xl font-bold mb-1">AI 弱点克服コーチ</h2>
-                        <p class="text-indigo-100 text-sm mb-6">学習履歴を分析して、あなた専用の問題を作成します。</p>
-                        <div id="ai-analysis"
-                            class="bg-white/10 backdrop-blur-md rounded-lg p-4 mb-6 border border-white/20 hidden">
-                            <h4 class="text-xs font-bold text-indigo-200 uppercase tracking-wider mb-2">Detected
-                                Weaknesses</h4>
-                            <ul id="weak-list" class="list-disc list-inside text-sm space-y-1 text-white"></ul>
+                        <h2 class="text-2xl font-bold mb-1">AI 先生の学習分析</h2>
+                        <p class="text-indigo-100 text-sm mb-6">あなたの学習履歴（苦手分野や間違えた問題）を分析して、アドバイスとオリジナル問題作成のヒントを教えます。</p>
+                        
+                        <div id="ai-analysis-stats" class="bg-white/10 backdrop-blur-md rounded-lg p-4 mb-6 border border-white/20 hidden">
+                            <h4 class="text-xs font-bold text-indigo-200 uppercase tracking-wider mb-2">Current Status</h4>
+                            <div class="flex gap-4 text-sm">
+                                <div>苦手: <span id="ai-weak-text" class="font-bold"></span></div>
+                            </div>
                         </div>
-                        <button onclick="aiTutor.generate()" id="btn-generate"
+
+                        <button onclick="aiTutor.getAdvice()" id="btn-get-advice"
                             class="w-full bg-white text-indigo-600 font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-50 transition flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                            disabled>🚀 問題を生成する</button>
+                            disabled>🧠 分析＆アドバイスをもらう</button>
+                        
                         <div id="ai-loading" class="hidden mt-6 flex flex-col items-center">
                             <div class="loader mb-3 border-t-white border-white/20"></div>
-                            <p class="text-xs text-indigo-100 animate-pulse" id="ai-status-text">思考中...</p>
+                            <p class="text-xs text-indigo-100 animate-pulse" id="ai-status-text">学習履歴を分析中...</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- AI Output Area -->
+                <div id="ai-output-box" class="hidden bg-white dark:bg-darkcard p-6 md:p-8 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                    <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-xl">🤖</div>
+                        <div>
+                            <div class="font-bold text-slate-800 dark:text-white">AI先生</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">Java Silver エキスパート</div>
+                        </div>
+                    </div>
+                    <div id="ai-response-content" class="text-sm md:text-base leading-relaxed text-slate-700 dark:text-slate-300 ai-response whitespace-pre-wrap"></div>
                 </div>
             </div>
         </div>
@@ -631,8 +654,8 @@
                             <h4 class="font-bold text-sm text-slate-700 dark:text-slate-300 mb-2">📥 インポート (読み込み)</h4>
                             <label
                                 class="text-sm bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-600 transition font-bold shadow-sm cursor-pointer inline-block">
-                                ファイルを選択して読み込む
-                                <input type="file" class="hidden" onchange="dataManager.importData(this)">
+                                ファイルを選択して読み込む (複数可)
+                                <input type="file" class="hidden" multiple onchange="dataManager.importData(this)">
                             </label>
                         </div>
                         <div
@@ -644,7 +667,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 15.18</p>
+                    <p>Java Silver Dojo Ver 16.0</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -687,7 +710,7 @@
             </div>
         </div>
 
-        <!-- QUIZ VIEW (CORRECTED ID) -->
+        <!-- QUIZ VIEW -->
         <div id="tab-quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] dark:bg-darkbg hidden z-50">
             <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
                 <div class="flex justify-between items-center mb-6">
@@ -848,7 +871,7 @@
             { id: 'c21', title: 'Staticメソッド呼び出し', tag: '中級 (OOP)', desc: 'Mathクラスのmaxメソッドを使って、10と20のうち大きい方を表示してください。', keywords: ['Math.max', 'System.out.println'], answer: 'System.out.println(Math.max(10, 20));' }
         ];
 
-        // --- MODULES DEFINITIONS (Changed to var to avoid TDZ issues) ---
+        // --- MODULES DEFINITIONS ---
 
         var aiTutor = {
             apiKey: '',
@@ -883,48 +906,92 @@
             },
             updateStatus: function () {
                 var statusEl = document.getElementById('key-status');
+                var btn = document.getElementById('btn-get-advice');
                 if (this.apiKey) {
                     statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み';
                     statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold';
-                    document.getElementById('btn-generate').disabled = false;
+                    if (btn) btn.disabled = false;
                 } else {
                     statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-300"></span> 未設定';
                     statusEl.className = 'text-xs text-slate-400 mt-2 flex items-center gap-1';
-                    document.getElementById('btn-generate').disabled = true;
+                    if (btn) btn.disabled = true;
                 }
             },
-            analyzeWeakness: function () {
-                if (!app || !app.data || app.data.results.length === 0) return "Java Silver全般";
+            analyzeStats: function() {
+                if (!app || !app.data) return { weakCategories: [], recentMistakes: [] };
+                
+                // 1. Weak Categories
                 var wrongCounts = {};
-                // Safe check loop
-                for (var i = 0; i < app.data.questions.length; i++) {
-                    var q = app.data.questions[i];
+                var totalCounts = {};
+                app.data.questions.forEach(q => {
+                    var cat = q.category || "その他";
+                    totalCounts[cat] = (totalCounts[cat] || 0) + 1;
                     if (app.data.results[q.id] === false) {
-                        var cat = q.category || "その他";
                         wrongCounts[cat] = (wrongCounts[cat] || 0) + 1;
                     }
-                }
-                var sortedWeakness = Object.entries(wrongCounts).sort(function (a, b) { return b[1] - a[1] }).slice(0, 3).map(function (e) { return e[0] });
-                var listEl = document.getElementById('weak-list');
-                var analysisBox = document.getElementById('ai-analysis');
-                if (sortedWeakness.length > 0) {
-                    analysisBox.classList.remove('hidden');
-                    listEl.innerHTML = sortedWeakness.map(function (w) { return '<li>' + w + '</li>' }).join('');
-                    return sortedWeakness.join('、');
-                } else {
-                    analysisBox.classList.add('hidden');
-                    return "Java Silver全般";
-                }
+                });
+                
+                var weakCategories = Object.keys(wrongCounts)
+                    .sort((a, b) => wrongCounts[b] - wrongCounts[a])
+                    .slice(0, 3);
+                
+                // 2. Recent Mistakes (Last 5)
+                var recentMistakes = [];
+                // Look through history from end to beginning
+                // Simplified: Just grabbing random wrong answers from memory for now to keep payload small
+                // In a real DB we would query by date. Here we iterate all Qs.
+                var wrongQs = app.data.questions.filter(q => app.data.results[q.id] === false);
+                // Get 3 random wrong questions to show AI
+                recentMistakes = wrongQs.sort(() => 0.5 - Math.random()).slice(0, 3).map(q => {
+                    return {
+                        category: q.category,
+                        text: q.text,
+                        correctAnswer: Array.isArray(q.options) && typeof q.answer === 'number' ? q.options[q.answer] : "N/A"
+                    };
+                });
+
+                return { weakCategories, recentMistakes };
             },
-            generate: async function () {
-                var topics = this.analyzeWeakness() || "Java Silver全般";
-                var btn = document.getElementById('btn-generate');
+            updateWeaknessDisplay: function() {
+                 var stats = this.analyzeStats();
+                 var text = stats.weakCategories.length > 0 ? stats.weakCategories.join('、') : "データ不足";
+                 var el = document.getElementById('ai-weak-text');
+                 var container = document.getElementById('ai-analysis-stats');
+                 if(el) el.innerText = text;
+                 if(container) container.classList.remove('hidden');
+            },
+            getAdvice: async function () {
+                var stats = this.analyzeStats();
+                var btn = document.getElementById('btn-get-advice');
                 var loading = document.getElementById('ai-loading');
-                var loadingText = document.getElementById('ai-status-text');
+                var outputBox = document.getElementById('ai-output-box');
+                var contentDiv = document.getElementById('ai-response-content');
+                
                 btn.classList.add('hidden');
                 loading.classList.remove('hidden');
+                outputBox.classList.add('hidden');
 
-                var prompt = `Java Silver SE11の試験対策として、ユーザーの苦手分野【${topics}】に関する4択問題を5問作成してください。出力は以下のJSON配列形式のみ。Markdown記法は含めないでください。[{"id": "ai-${Date.now()}-1", "category": "AI生成", "text": "...", "code": "...", "options": ["..."], "answer": 0, "explanation": "..."}]`;
+                // Construct Prompt
+                var weaknessStr = stats.weakCategories.length ? stats.weakCategories.join(', ') : "まだデータがありません";
+                var mistakesStr = stats.recentMistakes.map((m, i) => 
+                    `[${i+1}] 分野:${m.category}\n問題:${m.text}\n正解:${m.correctAnswer}`
+                ).join('\n---\n');
+
+                var prompt = `
+あなたはJava Silver (SE11) 資格試験の熱血かつ論理的なベテラン講師です。
+生徒（ユーザー）の学習履歴データを分析し、日本語でアドバイスをしてください。
+
+【生徒データ】
+・現在の苦手分野: ${weaknessStr}
+・最近間違えた問題の例:
+${mistakesStr || "（まだ間違いデータがありません）"}
+
+【指示】
+1. 生徒の苦手分野傾向を分析し、なぜそこでつまずきやすいか簡潔に解説してください。
+2. 今後の学習戦略（どの章を重点的にやるべきか）を提案してください。
+3. 「オリジナル問題作成」機能を使っている生徒に対して、「次は〇〇についてのひっかけ問題を作ってみよう」といった、理解を深めるための作問テーマを1つ提案してください。
+4. 口調は「～だね」「～しよう！」といった、親しみやすくも頼れる先生のトーンでお願いします。Markdown形式で見やすく整形してください。
+`;
 
                 var fetchWithRetry = async (model, retries = 1) => {
                     var url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
@@ -936,7 +1003,6 @@
                         });
                         if (!res.ok) {
                             if (res.status === 429 && retries > 0) {
-                                loadingText.innerText = "混雑中...再試行します";
                                 await new Promise(r => setTimeout(r, 3000));
                                 return fetchWithRetry(model, retries - 1);
                             }
@@ -953,15 +1019,20 @@
                 try {
                     var data = await fetchWithRetry(this.model);
                     var text = data.candidates[0].content.parts[0].text;
-                    var jsonMatch = text.match(/\[\s*\{.*\}\s*\]/s);
-                    text = jsonMatch ? jsonMatch[0] : text.replace(/```json/g, '').replace(/```/g, '').trim();
-                    var newQs = JSON.parse(text);
-                    newQs.forEach((q, i) => { q.id = `ai-${Date.now()}-${i}`; app.data.questions.push(q); });
-                    app.save();
-                    alert('5問の問題を追加しました！');
-                    app.updateDashboard();
+                    
+                    // Simple Format processing (Basic Markdown to HTML)
+                    var formatted = text
+                        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                        .replace(/^## (.*$)/gim, '<h3>$1</h3>')
+                        .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                        .replace(/\* (.*)/gim, '<ul><li>$1</li></ul>')
+                        .replace(/<\/ul><ul>/gim, '') // Merge lists
+                        .replace(/\n/gim, '<br>');
+
+                    contentDiv.innerHTML = formatted;
+                    outputBox.classList.remove('hidden');
                 } catch (e) {
-                    alert(`AI生成エラー: ${e.message}`);
+                    alert(`AI通信エラー: ${e.message}`);
                 } finally {
                     btn.classList.remove('hidden');
                     loading.classList.add('hidden');
@@ -1093,8 +1164,90 @@
         };
 
         var dataManager = {
-            importData: function (input) { if (input.files.length === 0) return; var readers = Array.from(input.files).map(file => new Promise(r => { var reader = new FileReader(); reader.onload = e => r(e.target.result); reader.readAsText(file); })); Promise.all(readers).then(results => { var count = 0; var newQs = []; var seenIds = new Set(app.data.questions.map(q => q.id)); results.forEach(res => { try { var json = JSON.parse(res); if (json.questions) json.questions.forEach(q => { if (!seenIds.has(q.id)) { newQs.push(q); seenIds.add(q.id); count++; } }); } catch (e) { } }); if (count > 0) { app.data.questions = [...app.data.questions, ...newQs]; app.save(); alert(`${count}問を追加しました！`); app.renderChapters(); } input.value = ''; }); },
-            resetAll: function () { if (confirm('全てのデータを削除しますか？')) { localStorage.removeItem(STORAGE_KEY); location.reload(); } },
+            importData: function (input) {
+                if (input.files.length === 0) return;
+                var readers = Array.from(input.files).map(file => new Promise(r => {
+                    var reader = new FileReader();
+                    reader.onload = e => r(e.target.result);
+                    reader.readAsText(file);
+                }));
+                
+                Promise.all(readers).then(results => {
+                    var qCount = 0;
+                    var hCount = 0;
+                    var newQs = [];
+                    // 既存の問題IDセット
+                    var seenIds = new Set(app.data.questions.map(q => q.id));
+                    // 既存の履歴日付セット（重複防止用）
+                    var existingHistoryDates = new Set(app.data.history.map(h => h.date));
+
+                    results.forEach(res => {
+                        try {
+                            var json = JSON.parse(res);
+                            
+                            // 1. 問題データの取り込み
+                            // 配列そのものか、オブジェクト内のquestionsプロパティか判定
+                            var questionsSource = Array.isArray(json) ? json : (json.questions || []);
+                            
+                            questionsSource.forEach(q => {
+                                // IDがあり、かつ未登録なら追加
+                                if (q.id && !seenIds.has(q.id)) {
+                                    newQs.push(q);
+                                    seenIds.add(q.id);
+                                    qCount++;
+                                } else if (q.id && seenIds.has(q.id) && q.id.includes('user')) {
+                                    // ユーザー作成問題(IDに'user'含む)に限り、内容を更新（上書き）するロジックを入れるか？
+                                    // 今回は安全のため「追加」のみとし、更新したい場合は削除してからインポートを促す運用にします。
+                                    // ※ここを実装すると複雑になるため。
+                                }
+                            });
+
+                            // 2. 履歴・成績データの統合（完全なバックアップファイルの場合）
+                            if (!Array.isArray(json) && json.history) {
+                                json.history.forEach(h => {
+                                    if (!existingHistoryDates.has(h.date)) {
+                                        app.data.history.push(h);
+                                        existingHistoryDates.add(h.date);
+                                        hCount++;
+                                    }
+                                });
+                            }
+                            if (!Array.isArray(json) && json.results) {
+                                // 成績データはマージ（新しいものを優先）
+                                app.data.results = { ...app.data.results, ...json.results };
+                            }
+                            if (!Array.isArray(json) && json.bookmarks) {
+                                // ブックマークのマージ
+                                var newBm = json.bookmarks.filter(b => !app.data.bookmarks.includes(b));
+                                app.data.bookmarks = [...app.data.bookmarks, ...newBm];
+                            }
+
+                        } catch (e) {
+                            console.error("JSON Parse Error:", e);
+                            alert("一部のファイルを読み込めませんでした。JSON形式を確認してください。");
+                        }
+                    });
+
+                    if (qCount > 0 || hCount > 0) {
+                        // 新しい問題があれば結合
+                        if (qCount > 0) app.data.questions = [...app.data.questions, ...newQs];
+                        
+                        // 履歴を日付順にソートし直す
+                        app.data.history.sort((a, b) => a.date - b.date);
+                        
+                        app.save();
+                        alert(`読み込み完了！\n・問題: ${qCount}問 追加\n・履歴: ${hCount}件 同期`);
+                        app.updateDashboard();
+                        
+                        // 画面更新
+                        if(typeof aiTutor !== 'undefined') aiTutor.updateWeaknessDisplay();
+                    } else {
+                        alert('新しいデータは見つかりませんでした。\n（すでに全て登録済みか、データの形式が異なります）');
+                    }
+                    input.value = '';
+                });
+            },
+            resetAll: function () { if (confirm('全てのデータを削除しますか？\n（学習履歴も消えます）')) { localStorage.removeItem(STORAGE_KEY); location.reload(); } },
             generateDemoData: function () {
                 var now = Date.now();
                 var dummyHistory = [
@@ -1314,7 +1467,7 @@
                         if (tab === 'dashboard') this.renderChapters();
                         if (tab === 'history') this.renderHistory();
                         if (tab === 'create' && typeof creator !== 'undefined') creator.renderUserQuestions();
-                        if (tab === 'ai' && typeof aiTutor !== 'undefined') aiTutor.analyzeWeakness();
+                        if (tab === 'ai' && typeof aiTutor !== 'undefined') aiTutor.updateWeaknessDisplay();
                     });
                 }
             },
@@ -1386,7 +1539,7 @@
                 var chapters = {};
                 this.data.questions.forEach(q => {
                     if (!q || !q.id) return;
-                    if (q.id.includes('user')) return; // ★追加：自作問題を集計から除外
+                    if (q.id.includes('user')) return; // 自作問題を集計から除外
                     var key = 'others';
                     var lower = q.id.toLowerCase();
                     var cat = q.category || "";
