@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 16.1 - Java Icon Fix)</title>
+    <title>Java Silver 完全攻略道場 (Ver 16.2 - AI Fix)</title>
     <!-- Favicon: Java-like Coffee Cup -->
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z' fill='%235382a1'/><path d='M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z' fill='%235382a1'/><path d='M75,45 H85 C90,45 90,55 85,60 H75 Z' fill='%235382a1'/><path d='M40,30 Q50,10 60,30 T80,30' fill='none' stroke='%23f89820' stroke-width='6' stroke-linecap='round'/><path d='M30,20 Q40,0 50,20 T70,20' fill='none' stroke='%23f89820' stroke-width='6' stroke-linecap='round'/></svg>">
@@ -186,7 +186,7 @@
                     </div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 16.1 AI Tutor & Fix</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 16.2 AI Fix</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -577,6 +577,7 @@
                                 onchange="aiTutor.toggleCustomModelInput()">
                                 <option value="gemini-1.5-flash">gemini-1.5-flash (推奨・高速)</option>
                                 <option value="gemini-1.5-pro">gemini-1.5-pro (高精度)</option>
+                                <option value="gemini-2.0-flash-exp">gemini-2.0-flash-exp (最新・実験的)</option>
                                 <option value="custom">カスタム入力...</option>
                             </select>
                             <input type="text" id="api-model-custom"
@@ -675,7 +676,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 16.1</p>
+                    <p>Java Silver Dojo Ver 16.2</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -890,7 +891,7 @@
                     this.model = localStorage.getItem('gemini_api_model') || 'gemini-1.5-flash';
                     var select = document.getElementById('api-model-select');
                     if (select) {
-                        if (['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'].includes(this.model)) { select.value = this.model; document.getElementById('api-model-custom').classList.add('hidden'); }
+                        if (['gemini-1.5-flash', 'gemini-1.5-pro'].includes(this.model)) { select.value = this.model; document.getElementById('api-model-custom').classList.add('hidden'); }
                         else { select.value = 'custom'; document.getElementById('api-model-custom').classList.remove('hidden'); document.getElementById('api-model-custom').value = this.model; }
                     }
                     this.updateStatus();
@@ -1013,9 +1014,6 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                             if (res.status === 429 && retries > 0) {
                                 await new Promise(r => setTimeout(r, 3000));
                                 return fetchWithRetry(model, retries - 1);
-                            }
-                            if (res.status === 404 && model === 'gemini-1.5-flash') {
-                                return fetchWithRetry('gemini-pro', 0);
                             }
                             var err = await res.json().catch(() => ({}));
                             throw new Error(err.error?.message || res.statusText);
