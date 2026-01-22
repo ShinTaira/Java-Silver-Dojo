@@ -154,35 +154,142 @@
             font-size: 12px;
             z-index: 9999;
         }
-        
+
         /* Markdown Styling for AI Response */
-        .ai-response { line-height: 1.7; }
-        .ai-response h3 { font-weight: bold; margin-top: 1.5em; margin-bottom: 0.8em; font-size: 1.2em; color: #4f46e5; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.3em; }
-        .dark .ai-response h3 { color: #818cf8; border-color: #334155; }
-        .ai-response h4 { font-weight: bold; margin-top: 1.2em; margin-bottom: 0.5em; font-size: 1.1em; }
-        .ai-response ul { list-style-type: disc; margin-left: 1.5em; margin-bottom: 1em; }
-        .ai-response ol { list-style-type: decimal; margin-left: 1.5em; margin-bottom: 1em; }
-        .ai-response li { margin-bottom: 0.3em; }
-        .ai-response strong { font-weight: bold; color: #1e293b; background: linear-gradient(transparent 70%, #fef3c7 70%); }
-        .dark .ai-response strong { color: #f1f5f9; background: linear-gradient(transparent 70%, #4b5563 70%); }
-        .ai-response p { margin-bottom: 1em; }
-        .ai-response blockquote { border-left: 4px solid #cbd5e1; padding-left: 1em; margin: 1em 0; color: #64748b; font-style: italic; }
-        .dark .ai-response blockquote { border-color: #475569; color: #94a3b8; }
-        
+        .ai-response {
+            line-height: 1.7;
+        }
+
+        .ai-response h3 {
+            font-weight: bold;
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+            font-size: 1.2em;
+            color: #4f46e5;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.3em;
+        }
+
+        .dark .ai-response h3 {
+            color: #818cf8;
+            border-color: #334155;
+        }
+
+        .ai-response h4 {
+            font-weight: bold;
+            margin-top: 1.2em;
+            margin-bottom: 0.5em;
+            font-size: 1.1em;
+        }
+
+        .ai-response ul {
+            list-style-type: disc;
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        .ai-response ol {
+            list-style-type: decimal;
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        .ai-response li {
+            margin-bottom: 0.3em;
+        }
+
+        .ai-response strong {
+            font-weight: bold;
+            color: #1e293b;
+            background: linear-gradient(transparent 70%, #fef3c7 70%);
+        }
+
+        .dark .ai-response strong {
+            color: #f1f5f9;
+            background: linear-gradient(transparent 70%, #4b5563 70%);
+        }
+
+        .ai-response p {
+            margin-bottom: 1em;
+        }
+
+        .ai-response blockquote {
+            border-left: 4px solid #cbd5e1;
+            padding-left: 1em;
+            margin: 1em 0;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .dark .ai-response blockquote {
+            border-color: #475569;
+            color: #94a3b8;
+        }
+
         /* Table Styles for AI Response */
-        .ai-response table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.9em; }
-        .ai-response th, .ai-response td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
-        .dark .ai-response th, .dark .ai-response td { border-color: #475569; }
-        .ai-response th { background-color: #f1f5f9; font-weight: bold; color: #334155; }
-        .dark .ai-response th { background-color: #1e293b; color: #e2e8f0; }
-        .ai-response tr:nth-child(even) { background-color: #f8fafc; }
-        .dark .ai-response tr:nth-child(even) { background-color: #0f172a; }
+        .ai-response table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 0.9em;
+        }
+
+        .ai-response th,
+        .ai-response td {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .dark .ai-response th,
+        .dark .ai-response td {
+            border-color: #475569;
+        }
+
+        .ai-response th {
+            background-color: #f1f5f9;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .dark .ai-response th {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+
+        .ai-response tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .dark .ai-response tr:nth-child(even) {
+            background-color: #0f172a;
+        }
 
         /* Code Block in AI Response */
-        .ai-response pre { margin: 1em 0; border-radius: 8px; overflow-x: auto; background-color: #1e1e1e !important; }
-        .ai-response code { font-family: 'Roboto Mono', monospace; font-size: 0.9em; }
-        .ai-response p > code { background-color: #f1f5f9; padding: 0.2em 0.4em; border-radius: 4px; color: #ef4444; font-weight: bold; }
-        .dark .ai-response p > code { background-color: #334155; color: #fca5a5; }
+        .ai-response pre {
+            margin: 1em 0;
+            border-radius: 8px;
+            overflow-x: auto;
+            background-color: #1e1e1e !important;
+        }
+
+        .ai-response code {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .ai-response p>code {
+            background-color: #f1f5f9;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .dark .ai-response p>code {
+            background-color: #334155;
+            color: #fca5a5;
+        }
     </style>
 </head>
 
@@ -200,11 +307,14 @@
                     <!-- Java-like Icon -->
                     <div class="w-10 h-10 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-md">
-                            <path d="M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z" fill="#5382a1"/>
-                            <path d="M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z" fill="#5382a1"/>
-                            <path d="M75,45 H85 C90,45 90,55 85,60 H75 Z" fill="#5382a1"/>
-                            <path d="M40,30 Q50,10 60,30 T80,30" fill="none" stroke="#f89820" stroke-width="6" stroke-linecap="round"/>
-                            <path d="M30,20 Q40,0 50,20 T70,20" fill="none" stroke="#f89820" stroke-width="6" stroke-linecap="round"/>
+                            <path d="M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z"
+                                fill="#5382a1" />
+                            <path d="M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z" fill="#5382a1" />
+                            <path d="M75,45 H85 C90,45 90,55 85,60 H75 Z" fill="#5382a1" />
+                            <path d="M40,30 Q50,10 60,30 T80,30" fill="none" stroke="#f89820" stroke-width="6"
+                                stroke-linecap="round" />
+                            <path d="M30,20 Q40,0 50,20 T70,20" fill="none" stroke="#f89820" stroke-width="6"
+                                stroke-linecap="round" />
                         </svg>
                     </div>
                     <div>
@@ -266,7 +376,8 @@
                 <!-- Level Based Quizzes -->
                 <div class="mb-8">
                     <h3 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
-                        <span class="text-xl">📊</span> レベル別演習 (各30問)</h3>
+                        <span class="text-xl">📊</span> レベル別演習 (各30問)
+                    </h3>
                     <div class="grid grid-cols-3 gap-4">
                         <button onclick="app.startQuiz('level-1')"
                             class="bg-gradient-to-br from-emerald-400 to-teal-500 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative overflow-hidden group">
@@ -300,7 +411,8 @@
                     <div
                         class="bg-white dark:bg-darkcard p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
                         <h3 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
-                            <span class="text-xl">🔍</span> キーワード演習</h3>
+                            <span class="text-xl">🔍</span> キーワード演習
+                        </h3>
                         <div class="flex gap-2">
                             <input type="text" id="search-input"
                                 class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500 transition dark:text-white"
@@ -314,7 +426,8 @@
                         <div>
                             <h3
                                 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-1 flex items-center gap-2">
-                                <span class="text-xl">🔖</span> ブックマーク</h3>
+                                <span class="text-xl">🔖</span> ブックマーク
+                            </h3>
                             <p class="text-xs text-slate-400">保存済み: <span id="bookmark-count"
                                     class="font-bold text-slate-700 dark:text-slate-300">0</span> 問</p>
                         </div>
@@ -329,7 +442,8 @@
                     <div>
                         <h3 class="text-base font-bold text-indigo-800 dark:text-indigo-300 flex items-center gap-2">📥
                             データ読み込み・復元</h3>
-                        <p class="text-xs text-indigo-600 dark:text-indigo-400 mt-1">画面が白い、または問題がない場合はここからデータを読み込んでください。
+                        <p class="text-xs text-indigo-600 dark:text-indigo-400 mt-1">
+                            🚨画面が白い、または問題がない場合はここからデータを読み込んでください‼️
                         </p>
                     </div>
                     <div class="flex gap-3">
@@ -350,7 +464,7 @@
                         <div class="absolute right-0 top-0 p-4 text-8xl opacity-10 group-hover:scale-110 transition">💻
                         </div>
                         <h3 class="text-xl font-bold flex items-center gap-2 mb-1"><span>実践コーディング道場</span><span
-                                class="bg-white/20 text-[10px] px-2 py-0.5 rounded">NEW</span></h3>
+                                class="bg-white/20 text-[10px] px-2 py-0.5 rounded">〜コードに慣れよう！！〜</span></h3>
                         <p class="text-emerald-100 text-sm">手を動かして覚える。全20問以上の実践ドリル。</p>
                     </div>
                 </div>
@@ -361,7 +475,8 @@
                         <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
                             <span>📚 オリジナル問題集</span><span
                                 class="bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 text-[10px] px-2 py-0.5 rounded font-bold">User
-                                Made</span></h3>
+                                Made</span>
+                        </h3>
                     </div>
                     <div
                         class="bg-gradient-to-br from-slate-800 to-slate-900 dark:from-slate-900 dark:to-black rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group border border-slate-700">
@@ -485,7 +600,8 @@
                     <div
                         class="border-b border-slate-100 dark:border-slate-700 p-5 bg-slate-50 dark:bg-slate-800 flex justify-between items-center">
                         <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <span>📝 問題を作成</span></h2>
+                            <span>📝 問題を作成</span>
+                        </h2>
                         <span
                             class="text-xs bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 px-2 py-1 rounded font-bold">User
                             Studio</span>
@@ -523,7 +639,8 @@
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M19 9l-7 7-7-7"></path>
-                                        </svg></div>
+                                        </svg>
+                                    </div>
                                 </div>
                                 <input type="hidden" id="create-cat-name" value="Javaの基本">
                             </div>
@@ -579,7 +696,8 @@
                 <div
                     class="bg-white dark:bg-darkcard p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                     <h2 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <span>🔑 Gemini API 設定</span></h2>
+                        <span>🔑 Gemini API 設定</span>
+                    </h2>
                     <div class="space-y-4">
                         <div>
                             <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">API
@@ -611,14 +729,17 @@
                 </div>
 
                 <!-- AI Tutor Area -->
-                <div class="bg-gradient-to-br from-indigo-600 to-violet-600 p-8 rounded-2xl shadow-lg text-white relative overflow-hidden">
+                <div
+                    class="bg-gradient-to-br from-indigo-600 to-violet-600 p-8 rounded-2xl shadow-lg text-white relative overflow-hidden">
                     <div class="absolute -right-4 -top-4 text-9xl opacity-10 select-none">🎓</div>
                     <div class="relative z-10">
                         <h2 class="text-2xl font-bold mb-1">AI 先生の学習分析</h2>
                         <p class="text-indigo-100 text-sm mb-6">あなたの学習履歴（苦手分野や間違えた問題）を分析して、アドバイスとオリジナル問題作成のヒントを教えます。</p>
-                        
-                        <div id="ai-analysis-stats" class="bg-white/10 backdrop-blur-md rounded-lg p-4 mb-6 border border-white/20 hidden">
-                            <h4 class="text-xs font-bold text-indigo-200 uppercase tracking-wider mb-2">Current Status</h4>
+
+                        <div id="ai-analysis-stats"
+                            class="bg-white/10 backdrop-blur-md rounded-lg p-4 mb-6 border border-white/20 hidden">
+                            <h4 class="text-xs font-bold text-indigo-200 uppercase tracking-wider mb-2">Current Status
+                            </h4>
                             <div class="flex gap-4 text-sm">
                                 <div>苦手: <span id="ai-weak-text" class="font-bold"></span></div>
                             </div>
@@ -627,7 +748,7 @@
                         <button onclick="aiTutor.getAdvice()" id="btn-get-advice"
                             class="w-full bg-white text-indigo-600 font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-50 transition flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled>🧠 分析＆アドバイスをもらう</button>
-                        
+
                         <div id="ai-loading" class="hidden mt-6 flex flex-col items-center">
                             <div class="loader mb-3 border-t-white border-white/20"></div>
                             <p class="text-xs text-indigo-100 animate-pulse" id="ai-status-text">学習履歴を分析中...</p>
@@ -636,15 +757,20 @@
                 </div>
 
                 <!-- AI Output Area -->
-                <div id="ai-output-box" class="hidden bg-white dark:bg-darkcard p-6 md:p-8 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+                <div id="ai-output-box"
+                    class="hidden bg-white dark:bg-darkcard p-6 md:p-8 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
                     <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100 dark:border-slate-700">
-                        <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-xl">🤖</div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-xl">
+                            🤖</div>
                         <div>
                             <div class="font-bold text-slate-800 dark:text-white">AI先生</div>
                             <div class="text-xs text-slate-500 dark:text-slate-400">Java Silver エキスパート</div>
                         </div>
                     </div>
-                    <div id="ai-response-content" class="text-sm md:text-base leading-relaxed text-slate-700 dark:text-slate-300 ai-response whitespace-pre-wrap"></div>
+                    <div id="ai-response-content"
+                        class="text-sm md:text-base leading-relaxed text-slate-700 dark:text-slate-300 ai-response whitespace-pre-wrap">
+                    </div>
                 </div>
             </div>
         </div>
@@ -721,7 +847,8 @@
                     <div class="md:col-span-8 space-y-6">
                         <div
                             class="bg-white dark:bg-darkcard p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 h-64 md:h-80">
-                            <canvas id="historyChart"></canvas></div>
+                            <canvas id="historyChart"></canvas>
+                        </div>
                         <div id="history-list" class="space-y-3"></div>
                     </div>
                     <div class="md:col-span-4">
@@ -731,7 +858,8 @@
                                 <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none text-9xl">💊</div>
                                 <h3
                                     class="font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2 relative z-10">
-                                    <span class="text-xl">🚑</span> 苦手克服サポート</h3>
+                                    <span class="text-xl">🚑</span> 苦手克服サポート
+                                </h3>
                                 <div id="weakness-advice-list" class="space-y-4 relative z-10"></div>
                             </div>
                         </div>
@@ -816,7 +944,8 @@
                             class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 border border-indigo-100 dark:border-indigo-800 mb-6">
                             <h4
                                 class="text-xs font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                                <span>✏️</span> 自分用メモ</h4>
+                                <span>✏️</span> 自分用メモ
+                            </h4>
                             <textarea id="user-note-input"
                                 class="w-full bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-800 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition dark:text-white"
                                 rows="2" placeholder="ここが間違えやすい、○○メソッドは××など..."></textarea>
@@ -917,7 +1046,7 @@
                     } else {
                         this.model = 'gemini-2.5-flash-preview-09-2025';
                     }
-                    
+
                     var select = document.getElementById('api-model-select');
                     if (select) {
                         if (this.model === 'gemini-2.5-flash-preview-09-2025') {
@@ -961,9 +1090,9 @@
                     if (btn) btn.disabled = true;
                 }
             },
-            analyzeStats: function() {
+            analyzeStats: function () {
                 if (!app || !app.data) return { weakCategories: [], recentMistakes: [] };
-                
+
                 // 1. Weak Categories
                 var wrongCounts = {};
                 var totalCounts = {};
@@ -974,11 +1103,11 @@
                         wrongCounts[cat] = (wrongCounts[cat] || 0) + 1;
                     }
                 });
-                
+
                 var weakCategories = Object.keys(wrongCounts)
                     .sort((a, b) => wrongCounts[b] - wrongCounts[a])
                     .slice(0, 3);
-                
+
                 // 2. Recent Mistakes (Last 5)
                 var recentMistakes = [];
                 // Look through history from end to beginning
@@ -996,13 +1125,13 @@
 
                 return { weakCategories, recentMistakes };
             },
-            updateWeaknessDisplay: function() {
-                 var stats = this.analyzeStats();
-                 var text = stats.weakCategories.length > 0 ? stats.weakCategories.join('、') : "データ不足";
-                 var el = document.getElementById('ai-weak-text');
-                 var container = document.getElementById('ai-analysis-stats');
-                 if(el) el.innerText = text;
-                 if(container) container.classList.remove('hidden');
+            updateWeaknessDisplay: function () {
+                var stats = this.analyzeStats();
+                var text = stats.weakCategories.length > 0 ? stats.weakCategories.join('、') : "データ不足";
+                var el = document.getElementById('ai-weak-text');
+                var container = document.getElementById('ai-analysis-stats');
+                if (el) el.innerText = text;
+                if (container) container.classList.remove('hidden');
             },
             getAdvice: async function () {
                 var stats = this.analyzeStats();
@@ -1010,15 +1139,15 @@
                 var loading = document.getElementById('ai-loading');
                 var outputBox = document.getElementById('ai-output-box');
                 var contentDiv = document.getElementById('ai-response-content');
-                
+
                 btn.classList.add('hidden');
                 loading.classList.remove('hidden');
                 outputBox.classList.add('hidden');
 
                 // Construct Prompt
                 var weaknessStr = stats.weakCategories.length ? stats.weakCategories.join(', ') : "まだデータがありません";
-                var mistakesStr = stats.recentMistakes.map((m, i) => 
-                    `[${i+1}] 分野:${m.category}\n問題:${m.text}\n正解:${m.correctAnswer}`
+                var mistakesStr = stats.recentMistakes.map((m, i) =>
+                    `[${i + 1}] 分野:${m.category}\n問題:${m.text}\n正解:${m.correctAnswer}`
                 ).join('\n---\n');
 
                 var prompt = `
@@ -1061,7 +1190,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 try {
                     var data = await fetchWithRetry(this.model);
                     var text = data.candidates[0].content.parts[0].text;
-                    
+
                     // Improved Formatting using Marked.js
                     if (typeof marked !== 'undefined') {
                         contentDiv.innerHTML = marked.parse(text);
@@ -1225,7 +1354,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     reader.onload = e => r(e.target.result);
                     reader.readAsText(file);
                 }));
-                
+
                 Promise.all(readers).then(results => {
                     var qCount = 0;
                     var hCount = 0;
@@ -1239,11 +1368,11 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     results.forEach(res => {
                         try {
                             var json = JSON.parse(res);
-                            
+
                             // 1. 問題データの取り込み
                             // 配列そのものか、オブジェクト内のquestionsプロパティか判定
                             var questionsSource = Array.isArray(json) ? json : (json.questions || []);
-                            
+
                             questionsSource.forEach(q => {
                                 // IDがあり、かつ未登録なら追加
                                 if (q.id) {
@@ -1291,10 +1420,10 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     if (qCount > 0 || hCount > 0 || updateCount > 0) {
                         // 新しい問題があれば結合
                         if (qCount > 0) app.data.questions = [...app.data.questions, ...newQs];
-                        
+
                         // 履歴を日付順にソートし直す
                         app.data.history.sort((a, b) => a.date - b.date);
-                        
+
                         app.save();
                         var msg = `読み込み完了！\n`;
                         if (qCount > 0) msg += `・新規追加: ${qCount}問\n`;
@@ -1302,10 +1431,10 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                         if (hCount > 0) msg += `・履歴同期: ${hCount}件\n`;
                         alert(msg);
                         app.updateDashboard();
-                        
+
                         // 画面更新
-                        if(typeof aiTutor !== 'undefined') aiTutor.updateWeaknessDisplay();
-                        if(typeof creator !== 'undefined') creator.renderUserQuestions();
+                        if (typeof aiTutor !== 'undefined') aiTutor.updateWeaknessDisplay();
+                        if (typeof creator !== 'undefined') creator.renderUserQuestions();
                     } else {
                         alert('新しいデータは見つかりませんでした。\n（すでに全て最新の状態か、データの形式が異なります）');
                     }
