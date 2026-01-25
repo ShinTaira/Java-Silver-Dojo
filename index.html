@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Java Silver 完全攻略道場 (Ver 17.0 - Image Paste Support)</title>
+    <title>Java Silver 完全攻略道場 (Ver 17.1 - Official Chapters)</title>
     <!-- Favicon: Java-like Coffee Cup -->
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z' fill='%235382a1'/><path d='M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z' fill='%235382a1'/><path d='M75,45 H85 C90,45 90,55 85,60 H75 Z' fill='%235382a1'/><path d='M40,30 Q50,10 60,30 T80,30' fill='none' stroke='%23f89820' stroke-width='6' stroke-linecap='round'/><path d='M30,20 Q40,0 50,20 T70,20' fill='none' stroke='%23f89820' stroke-width='6' stroke-linecap='round'/></svg>">
@@ -319,7 +319,8 @@
                     </div>
                     <div>
                         <h1 class="font-bold text-xl tracking-tight text-slate-900 dark:text-white">Java Silver 道場</h1>
-                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 17.0 Image Paste</p>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 17.1 Official
+                            Chapters</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
@@ -502,7 +503,8 @@
 
                 <!-- Chapters Grid -->
                 <div class="mb-12">
-                    <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">📖 章ごとの練習</h3>
+                    <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">📖 章ごとの練習 (Java Silver 公式準拠)
+                    </h3>
                     <div id="chapter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                         <div
                             class="col-span-full py-12 text-center text-slate-400 bg-white dark:bg-darkcard border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">
@@ -616,19 +618,17 @@
                                     <select id="create-chapter"
                                         class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none appearance-none transition dark:text-white"
                                         onchange="creator.updateCategoryLabel()">
-                                        <option value="1">第1章: Javaの基本</option>
-                                        <option value="2">第2章: データ型と変数</option>
-                                        <option value="3">第3章: 演算子</option>
-                                        <option value="4">第4章: ループ制御</option>
-                                        <option value="5">第5章: 配列</option>
-                                        <option value="6">第6章: クラスとインスタンス</option>
-                                        <option value="7">第7章: 継承</option>
-                                        <option value="8">第8章: インターフェース</option>
-                                        <option value="9">第9章: ポリモーフィズム</option>
+                                        <option value="1">第1章: 簡単なJAVAプログラムの作成</option>
+                                        <option value="2">第2章: Javaの基本データ型と文字列操作</option>
+                                        <option value="3">第3章: 演算子と判定構造</option>
+                                        <option value="4">第4章: 制御構造</option>
+                                        <option value="5">第5章: 配列の操作</option>
+                                        <option value="6">第6章: インスタンスとメソッド</option>
+                                        <option value="7">第7章: クラスの継承、インターフェイス、抽象クラス</option>
+                                        <option value="8">第8章: 関数型インターフェイス、ラムダ式</option>
+                                        <option value="9">第9章: API</option>
                                         <option value="10">第10章: 例外処理</option>
-                                        <option value="11">第11章: モジュール</option>
-                                        <option value="12">第12章: 主要API</option>
-                                        <option value="13">第13章: ラムダ式</option>
+                                        <option value="11">第11章: モジュールシステム</option>
                                         <option value="mock1">模擬試験①</option>
                                         <option value="mock2">模擬試験②</option>
                                         <option value="mock3">模擬試験③</option>
@@ -642,7 +642,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                <input type="hidden" id="create-cat-name" value="Javaの基本">
+                                <input type="hidden" id="create-cat-name" value="簡単なJAVAプログラムの作成">
                             </div>
                             <div><label
                                     class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">問題文</label><textarea
@@ -701,7 +701,7 @@
             </div>
         </div>
 
-        <!-- AI TAB (UPDATED) -->
+        <!-- AI TAB -->
         <div id="tab-ai" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
             <div class="max-w-3xl mx-auto space-y-6">
                 <!-- API Settings -->
@@ -835,7 +835,7 @@
                     </div>
                 </div>
                 <div class="text-center text-xs text-slate-400">
-                    <p>Java Silver Dojo Ver 17.0</p>
+                    <p>Java Silver Dojo Ver 17.1</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
             </div>
@@ -1023,6 +1023,21 @@
 
         var STORAGE_KEY = 'javaSilverDojo_GlobalData';
         var LEGACY_KEYS = ['javaSilverAI_v14_2', 'javaSilverAI_v14_8'];
+
+        // Updated Chapter Map based on Official Exams
+        const CHAPTER_TITLES = {
+            1: "簡単なJAVAプログラムの作成",
+            2: "基本データ型と文字列操作",
+            3: "演算子と判定構造",
+            4: "制御構造",
+            5: "配列の操作",
+            6: "インスタンスとメソッド",
+            7: "クラスの継承、インターフェイス、抽象クラス",
+            8: "関数型インターフェイス、ラムダ式",
+            9: "API",
+            10: "例外処理",
+            11: "モジュールシステム"
+        };
 
         var codingDrills = [
             { id: 'c1', title: 'Hello World', tag: '基本', desc: 'Mainクラスを作成し、mainメソッド内で "Hello World" と出力してください。', keywords: ['class', 'Main', 'public', 'static', 'void', 'main', 'System.out.println', 'Hello World'], answer: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello World");\n    }\n}' },
@@ -1230,7 +1245,23 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
         };
 
         var creator = {
-            categoryNames: { "1": "Javaの基本", "2": "データ型と変数", "3": "演算子", "4": "ループ制御", "5": "配列", "6": "クラスとインスタンス", "7": "継承", "8": "インターフェース", "9": "ポリモーフィズム", "10": "例外処理", "11": "モジュール", "12": "主要API", "13": "ラムダ式", "mock1": "模擬試験①", "mock2": "模擬試験②", "mock3": "模擬試験③", "99": "その他" },
+            categoryNames: {
+                "1": "簡単なJAVAプログラムの作成",
+                "2": "基本データ型と文字列操作",
+                "3": "演算子と判定構造",
+                "4": "制御構造",
+                "5": "配列の操作",
+                "6": "インスタンスとメソッド",
+                "7": "クラスの継承、インターフェイス、抽象クラス",
+                "8": "関数型インターフェイス、ラムダ式",
+                "9": "API",
+                "10": "例外処理",
+                "11": "モジュールシステム",
+                "mock1": "模擬試験①",
+                "mock2": "模擬試験②",
+                "mock3": "模擬試験③",
+                "99": "その他"
+            },
             currentImage: null, // Temporary store for image
             updateCategoryLabel: function () { var val = document.getElementById('create-chapter').value; document.getElementById('create-cat-name').value = this.categoryNames[val]; },
             addOption: function () {
@@ -1524,9 +1555,9 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
             generateDemoData: function () {
                 var now = Date.now();
                 var dummyHistory = [
-                    { date: now - 10000000, correct: 5, total: 10, mode: '第1章', weak: ['Javaの基本', 'データ型と変数'] },
-                    { date: now - 5000000, correct: 2, total: 5, mode: '第3章', weak: ['演算子', 'Javaの基本'] },
-                    { date: now, correct: 8, total: 10, mode: '模擬試験', weak: ['例外処理', 'ポリモーフィズム', 'Javaの基本'] }
+                    { date: now - 10000000, correct: 5, total: 10, mode: '第1章', weak: ['簡単なJAVAプログラムの作成', '基本データ型と文字列操作'] },
+                    { date: now - 5000000, correct: 2, total: 5, mode: '第3章', weak: ['演算子と判定構造', '簡単なJAVAプログラムの作成'] },
+                    { date: now, correct: 8, total: 10, mode: '模擬試験', weak: ['例外処理', 'ポリモーフィズム', '簡単なJAVAプログラムの作成'] }
                 ];
                 app.data.history = [...app.data.history, ...dummyHistory];
                 app.save();
@@ -1627,19 +1658,17 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
             state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', timer: null, currentSelection: new Set(), isQuizActive: false },
             chartInstance: null,
             categoryLinks: {
-                "Javaの基本": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/package-summary.html",
-                "データ型と変数": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html",
-                "演算子": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
-                "ループ制御": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/flow.html",
-                "配列": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/util/Arrays.html",
-                "クラスとインスタンス": "https://docs.oracle.com/javase/tutorial/java/javaOO/classes.html",
-                "継承": "https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html",
-                "インターフェース": "https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html",
-                "ポリモーフィズム": "https://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html",
+                "簡単なJAVAプログラムの作成": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/package-summary.html",
+                "基本データ型と文字列操作": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html",
+                "演算子と判定構造": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html",
+                "制御構造": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/flow.html",
+                "配列の操作": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/util/Arrays.html",
+                "インスタンスとメソッド": "https://docs.oracle.com/javase/tutorial/java/javaOO/classes.html",
+                "クラスの継承、インターフェイス、抽象クラス": "https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html",
+                "関数型インターフェイス、ラムダ式": "https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html",
+                "API": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/time/LocalDate.html",
                 "例外処理": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/Exception.html",
-                "モジュール": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/module/package-summary.html",
-                "主要API": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/time/LocalDate.html",
-                "ラムダ式": "https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html"
+                "モジュールシステム": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/module/package-summary.html"
             },
             init: function () {
                 try {
@@ -1831,17 +1860,24 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 }).forEach(key => {
                     var c = chapters[key];
                     var rate = Math.round((c.correct / c.count) * 100);
-                    var label = `Chapter ${key}`;
+                    var label = '';
                     var color = 'indigo';
+
                     if (key === 'final') { label = '最終章'; color = 'yellow'; }
                     else if (key === 'ai') { label = 'AI生成'; color = 'purple'; }
                     else if (key === 'best') { label = '厳選'; color = 'orange'; }
                     else if (key === 'others') { label = 'その他'; color = 'slate'; }
-                    else { label = `第${key}章`; }
+                    else {
+                        // Use official chapter titles
+                        label = CHAPTER_TITLES[key] ? `第${key}章 ${CHAPTER_TITLES[key]}` : `第${key}章`;
+                    }
+
                     var btn = document.createElement('button');
                     btn.className = `drill-card bg-white dark:bg-darkcard p-4 rounded-xl border border-slate-200 dark:border-slate-700 border-b-${color}-500 text-left h-32 flex flex-col justify-between`;
                     btn.onclick = () => this.startQuiz('chapter', key);
-                    btn.innerHTML = `<div class="font-bold text-slate-700 dark:text-slate-200">${label}</div><div><div class="flex justify-between text-xs text-slate-400 mb-1"><span>正解率</span><span>${rate}%</span></div><div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5"><div class="bg-${color}-500 h-1.5 rounded-full" style="width:${rate}%"></div></div></div>`;
+
+                    // Truncate long labels for display if needed, but let CSS handle wrap usually
+                    btn.innerHTML = `<div class="font-bold text-slate-700 dark:text-slate-200 text-sm line-clamp-2">${label}</div><div><div class="flex justify-between text-xs text-slate-400 mb-1"><span>正解率</span><span>${rate}%</span></div><div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5"><div class="bg-${color}-500 h-1.5 rounded-full" style="width:${rate}%"></div></div></div>`;
                     grid.appendChild(btn);
                 });
             },
@@ -1853,12 +1889,18 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 else if (mode === 'chapter') {
                     if (param === 'final') list = this.data.questions.filter(q => q.id.includes('final') || (q.category && q.category.includes('模擬')));
                     else if (param === 'ai') list = this.data.questions.filter(q => q.id.startsWith('ai-'));
-                    else if (param === 'others') list = this.data.questions.filter(q => !q.id.match(/^(?:ch|chapter)?\d+/) && !q.id.startsWith('ai-') && !q.id.includes('user'));
+                    else if (param === 'best') list = this.data.questions.filter(q => q.id.startsWith('best-'));
+                    else if (param === 'others') list = this.data.questions.filter(q => !q.id.match(/^(?:ch|chapter)?\d+/) && !q.id.startsWith('ai-') && !q.id.startsWith('best-') && !q.id.includes('final') && !q.id.includes('user'));
                     else list = this.data.questions.filter(q => { var m = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)/); return m && parseInt(m[1]) === parseInt(param); });
-                    name = (!isNaN(param)) ? `第${param}章` : `Chapter ${param}`;
+
+                    name = CHAPTER_TITLES[param] ? `第${param}章` : (isNaN(param) ? (param === 'final' ? '最終章' : param === 'best' ? '厳選' : 'その他') : `Chapter ${param}`);
                 }
                 else if (mode.startsWith('level')) {
-                    var r1 = /^(?:ch|q)[-_]?(1|2|3|4)[-_]/i, r2 = /^(?:ch|q)[-_]?(5|6|7|8|12)[-_]/i, r3 = /^(?:ch|q)[-_]?(9|10|11|13)[-_]/i;
+                    // Adjust regex for 11 chapters structure
+                    var r1 = /^(?:ch|q)[-_]?(1|2|3|4)[-_]/i; // Ch 1-4
+                    var r2 = /^(?:ch|q)[-_]?(5|6|7|9)[-_]/i; // Ch 5-7, 9 (Array, OOP, API)
+                    var r3 = /^(?:ch|q)[-_]?(8|10|11)[-_]/i; // Ch 8, 10, 11 (Lambda, Exception, Module)
+
                     if (mode === 'level-1') list = this.data.questions.filter(q => q.id.match(r1) && !q.id.includes('user'));
                     if (mode === 'level-2') list = this.data.questions.filter(q => q.id.match(r2) && !q.id.includes('user'));
                     if (mode === 'level-3') list = this.data.questions.filter(q => q.id.match(r3) && !q.id.includes('user'));
