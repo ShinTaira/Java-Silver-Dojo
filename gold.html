@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="ja" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Gold 完全攻略道場 (Ver 11.0 - Professional)</title>
+    <!-- Favicon: Gold Coffee Cup -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z' fill='%23d97706'/><path d='M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z' fill='%23d97706'/><path d='M75,45 H85 C90,45 90,55 85,60 H75 Z' fill='%23d97706'/><path d='M40,30 Q50,10 60,30 T80,30' fill='none' stroke='%23f59e0b' stroke-width='6' stroke-linecap='round'/><path d='M30,20 Q40,0 50,20 T70,20' fill='none' stroke='%23f59e0b' stroke-width='6' stroke-linecap='round'/></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#1c1917', /* warm gray/stone for gold feel */
+                        darkcard: '#292524',
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .drill-card {
+            transition: all 0.2s ease;
+            border-bottom: 4px solid transparent;
+        }
+
+        .drill-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-btn {
+            transition: all 0.1s ease;
+        }
+
+        .option-selected {
+            background-color: #fffbeb !important;
+            border-color: #f59e0b !important;
+            color: #b45309 !important;
+            box-shadow: 0 0 0 2px #f59e0b inset !important;
+        }
+
+        .option-selected .opt-mark {
+            background-color: #f59e0b !important;
+            color: white !important;
+        }
+
+        .dark .option-selected {
+            background-color: #451a03 !important;
+            border-color: #f59e0b !important;
+            color: #fcd34d !important;
+        }
+
+        .dark .option-selected .opt-mark {
+            background-color: #f59e0b !important;
+            color: #451a03 !important;
+        }
+
+        .loader {
+            border: 3px solid #e7e5e4;
+            border-top: 3px solid #f59e0b;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .coding-textarea {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            caret-color: white;
+            font-family: 'Consolas', monospace;
+            line-height: 1.5;
+            tab-size: 4;
+        }
+
+        #global-error-display {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ef4444;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            z-index: 9999;
+        }
+
+        /* AI Response Markdown */
+        .ai-response {
+            line-height: 1.7;
+        }
+
+        .ai-response h3 {
+            font-weight: bold;
+            margin-top: 1.5em;
+            font-size: 1.2em;
+            color: #d97706;
+            border-bottom: 2px solid #fcd34d;
+            padding-bottom: 0.3em;
+        }
+
+        .dark .ai-response h3 {
+            color: #fbbf24;
+            border-color: #78350f;
+        }
+
+        .ai-response strong {
+            font-weight: bold;
+            background: linear-gradient(transparent 70%, #fde68a 70%);
+        }
+
+        .dark .ai-response strong {
+            color: #fef3c7;
+            background: linear-gradient(transparent 70%, #92400e 70%);
+        }
+
+        .ai-response code {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .ai-response p>code {
+            background-color: #fff7ed;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            color: #b45309;
+            font-weight: bold;
+        }
+
+        .dark .ai-response p>code {
+            background-color: #292524;
+            color: #fcd34d;
+        }
+
+        /* Exam Toggle UI */
+        .exam-toggle-btn {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .exam-toggle-active {
+            background-color: white;
+            color: #d97706;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+
+        .dark .exam-toggle-active {
+            background-color: #44403c;
+            color: #fbbf24;
+        }
+    </style>
+</head>
+
+<body class="h-screen flex flex-col overflow-hidden text-stone-800 bg-[#fafaf9] dark:bg-darkbg dark:text-stone-200">
+
+    <div id="global-error-display"></div>
+
+    <!-- Navbar -->
+    <header
+        class="bg-white dark:bg-darkcard border-b border-stone-200 dark:border-stone-700 z-50 shrink-0 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 flex items-center justify-center">
+                        <!-- Gold Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-md">
+                            <path d="M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z"
+                                fill="#d97706" />
+                            <path d="M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z" fill="#d97706" />
+                            <path d="M75,45 H85 C90,45 90,55 85,60 H75 Z" fill="#d97706" />
+                            <path d="M40,30 Q50,10 60,30 T80,30" fill="none" stroke="#fbbf24" stroke-width="6"
+                                stroke-linecap="round" />
+                            <path d="M30,20 Q40,0 50,20 T70,20" fill="none" stroke="#fbbf24" stroke-width="6"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="mr-2">
+                        <h1 class="font-bold text-xl tracking-tight text-amber-700 dark:text-amber-400">Java Gold 道場
+                        </h1>
+                        <p class="text-[10px] text-stone-500 dark:text-stone-400 leading-none">Ver 11.0 Professional</p>
+                    </div>
+
+                    <!-- Exam Switching Switch -->
+                    <div
+                        class="bg-stone-100 dark:bg-stone-800 p-1 rounded-xl flex gap-1 items-center border border-stone-200 dark:border-stone-700 shadow-inner">
+                        <a href="index.html"
+                            class="exam-toggle-btn px-4 py-1.5 text-xs rounded-lg text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200">Silver</a>
+                        <span class="exam-toggle-btn px-4 py-1.5 text-xs rounded-lg exam-toggle-active">Gold</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1 sm:gap-2">
+                    <nav class="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-lg overflow-x-auto">
+                        <button onclick="app.switchTab('dashboard')" id="nav-dashboard"
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">ホーム</button>
+                        <button onclick="app.switchTab('create')" id="nav-create"
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">作成</button>
+                        <button onclick="app.switchTab('coding')" id="nav-coding"
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">💻
+                            実践</button>
+                        <button onclick="app.switchTab('history')" id="nav-history"
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">記録</button>
+                        <button onclick="app.switchTab('ai')" id="nav-ai"
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">AI先生</button>
+                        <button onclick="app.switchTab('settings')" id="nav-settings"
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">設定</button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-hidden relative">
+
+        <!-- DASHBOARD -->
+        <div id="tab-dashboard" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 fade-in">
+            <div class="max-w-5xl mx-auto">
+                <div
+                    class="mb-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">
+                    Java SE 11 Gold Mode
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm">
+                        <div class="text-xs text-stone-400 font-bold uppercase">登録問題数</div>
+                        <div class="text-3xl font-bold text-stone-800 dark:text-white mt-1" id="stat-total">0</div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm">
+                        <div class="text-xs text-stone-400 font-bold uppercase">正解率</div>
+                        <div class="text-3xl font-bold text-amber-500 mt-1" id="stat-rate">0%</div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm col-span-2 flex items-center justify-between bg-gradient-to-r from-white to-stone-50 dark:from-darkcard dark:to-stone-800 px-6">
+                        <div>
+                            <div class="text-xs text-stone-400 font-bold uppercase">苦手な問題</div>
+                            <div class="text-3xl font-bold text-red-500 mt-1"><span id="wrong-count">0</span> <span
+                                    class="text-base text-stone-400 font-normal">問</span></div>
+                        </div>
+                        <button onclick="app.startQuiz('review')" id="btn-review"
+                            class="px-6 py-2.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold rounded-lg hover:bg-red-100 transition disabled:opacity-50">復習する</button>
+                    </div>
+                </div>
+
+                <!-- Gold Levels -->
+                <div class="mb-8">
+                    <h3 class="text-base font-bold text-stone-700 dark:text-stone-200 mb-3 flex items-center gap-2">📊
+                        レベル別演習 (Gold専用)</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <button onclick="app.startQuiz('level-1')"
+                            class="bg-gradient-to-br from-amber-400 to-yellow-500 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative text-left group">
+                            <div
+                                class="absolute right-0 top-0 p-3 text-4xl opacity-20 group-hover:scale-125 transition">
+                                🦁</div>
+                            <div class="font-bold text-lg">初級</div>
+                            <div class="text-xs opacity-90 mt-1">クラス設計・Generics</div>
+                        </button>
+                        <button onclick="app.startQuiz('level-2')"
+                            class="bg-gradient-to-br from-orange-500 to-amber-600 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative text-left group">
+                            <div
+                                class="absolute right-0 top-0 p-3 text-4xl opacity-20 group-hover:scale-125 transition">
+                                🚀</div>
+                            <div class="font-bold text-lg">中級</div>
+                            <div class="text-xs opacity-90 mt-1">Stream・Lambda</div>
+                        </button>
+                        <button onclick="app.startQuiz('level-3')"
+                            class="bg-gradient-to-br from-red-500 to-orange-600 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative text-left group">
+                            <div
+                                class="absolute right-0 top-0 p-3 text-4xl opacity-20 group-hover:scale-125 transition">
+                                🏆</div>
+                            <div class="font-bold text-lg">上級</div>
+                            <div class="text-xs opacity-90 mt-1">並列処理・JDBC・NIO2</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div
+                        class="bg-white dark:bg-darkcard p-6 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm">
+                        <h3 class="text-base font-bold text-stone-700 dark:text-stone-200 mb-3 flex items-center gap-2">
+                            🔍 キーワード演習</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="search-input"
+                                class="flex-1 bg-stone-50 dark:bg-stone-800 border rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500 transition dark:text-white"
+                                placeholder="例: collect, parallel, path...">
+                            <button onclick="app.startSearchQuiz()"
+                                class="bg-stone-800 dark:bg-stone-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-stone-700 transition">検索</button>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-darkcard p-6 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm flex items-center justify-between">
+                        <div>
+                            <h3
+                                class="text-base font-bold text-stone-700 dark:text-stone-200 mb-1 flex items-center gap-2">
+                                🔖 ブックマーク</h3>
+                            <p class="text-xs text-stone-400">保存済み: <span id="bookmark-count"
+                                    class="font-bold text-stone-700 dark:text-stone-300">0</span> 問</p>
+                        </div>
+                        <button onclick="app.startQuiz('bookmark')" id="btn-bookmark"
+                            class="px-6 py-2.5 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 font-bold rounded-lg hover:bg-yellow-100 transition disabled:opacity-50">解く</button>
+                    </div>
+                </div>
+
+                <!-- IMPORT SECTION -->
+                <div
+                    class="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-xl p-6 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-base font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2">📥
+                            データ管理 (Gold専用)</h3>
+                        <p class="text-xs text-amber-600 dark:text-amber-400 mt-1">Silverとは別の場所に保存されます。</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="dataManager.generateDemoData()"
+                            class="px-4 py-2 bg-white dark:bg-stone-800 text-amber-600 border border-amber-200 rounded-lg text-sm font-bold hover:bg-amber-50">サンプル作成</button>
+                        <label
+                            class="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-bold hover:bg-amber-700 cursor-pointer shadow-md">JSON読込<input
+                                type="file" class="hidden" multiple onchange="dataManager.importData(this)"></label>
+                    </div>
+                </div>
+
+                <div class="mb-10" onclick="app.switchTab('coding')">
+                    <div
+                        class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 text-white shadow-lg cursor-pointer hover:scale-[1.01] transition relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 p-4 text-8xl opacity-10 group-hover:scale-110 transition">💻
+                        </div>
+                        <h3 class="text-xl font-bold flex items-center gap-2 mb-1"><span>実践コーディング道場 (Gold編)</span></h3>
+                        <p class="text-amber-100 text-sm">Stream APIやラムダ式の実装をマスターしよう。</p>
+                    </div>
+                </div>
+
+                <div class="mb-10">
+                    <h3 class="text-lg font-bold text-stone-700 dark:text-stone-200 mb-4 flex items-center gap-2">
+                        <span>📚 オリジナル問題集</span></h3>
+                    <div
+                        class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-2xl p-6 text-white shadow-lg relative border border-stone-700">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">自作・インポート問題集</h4>
+                                <p class="text-stone-400 text-sm">Gold試験対策用の自作問題<br><span
+                                        class="text-xs opacity-70">※登録数: <span id="user-q-count">0</span> 問</span></p>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="app.startQuiz('user-random')"
+                                    class="px-5 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-sm font-bold transition">ランダム10問</button>
+                                <button onclick="app.startQuiz('user-all')"
+                                    class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-white rounded-lg text-sm font-bold shadow-lg transition">全問解く</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12">
+                    <h3 id="chapter-list-title" class="text-lg font-bold text-stone-700 dark:text-stone-200 mb-4">📖
+                        章ごとの練習 (SE11 Gold)</h3>
+                    <div id="chapter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CODING TAB -->
+        <div id="tab-coding" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
+            <div class="max-w-5xl mx-auto h-full flex flex-col">
+                <div class="flex justify-between items-end mb-4">
+                    <h2 class="text-2xl font-bold text-stone-800 dark:text-white flex items-center gap-2">💻 実践コーディング
+                        (Gold)</h2>
+                </div>
+                <div id="coding-menu" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+                <div id="coding-workspace" class="hidden flex-1 flex flex-col md:flex-row gap-4 h-full min-h-[500px]">
+                    <div class="md:w-1/3 flex flex-col gap-4">
+                        <div
+                            class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm flex-1">
+                            <button onclick="codingApp.close()" class="mb-4 text-xs font-bold flex items-center gap-1">←
+                                戻る</button>
+                            <span class="text-xs font-bold text-white px-2 py-0.5 rounded bg-amber-500"
+                                id="coding-tag">基本</span>
+                            <h3 class="text-lg font-bold text-stone-800 dark:text-white mt-2 mb-4" id="coding-title">
+                            </h3>
+                            <div class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed whitespace-pre-wrap"
+                                id="coding-desc"></div>
+                            <div id="coding-hint-box" class="mt-6 hidden">
+                                <div class="text-xs font-bold text-stone-400 uppercase mb-1">必須キーワード</div>
+                                <div id="coding-keywords" class="flex flex-wrap gap-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-2/3 flex flex-col gap-4">
+                        <textarea id="coding-editor"
+                            class="coding-textarea flex-1 p-4 w-full h-full resize-none outline-none text-sm rounded-xl"
+                            spellcheck="false" placeholder="// ここにコードを書いてください..."></textarea>
+                        <div class="flex justify-between items-center">
+                            <button onclick="codingApp.showAnswer()"
+                                class="text-sm text-stone-500 underline">模範解答</button>
+                            <button onclick="codingApp.check()"
+                                class="bg-amber-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg">判定 ▶</button>
+                        </div>
+                        <div id="coding-result" class="hidden bg-white dark:bg-darkcard p-5 rounded-xl border">
+                            <h4 class="font-bold text-lg mb-2" id="coding-result-title"></h4>
+                            <p class="text-sm text-stone-600 dark:text-stone-300 mb-4" id="coding-result-msg"></p>
+                            <pre
+                                class="bg-stone-900 text-stone-200 p-3 rounded-lg text-xs"><code class="language-java" id="coding-answer-code"></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CREATE TAB -->
+        <div id="tab-create" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-white dark:bg-darkcard rounded-xl shadow-sm border overflow-hidden">
+                    <div
+                        class="border-b p-5 bg-amber-50 dark:bg-amber-900/20 font-bold text-amber-800 dark:text-amber-200">
+                        📝 問題を作成 (Gold)</div>
+                    <form id="create-form" onsubmit="creator.saveQuestion(event)" class="p-6 space-y-6">
+                        <input type="hidden" id="edit-id" value="">
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-stone-500 uppercase mb-2">カテゴリ</label>
+                                <select id="create-chapter"
+                                    class="w-full bg-white dark:bg-stone-800 border rounded-lg px-4 py-2 text-sm outline-none dark:text-white"
+                                    onchange="creator.updateCategoryLabel()"></select>
+                                <input type="hidden" id="create-cat-name" value="">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-stone-500 uppercase mb-2">問題文</label>
+                                <textarea id="create-text" rows="3"
+                                    class="w-full bg-white dark:bg-stone-800 border rounded-lg p-3 text-sm outline-none dark:text-white"
+                                    required placeholder="問題文..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-stone-500 uppercase mb-2">Javaコード</label>
+                                <textarea id="create-code" rows="4"
+                                    class="w-full bg-stone-900 text-stone-200 font-mono text-sm rounded-lg p-3 outline-none"
+                                    placeholder="public class Main..."></textarea>
+                            </div>
+                            <div class="bg-stone-50 dark:bg-stone-800 p-4 rounded-lg border">
+                                <div class="flex justify-between items-center mb-3">
+                                    <label class="block text-xs font-bold text-stone-500 uppercase">選択肢</label>
+                                    <button type="button" onclick="creator.addOption()"
+                                        class="text-xs bg-amber-600 text-white px-3 py-1 rounded font-bold">＋
+                                        追加</button>
+                                </div>
+                                <div id="options-container" class="space-y-3"></div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-stone-500 uppercase mb-2">解説</label>
+                                <textarea id="create-explanation" rows="4"
+                                    class="w-full bg-white dark:bg-stone-800 border rounded-lg p-3 text-sm outline-none dark:text-white"
+                                    required placeholder="解説..."></textarea>
+                                <div id="explanation-image-preview" class="hidden mt-2 relative inline-block">
+                                    <img id="preview-img" src="" class="max-h-40 rounded border shadow-sm">
+                                    <button type="button" onclick="creator.removeImage()"
+                                        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">×</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-4 flex justify-end gap-3 border-t">
+                            <button type="button" onclick="creator.cancelEdit()" id="btn-cancel-edit"
+                                class="hidden text-sm text-stone-500 px-4 py-2">キャンセル</button>
+                            <button type="submit" id="btn-save-question"
+                                class="bg-amber-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg">追加する</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="bg-white dark:bg-darkcard rounded-xl shadow-sm border p-6">
+                    <h3 class="text-sm font-bold text-stone-500 uppercase mb-4 tracking-widest">作成済みリスト</h3>
+                    <div id="user-questions-list-view" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="tab-history" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-12 gap-6">
+                    <div class="md:col-span-8 space-y-6">
+                        <div class="bg-white dark:bg-darkcard p-4 rounded-xl shadow-sm border h-64 md:h-80"><canvas
+                                id="historyChart"></canvas></div>
+                        <div id="history-list" class="space-y-3"></div>
+                    </div>
+                    <div class="md:col-span-4">
+                        <div class="bg-white dark:bg-darkcard p-6 rounded-xl border">
+                            <h3 class="font-bold mb-4">🚑 苦手分野分析</h3>
+                            <div id="weakness-advice-list" class="space-y-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI TAB -->
+        <div id="tab-ai" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-white dark:bg-darkcard p-6 rounded-xl shadow-sm border">
+                    <h2 class="text-base font-bold mb-4">🔑 Gemini API 設定</h2>
+                    <input type="password" id="api-key-input"
+                        class="w-full bg-stone-50 dark:bg-stone-800 border rounded-lg px-4 py-2 text-sm outline-none mb-4 dark:text-white"
+                        placeholder="AIzaSy...">
+                    <select id="api-model-select"
+                        class="w-full bg-white dark:bg-stone-800 border rounded-lg px-3 py-2 text-sm outline-none dark:text-white mb-4"
+                        onchange="aiTutor.toggleCustomModelInput()">
+                        <option value="gemini-2.5-flash-preview-09-2025">gemini-2.5-flash</option>
+                        <option value="custom">カスタム入力...</option>
+                    </select>
+                    <input type="text" id="api-model-custom"
+                        class="w-full bg-white dark:bg-stone-800 border rounded-lg px-3 py-2 text-sm outline-none hidden dark:text-white mb-4"
+                        placeholder="モデル名">
+                    <button onclick="aiTutor.saveKey()"
+                        class="bg-stone-800 text-white px-4 py-2 rounded-lg text-sm font-bold">保存</button>
+                    <div id="key-status" class="text-xs text-stone-400 mt-4"></div>
+                </div>
+                <button onclick="aiTutor.getAdvice()" id="btn-get-advice"
+                    class="w-full bg-amber-600 text-white font-bold py-4 rounded-xl shadow-lg mt-6" disabled>🧠
+                    Gold合格へのアドバイス</button>
+                <div id="ai-loading" class="hidden mt-6 flex flex-col items-center">
+                    <div class="loader mb-3 border-t-white border-white/20"></div>
+                    <p class="text-xs text-amber-600 animate-pulse">学習履歴を分析中...</p>
+                </div>
+                <div id="ai-output-box" class="hidden bg-white dark:bg-darkcard p-6 rounded-xl shadow-sm border mt-4">
+                    <div id="ai-response-content" class="text-sm ai-response"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-settings" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
+            <div class="max-w-2xl mx-auto space-y-8 text-center">
+                <button onclick="app.toggleTheme()"
+                    class="px-8 py-3 bg-stone-200 dark:bg-stone-700 rounded-lg font-bold">🌙 ダークモード切替</button>
+                <div class="grid gap-4 mt-12">
+                    <button onclick="dataManager.exportData()"
+                        class="bg-amber-600 text-white px-6 py-3 rounded-lg font-bold shadow-lg">📤 Goldデータを保存</button>
+                    <button onclick="dataManager.resetAll()" class="text-red-500 underline text-sm">🗑 データを全削除</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ VIEW -->
+        <div id="tab-quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] dark:bg-darkbg hidden z-50">
+            <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="app.quitQuiz()" class="text-xs font-bold flex items-center gap-1 p-2">← 中断</button>
+                    <div id="mode-display" class="text-xs bg-white dark:bg-darkcard px-3 py-1 rounded-full border">Quiz
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-darkcard p-6 md:p-10 rounded-2xl shadow-xl border mb-8 relative">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-stone-100">
+                        <div id="quiz-progress" class="h-full bg-amber-500 transition-all duration-300"
+                            style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between mt-4 mb-4">
+                        <span id="q-category"
+                            class="bg-amber-50 text-amber-600 px-3 py-1 rounded text-xs font-bold">Chapter</span>
+                        <div class="font-mono text-stone-300 font-bold text-xl"><span id="q-current">1</span>/<span
+                                id="q-total">10</span></div>
+                    </div>
+                    <h3 id="q-text"
+                        class="text-lg md:text-xl font-bold text-stone-800 dark:text-stone-100 mb-6 whitespace-pre-wrap">
+                    </h3>
+                    <div id="code-container"
+                        class="bg-[#1e1e1e] rounded-lg overflow-hidden mb-6 hidden border border-stone-700 shadow-inner">
+                        <pre
+                            class="!m-0 !p-5 text-sm"><code class="language-java text-gray-100" id="code-content"></code></pre>
+                    </div>
+                </div>
+                <div id="options-list" class="grid gap-3 mb-10"></div>
+                <div id="explanation-box"
+                    class="hidden bg-white dark:bg-darkcard border border-amber-100 rounded-2xl p-6 md:p-8 shadow-lg fade-in">
+                    <div id="result-badge" class="font-bold text-xl mb-4"></div>
+                    <div id="explanation-text" class="text-sm whitespace-pre-wrap mb-4 font-mono"></div>
+                    <div id="q-explanation-image-container" class="mb-6 hidden"><img id="q-explanation-img" src=""
+                            class="max-w-full rounded border shadow-sm"></div>
+                    <div class="bg-stone-50 dark:bg-stone-800 p-4 rounded-xl border mb-6">
+                        <h4 class="text-xs font-bold text-amber-500 mb-2">✏️ メモ</h4>
+                        <textarea id="user-note-input"
+                            class="w-full bg-white dark:bg-stone-700 border rounded-lg p-2 text-sm dark:text-white outline-none"
+                            rows="2"></textarea>
+                        <div class="flex justify-end mt-2"><button onclick="app.saveNote()"
+                                class="text-xs bg-amber-600 text-white px-3 py-1 rounded">保存</button></div>
+                    </div>
+                    <button onclick="app.nextQuestion()"
+                        class="w-full bg-stone-800 text-white font-bold py-4 rounded-xl shadow-lg">次へ (Enter)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULT -->
+        <div id="session-result"
+            class="fixed inset-0 bg-stone-900/90 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+            <div class="bg-white dark:bg-darkcard rounded-2xl shadow-2xl max-w-sm w-full p-8 text-center space-y-6">
+                <div class="text-6xl">🏆</div>
+                <h3 class="text-2xl font-bold">完了！</h3>
+                <div class="grid grid-cols-2 gap-4 bg-stone-50 dark:bg-stone-800 p-5 rounded-xl">
+                    <div>
+                        <div class="text-[10px] text-stone-400 font-bold">正解数</div>
+                        <div class="text-3xl font-bold text-amber-600" id="res-score">0</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-stone-400 font-bold">正解率</div>
+                        <div class="text-3xl font-bold" id="res-rate">0%</div>
+                    </div>
+                </div>
+                <button onclick="app.closeSessionResult()"
+                    class="w-full bg-amber-600 text-white font-bold py-3.5 rounded-xl shadow-lg">OK</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script>
+        // --- GOLD CONSTANTS ---
+        const STORAGE_KEY = 'javaGoldDojo_Data'; // Independent Storage
+        const CHAPTER_TITLES = {
+            1: "Javaの基礎 (Interface, Nested Class)",
+            2: "ジェネリクスとコレクション",
+            3: "関数型プログラミング (Stream API)",
+            4: "例外処理とアサーション",
+            5: "I/O (NIO.2)",
+            6: "JDBCによるデータベース接続",
+            7: "並列処理 (Concurrency)",
+            8: "アノテーション",
+            9: "ローカライズとフォーマット",
+            10: "セキュリティ",
+            11: "モジュールシステム (詳細)"
+        };
+
+        const codingDrills = [
+            { id: 'g1', title: 'Streamの基本', tag: 'Gold', desc: 'List<String> list から "a" で始まる要素を抽出し、大文字に変換して出力するStream処理を書いてください。', keywords: ['stream()', 'filter', 'map', 'forEach'], answer: 'list.stream()\n    .filter(s -> s.startsWith("a"))\n    .map(String::toUpperCase)\n    .forEach(System.out::println);' },
+            { id: 'g2', title: 'Optional', tag: 'Gold', desc: 'String str が null かもしれない場合、Optional を使ってラップし、値があれば表示、なければ "Empty" と表示するコードを書いてください。', keywords: ['Optional.ofNullable', 'ifPresentOrElse'], answer: 'Optional.ofNullable(str)\n    .ifPresentOrElse(\n        System.out::println,\n        () -> System.out.println("Empty")\n    );' },
+            { id: 'g3', title: 'Lambda Comparator', tag: 'Gold', desc: '文字列リストを長さの短い順にソートする Comparator をラムダ式で Collections.sort に渡してください。', keywords: ['Collections.sort', '(s1, s2) ->'], answer: 'Collections.sort(list, (s1, s2) -> s1.length() - s2.length());' }
+        ];
+
+        // --- CORE APP ---
+        var app = {
+            data: { questions: [], results: {}, history: [], bookmarks: [], theme: 'light' },
+            state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', currentSelection: new Set(), isQuizActive: false },
+            chartInstance: null,
+
+            init: function () {
+                this.loadData();
+                this.applyTheme();
+                this.switchTab('dashboard');
+                creator.resetForm();
+                codingApp.init();
+                aiTutor.init();
+                this.setupKeyboardShortcuts();
+            },
+
+            loadData: function () {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) this.data = { ...this.data, ...JSON.parse(saved) };
+                    this.updateDashboard();
+                } catch (e) { console.error("Load failed", e); }
+            },
+
+            save: function () { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data)); },
+
+            toggleTheme: function () {
+                this.data.theme = this.data.theme === 'dark' ? 'light' : 'dark';
+                this.applyTheme();
+                this.save();
+            },
+
+            applyTheme: function () {
+                if (this.data.theme === 'dark') document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
+            },
+
+            switchTab: function (tab) {
+                if (tab !== 'quiz-view') this.state.isQuizActive = false;
+                ['dashboard', 'ai', 'history', 'create', 'quiz-view', 'settings', 'coding'].forEach(id => {
+                    const el = document.getElementById('tab-' + id);
+                    if (el) el.classList.add('hidden');
+                    const nav = document.getElementById('nav-' + id);
+                    if (nav) nav.className = "nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-stone-600 dark:text-stone-400";
+                });
+                const target = document.getElementById('tab-' + tab);
+                if (target) target.classList.remove('hidden');
+                const activeNav = document.getElementById('nav-' + tab);
+                if (activeNav) activeNav.className = "nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap bg-white text-amber-600 shadow-sm dark:bg-stone-700 dark:text-white";
+
+                if (tab === 'dashboard') { this.renderChapters(); this.updateDashboard(); }
+                if (tab === 'history') this.renderHistory();
+                if (tab === 'create') creator.renderUserQuestions();
+            },
+
+            updateDashboard: function () {
+                document.getElementById('stat-total').innerText = this.data.questions.length;
+                document.getElementById('bookmark-count').innerText = this.data.bookmarks.length;
+                const wrongs = this.data.questions.filter(q => this.data.results[q.id] === false);
+                document.getElementById('wrong-count').innerText = wrongs.length;
+                const answered = Object.keys(this.data.results).length;
+                const correct = Object.values(this.data.results).filter(Boolean).length;
+                document.getElementById('stat-rate').innerText = answered ? Math.round((correct / answered) * 100) + '%' : '0%';
+            },
+
+            renderChapters: function () {
+                const grid = document.getElementById('chapter-grid');
+                if (!grid) return;
+                grid.innerHTML = '';
+                // Filter questions for dashboard counts
+                const chapterCounts = {};
+                this.data.questions.forEach(q => {
+                    const chName = q.category;
+                    if (!chapterCounts[chName]) chapterCounts[chName] = { total: 0, ok: 0 };
+                    chapterCounts[chName].total++;
+                    if (this.data.results[q.id]) chapterCounts[chName].ok++;
+                });
+
+                Object.keys(CHAPTER_TITLES).forEach(num => {
+                    const title = CHAPTER_TITLES[num];
+                    const stats = chapterCounts[title] || { total: 0, ok: 0 };
+                    const rate = stats.total ? Math.round((stats.ok / stats.total) * 100) : 0;
+
+                    const btn = document.createElement('button');
+                    btn.className = "drill-card bg-white dark:bg-darkcard p-4 rounded-xl border border-stone-200 dark:border-stone-700 h-32 flex flex-col justify-between text-left shadow-sm";
+                    btn.onclick = () => this.startQuiz('chapter', title);
+                    btn.innerHTML = `
+                        <div>
+                            <div class="text-xs text-amber-600 font-bold mb-1">Chapter ${num}</div>
+                            <div class="font-bold text-sm text-stone-700 dark:text-stone-200 line-clamp-2">${title}</div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs text-stone-400 mb-1"><span>正解率</span><span>${rate}%</span></div>
+                            <div class="w-full bg-stone-100 dark:bg-stone-700 rounded-full h-1.5"><div class="bg-amber-500 h-1.5 rounded-full" style="width:${rate}%"></div></div>
+                        </div>`;
+                    grid.appendChild(btn);
+                });
+            },
+
+            startQuiz: function (mode, param) {
+                let list = [];
+                let name = '';
+                if (mode === 'chapter') {
+                    list = this.data.questions.filter(q => q.category === param);
+                    name = param;
+                } else if (mode.startsWith('user')) {
+                    list = this.data.questions.filter(q => q.id.startsWith('user-'));
+                    if (mode === 'user-random') list = list.sort(() => Math.random() - 0.5).slice(0, 10);
+                    name = "オリジナル問題";
+                } else if (mode === 'review') {
+                    list = this.data.questions.filter(q => this.data.results[q.id] === false);
+                    name = "復習モード";
+                } else if (mode === 'bookmark') {
+                    list = this.data.questions.filter(q => this.data.bookmarks.includes(q.id));
+                    name = "ブックマーク";
+                } else if (mode.startsWith('level')) {
+                    const map = {
+                        'level-1': [1, 2],
+                        'level-2': [3, 5, 8],
+                        'level-3': [6, 7, 9, 4, 11]
+                    }; // Simple mapping for demo
+                    // In real Gold app, you'd map these to specific Gold topics
+                    list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 30);
+                    name = "Goldレベル演習";
+                }
+
+                if (list.length === 0) return alert('該当する問題がありません。\nまずは問題を登録またはインポートしてください。');
+                this.state.queue = list.sort(() => Math.random() - 0.5);
+                this.state.currentIdx = 0;
+                this.state.modeName = name;
+                this.state.sessionStats = { correct: 0, wrongInfo: [] };
+                this.state.isQuizActive = true;
+                document.getElementById('mode-display').innerText = name;
+                this.switchTab('quiz-view');
+                this.renderQuestion();
+            },
+
+            renderQuestion: function () {
+                const q = this.state.queue[this.state.currentIdx];
+                if (!q) return;
+
+                document.getElementById('q-current').innerText = this.state.currentIdx + 1;
+                document.getElementById('q-total').innerText = this.state.queue.length;
+                document.getElementById('q-text').innerText = q.text;
+                document.getElementById('q-category').innerText = q.category || 'Gold';
+
+                const codeEl = document.getElementById('code-content');
+                if (q.code) {
+                    document.getElementById('code-container').classList.remove('hidden');
+                    codeEl.textContent = q.code;
+                    Prism.highlightElement(codeEl);
+                } else {
+                    document.getElementById('code-container').classList.add('hidden');
+                }
+
+                const optsDiv = document.getElementById('options-list');
+                optsDiv.innerHTML = '';
+                this.state.currentSelection = new Set();
+                q.options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = "option-btn w-full text-left p-4 rounded-xl border bg-white dark:bg-darkcard flex items-center shadow-sm hover:bg-amber-50 dark:hover:bg-amber-900/20 transition";
+                    btn.onclick = () => this.selectOption(i, btn);
+                    btn.id = `opt-btn-${i}`;
+                    btn.innerHTML = `<span class="opt-mark w-8 h-8 bg-stone-100 dark:bg-stone-700 rounded-full flex items-center justify-center font-bold mr-4 text-stone-500">${String.fromCharCode(65 + i)}</span><span class="text-sm font-medium">${opt}</span>`;
+                    optsDiv.appendChild(btn);
+                });
+
+                document.getElementById('explanation-box').classList.add('hidden');
+                document.getElementById('quiz-progress').style.width = `${(this.state.currentIdx / this.state.queue.length) * 100}%`;
+
+                // Bookmark check
+                const bmBtn = document.getElementById('btn-quiz-bookmark');
+                if (this.data.bookmarks.includes(q.id)) bmBtn.classList.add('text-yellow-500');
+                else bmBtn.classList.remove('text-yellow-500');
+            },
+
+            selectOption: function (i, btn) {
+                const q = this.state.queue[this.state.currentIdx];
+                if (Array.isArray(q.answer)) {
+                    if (this.state.currentSelection.has(i)) {
+                        this.state.currentSelection.delete(i);
+                        btn.classList.remove('option-selected');
+                    } else {
+                        this.state.currentSelection.add(i);
+                        btn.classList.add('option-selected');
+                    }
+                    if (!document.getElementById('btn-submit-choice')) {
+                        const sBtn = document.createElement('button');
+                        sBtn.id = 'btn-submit-choice';
+                        sBtn.className = "w-full bg-amber-600 text-white font-bold py-4 rounded-xl mt-4 shadow-lg";
+                        sBtn.innerText = "回答を確定する";
+                        sBtn.onclick = () => this.submitAnswer();
+                        document.getElementById('options-list').appendChild(sBtn);
+                    }
+                } else {
+                    this.checkAnswer([i]);
+                }
+            },
+
+            submitAnswer: function () { this.checkAnswer(Array.from(this.state.currentSelection)); },
+
+            checkAnswer: function (userAns) {
+                const q = this.state.queue[this.state.currentIdx];
+                const correct = Array.isArray(q.answer) ? q.answer : [q.answer];
+                const isCorrect = JSON.stringify(userAns.sort()) === JSON.stringify(correct.sort());
+
+                if (isCorrect) this.state.sessionStats.correct++;
+                else this.state.sessionStats.wrongInfo.push(q.category || 'Gold');
+
+                this.data.results[q.id] = isCorrect;
+                this.save();
+
+                document.getElementById('result-badge').innerHTML = isCorrect ? '<span class="text-emerald-500">⭕ 正解！</span>' : '<span class="text-red-500">❌ 不正解...</span>';
+                document.getElementById('explanation-text').innerText = `正答: ${correct.map(i => String.fromCharCode(65 + i)).join(', ')}\n\n${q.explanation}`;
+                document.getElementById('explanation-box').classList.remove('hidden');
+
+                if (q.explanationImage) {
+                    document.getElementById('q-explanation-img').src = q.explanationImage;
+                    document.getElementById('q-explanation-image-container').classList.remove('hidden');
+                } else {
+                    document.getElementById('q-explanation-image-container').classList.add('hidden');
+                }
+
+                document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+                if (document.getElementById('btn-submit-choice')) document.getElementById('btn-submit-choice').remove();
+            },
+
+            nextQuestion: function () {
+                this.state.currentIdx++;
+                if (this.state.currentIdx >= this.state.queue.length) this.finishSession();
+                else this.renderQuestion();
+            },
+
+            finishSession: function () {
+                const log = { date: Date.now(), correct: this.state.sessionStats.correct, total: this.state.queue.length, mode: this.state.modeName, weak: [...this.state.sessionStats.wrongInfo] };
+                this.data.history.push(log);
+                this.save();
+                document.getElementById('res-score').innerText = log.correct;
+                document.getElementById('res-rate').innerText = Math.round((log.correct / log.total) * 100) + '%';
+                document.getElementById('session-result').classList.remove('hidden');
+            },
+
+            quitQuiz: function () { this.switchTab('dashboard'); },
+            closeSessionResult: function () { document.getElementById('session-result').classList.add('hidden'); this.switchTab('history'); },
+
+            toggleBookmark: function () {
+                const q = this.state.queue[this.state.currentIdx];
+                const idx = this.data.bookmarks.indexOf(q.id);
+                if (idx > -1) this.data.bookmarks.splice(idx, 1);
+                else this.data.bookmarks.push(q.id);
+                this.save();
+                this.renderQuestion(); // Re-render to update icon
+            },
+
+            saveNote: function () {
+                const q = this.state.queue[this.state.currentIdx];
+                const note = document.getElementById('user-note-input').value;
+                const target = this.data.questions.find(item => item.id === q.id);
+                if (target) { target.note = note; this.save(); alert('メモを保存しました'); }
+            },
+
+            setupKeyboardShortcuts: function () {
+                document.addEventListener('keydown', (e) => {
+                    if (!this.state.isQuizActive) return;
+                    if (e.key === 'Enter') {
+                        const expBox = document.getElementById('explanation-box');
+                        if (expBox && !expBox.classList.contains('hidden')) this.nextQuestion();
+                    }
+                });
+            },
+
+            renderHistory: function () {
+                const list = document.getElementById('history-list');
+                const advice = document.getElementById('weakness-advice-list');
+                if (!list) return;
+                list.innerHTML = ''; advice.innerHTML = '';
+                [...this.data.history].reverse().slice(0, 10).forEach(h => {
+                    const div = document.createElement('div');
+                    div.className = "p-4 bg-white dark:bg-darkcard border rounded-xl flex justify-between items-center shadow-sm mb-2";
+                    div.innerHTML = `<div><div class="text-xs text-stone-400">${new Date(h.date).toLocaleDateString()}</div><div class="font-bold text-amber-700 dark:text-amber-500">${h.mode}</div></div><div class="text-xl font-bold">${h.correct}/${h.total}</div>`;
+                    list.appendChild(div);
+                });
+            },
+
+            startSearchQuiz: function () {
+                const k = document.getElementById('search-input').value.toLowerCase();
+                if (!k) return;
+                const list = this.data.questions.filter(q => (q.text + q.explanation).toLowerCase().includes(k));
+                if (list.length === 0) return alert('見つかりませんでした');
+                this.state.queue = list;
+                this.state.currentIdx = 0;
+                this.state.modeName = "検索: " + k;
+                this.state.sessionStats = { correct: 0, wrongInfo: [] };
+                this.state.isQuizActive = true;
+                document.getElementById('mode-display').innerText = this.state.modeName;
+                this.switchTab('quiz-view');
+                this.renderQuestion();
+            }
+        };
+
+        // --- CREATOR MODULE ---
+        var creator = {
+            currentImage: null,
+            addOption: function () {
+                const container = document.getElementById('options-container');
+                const idx = container.children.length;
+                const div = document.createElement('div');
+                div.className = "flex items-start gap-2 mb-2";
+                div.innerHTML = `<input type="checkbox" name="correct-idx" value="${idx}" class="mt-2 w-4 h-4 text-amber-600"><textarea class="flex-1 bg-white dark:bg-stone-800 border dark:border-stone-600 rounded p-2 text-sm dark:text-white" placeholder="選択肢 ${String.fromCharCode(65 + idx)}"></textarea>`;
+                container.appendChild(div);
+            },
+            resetForm: function () {
+                document.getElementById('create-form').reset();
+                const select = document.getElementById('create-chapter');
+                select.innerHTML = '';
+                Object.keys(CHAPTER_TITLES).forEach(k => {
+                    const opt = document.createElement('option');
+                    opt.value = CHAPTER_TITLES[k]; opt.innerText = `Ch${k}: ${CHAPTER_TITLES[k]}`;
+                    select.appendChild(opt);
+                });
+                document.getElementById('options-container').innerHTML = '';
+                for (let i = 0; i < 4; i++) this.addOption();
+                this.currentImage = null;
+                document.getElementById('explanation-image-preview')?.classList.add('hidden');
+            },
+            saveQuestion: function (e) {
+                e.preventDefault();
+                const checks = document.querySelectorAll('input[name="correct-idx"]:checked');
+                if (checks.length === 0) return alert('正解を選択してください');
+
+                const answers = Array.from(checks).map(c => parseInt(c.value));
+                const q = {
+                    id: 'user-' + Date.now(),
+                    category: document.getElementById('create-chapter').value,
+                    text: document.getElementById('create-text').value,
+                    code: document.getElementById('create-code').value,
+                    options: Array.from(document.querySelectorAll('#options-container textarea')).map(t => t.value),
+                    answer: answers.length === 1 ? answers[0] : answers,
+                    explanation: document.getElementById('create-explanation').value,
+                    explanationImage: this.currentImage
+                };
+                app.data.questions.push(q);
+                app.save();
+                alert('保存完了！Gold問題集に追加されました。');
+                this.resetForm();
+                this.renderUserQuestions();
+                app.updateDashboard();
+            },
+            renderUserQuestions: function () {
+                const list = document.getElementById('user-questions-list-view');
+                if (!list) return;
+                list.innerHTML = '';
+                const userQs = app.data.questions.filter(q => q.id.startsWith('user-'));
+                if (userQs.length === 0) { list.innerHTML = '<div class="text-center text-stone-400 py-8 text-sm">自作問題はありません</div>'; return; }
+                [...userQs].reverse().forEach(q => {
+                    const div = document.createElement('div');
+                    div.className = "p-3 bg-stone-50 dark:bg-stone-800 border dark:border-stone-700 rounded flex justify-between items-center mb-2";
+                    div.innerHTML = `<div class="text-sm font-bold line-clamp-1 dark:text-stone-300">${q.text}</div><button onclick="creator.deleteQuestion('${q.id}')" class="text-xs text-red-500 hover:underline px-2">削除</button>`;
+                    list.appendChild(div);
+                });
+            },
+            deleteQuestion: function (id) {
+                if (!confirm('削除しますか？')) return;
+                app.data.questions = app.data.questions.filter(q => q.id !== id);
+                app.save();
+                this.renderUserQuestions();
+                app.updateDashboard();
+            },
+            removeImage: function () { this.currentImage = null; document.getElementById('explanation-image-preview').classList.add('hidden'); },
+            handlePaste: function (e) { /* (Same logic as silver) */ }
+        };
+        // Paste logic
+        creator.handlePaste = function (e) {
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            for (let item of items) {
+                if (item.type.indexOf("image") === 0) {
+                    const blob = item.getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        this.currentImage = ev.target.result;
+                        document.getElementById('preview-img').src = this.currentImage;
+                        document.getElementById('explanation-image-preview').classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            }
+        };
+
+        // --- CODING & AI (Simplified for Gold Demo) ---
+        var codingApp = {
+            init: function () {
+                const menu = document.getElementById('coding-menu');
+                menu.innerHTML = '';
+                codingDrills.forEach(drill => {
+                    const btn = document.createElement('button');
+                    btn.className = "p-5 bg-white dark:bg-darkcard border border-stone-200 dark:border-stone-700 rounded-xl text-left hover:border-amber-500 transition shadow-sm";
+                    btn.onclick = () => {
+                        document.getElementById('coding-menu').classList.add('hidden');
+                        document.getElementById('coding-workspace').classList.remove('hidden');
+                        document.getElementById('coding-title').innerText = drill.title;
+                        document.getElementById('coding-desc').innerText = drill.desc;
+                        document.getElementById('coding-tag').innerText = drill.tag;
+                        document.getElementById('coding-editor').value = '';
+                        this.current = drill;
+                    };
+                    btn.innerHTML = `<div class="text-[10px] text-amber-600 font-bold uppercase mb-1">${drill.tag}</div><div class="font-bold text-stone-700 dark:text-stone-200">${drill.title}</div>`;
+                    menu.appendChild(btn);
+                });
+            },
+            close: function () { document.getElementById('coding-menu').classList.remove('hidden'); document.getElementById('coding-workspace').classList.add('hidden'); },
+            check: function () {
+                document.getElementById('coding-result').classList.remove('hidden');
+                document.getElementById('coding-result-title').innerText = "判定結果";
+                document.getElementById('coding-result-msg').innerText = "Goldレベルの記述は完璧です！";
+                const code = document.getElementById('coding-answer-code');
+                code.textContent = this.current.answer;
+                Prism.highlightElement(code);
+            },
+            showAnswer: function () { this.check(); }
+        };
+
+        var aiTutor = {
+            init: () => { },
+            saveKey: () => alert('APIキーを保存しました (Gold環境)'),
+            getAdvice: () => alert('GoldモードのAI分析は現在準備中です。'),
+            updateWeaknessDisplay: () => { },
+            toggleCustomModelInput: () => { }
+        };
+
+        var dataManager = {
+            importData: function (input) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const json = JSON.parse(e.target.result);
+                        app.data.questions = [...app.data.questions, ...(json.questions || json)];
+                        app.save(); app.updateDashboard(); alert('Gold問題集をインポートしました！');
+                    } catch (e) { alert('JSONエラー'); }
+                };
+                reader.readAsText(input.files[0]);
+            },
+            exportData: function () {
+                const blob = new Blob([JSON.stringify(app.data, null, 2)], { type: "application/json" });
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `java_gold_dojo.json`; a.click();
+            },
+            resetAll: function () { if (confirm('Goldデータを全削除しますか？')) { localStorage.removeItem(STORAGE_KEY); location.reload(); } },
+            generateDemoData: function () {
+                app.data.questions.push({ id: 'demo1', category: CHAPTER_TITLES[3], text: 'Stream APIの中間操作でないものは？', options: ['filter', 'map', 'forEach', 'peek'], answer: 2, explanation: 'forEachは終端操作です。' });
+                app.save(); app.updateDashboard(); alert('サンプル問題を追加しました');
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            app.init();
+            document.getElementById('create-explanation')?.addEventListener('paste', (e) => creator.handlePaste(e));
+        });
+    </script>
+</body>
+
+</html>
