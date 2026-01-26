@@ -322,6 +322,15 @@
                         <p class="text-[10px] text-slate-500 dark:text-slate-400 leading-none">Ver 17.1 Official
                             Chapters</p>
                     </div>
+
+                    <!-- Silver/Gold Switcher (Mode Toggle) -->
+                    <div
+                        class="ml-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg flex items-center border border-slate-200 dark:border-slate-700">
+                        <span
+                            class="px-3 py-1 text-xs font-bold rounded-md bg-white dark:bg-slate-600 text-indigo-600 dark:text-indigo-300 shadow-sm cursor-default">Silver</span>
+                        <a href="gold.html"
+                            class="px-3 py-1 text-xs font-bold rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition">Gold</a>
+                    </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
                     <nav class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg overflow-x-auto">
@@ -1363,7 +1372,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     var div = document.createElement('div');
                     div.className = "flex justify-between items-start bg-slate-50 dark:bg-slate-800 p-4 rounded-lg border border-slate-200 dark:border-slate-600 hover:border-indigo-300 dark:hover:border-indigo-700 transition";
                     div.innerHTML = `<div class="flex-1 pr-2"><div class="flex items-center gap-2 mb-1"><span class="text-[10px] bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded font-bold whitespace-nowrap">${q.category}</span></div><p class="text-sm text-slate-700 dark:text-slate-300 font-medium line-clamp-2">${q.text}</p></div><div class="flex flex-col gap-2"><button onclick="creator.editQuestion('${q.id}')" class="text-xs bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-500 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded hover:bg-indigo-50 dark:hover:bg-indigo-900 hover:text-indigo-600 dark:hover:text-indigo-300 transition">編集</button><button onclick="creator.deleteQuestion('${q.id}')" class="text-xs bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-500 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded hover:bg-red-50 dark:hover:bg-red-900 hover:text-red-600 dark:hover:text-red-300 transition">削除</button></div>`;
-                    listEl.appendChild(div);
+                    list.appendChild(div);
                 });
             },
             editQuestion: function (id) {
@@ -1768,8 +1777,8 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     requestAnimationFrame(() => {
                         if (tab === 'dashboard') this.renderChapters();
                         if (tab === 'history') this.renderHistory();
-                        if (tab === 'create' && typeof creator !== 'undefined') creator.renderUserQuestions();
-                        if (tab === 'ai' && typeof aiTutor !== 'undefined') aiTutor.updateWeaknessDisplay();
+                        if (tab === 'create') creator.renderUserQuestions();
+                        if (tab === 'ai') aiTutor.updateWeaknessDisplay();
                     });
                 }
             },
