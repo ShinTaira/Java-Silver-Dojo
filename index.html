@@ -29,15 +29,23 @@
         .card-hover:hover {
             transform: translateY(-4px);
         }
-        
+
         /* Pop animation for the official link */
         @keyframes pop-in {
-            0% { transform: scale(0.8) translateY(-10px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
+            0% {
+                transform: scale(0.8) translateY(-10px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
         }
+
         .pop-animation {
             animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            opacity: 0; /* Initial state hidden */
+            opacity: 0;
+            /* Initial state hidden */
         }
     </style>
 </head>
@@ -46,11 +54,11 @@
 
     <!-- Floating Action Buttons (Top Left) -->
     <div class="fixed top-4 left-4 z-50 flex flex-col gap-3">
-        
+
         <!-- Official Java Link -->
-        <a href="https://www.oracle.com/jp/java/" target="_blank" rel="noopener noreferrer" 
-           class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 pr-5 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:scale-105 hover:shadow-xl transition-all duration-300 group pop-animation"
-           title="Oracle Java 公式サイトへ">
+        <a href="https://www.oracle.com/jp/java/" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 pr-5 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:scale-105 hover:shadow-xl transition-all duration-300 group pop-animation"
+            title="Oracle Java 公式サイトへ">
             <div class="w-10 h-10 flex items-center justify-center bg-red-50 dark:bg-red-900/20 rounded-full group-hover:bg-red-100 dark:group-hover:bg-red-900/40 transition-colors">
                 <!-- Coffee Icon -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-red-600 dark:text-red-400">
@@ -64,10 +72,9 @@
         </a>
 
         <!-- Exam Registration Link (Pearson VUE) -->
-        <a href="https://www.pearsonvue.co.jp/Clients/Oracle.aspx" target="_blank" rel="noopener noreferrer" 
-           class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 pr-5 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:scale-105 hover:shadow-xl transition-all duration-300 group pop-animation"
-           style="animation-delay: 0.1s;"
-           title="試験の予約・申し込み (Pearson VUE)">
+        <a href="https://www.pearsonvue.co.jp/Clients/Oracle.aspx" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 pr-5 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:scale-105 hover:shadow-xl transition-all duration-300 group pop-animation"
+            style="animation-delay: 0.1s;" title="試験の予約・申し込み (Pearson VUE)">
             <div class="w-10 h-10 flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/20 rounded-full group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40 transition-colors">
                 <!-- Calendar/Check Icon -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-indigo-600 dark:text-indigo-400">
@@ -172,7 +179,7 @@
     <script>
         // Simple Theme Logic for Portal
         const themeKey = 'portal_theme';
-        
+
         function initTheme() {
             const saved = localStorage.getItem(themeKey);
             const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
