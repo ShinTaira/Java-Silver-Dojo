@@ -922,8 +922,7 @@
                         <span
                             class="inline-block bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-md text-xs font-bold tracking-wide uppercase border border-indigo-100 dark:border-indigo-800"
                             id="q-category">Category</span>
-                        <a href="index.html" class="flex items-center gap-3 hover:opacity-75 transition"
-                            title="ポータル画面に戻る">
+                        <div class="flex items-center gap-3">
                             <button onclick="app.toggleBookmark()" id="btn-quiz-bookmark"
                                 class="text-slate-300 hover:text-yellow-400 transition transform hover:scale-110 focus:outline-none">
                                 <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20">
@@ -932,10 +931,16 @@
                                     </path>
                                 </svg>
                             </button>
-                            <div class="font-mono text-slate-300 font-bold text-xl"><span id="q-current"
-                                    class="text-slate-800 dark:text-white">1</span><span class="text-sm">/</span><span
-                                    id="q-total" class="text-sm">10</span></div>
-                        </a>
+
+                            <a href="index.html" class="flex items-center hover:opacity-70 transition"
+                                title="ポータル画面に戻る">
+                                <div class="font-mono text-slate-300 font-bold text-xl">
+                                    <span id="q-current" class="text-slate-800 dark:text-white">1</span>
+                                    <span class="text-sm">/</span>
+                                    <span id="q-total" class="text-sm">10</span>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                     <h3 class="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100 mb-6 leading-relaxed whitespace-pre-wrap"
                         id="q-text">Problem Text</h3>
