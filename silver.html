@@ -376,17 +376,28 @@
                         <div class="text-3xl font-bold text-emerald-500 mt-1" id="stat-rate">0%</div>
                     </div>
                     <div
-                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm col-span-2 flex items-center justify-between bg-gradient-to-r from-white to-slate-50 dark:from-darkcard dark:to-slate-800">
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm col-span-2 flex items-center justify-between">
                         <div>
                             <div class="text-xs text-slate-400 font-bold uppercase">苦手な問題</div>
-                            <div class="text-3xl font-bold text-red-500 mt-1"><span id="wrong-count">0</span> <span
-                                    class="text-base text-slate-400 font-normal">問</span></div>
+                            <div class="text-3xl font-bold text-red-500 mt-1"><span id="wrong-count">0</span> 問</div>
                         </div>
                         <button onclick="app.startQuiz('review')" id="btn-review"
-                            class="px-6 py-2.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition disabled:opacity-50 disabled:cursor-not-allowed">復習する</button>
+                            class="px-6 py-2.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition disabled:opacity-50">復習する</button>
                     </div>
                 </div>
-
+                <div id="resume-container" class="hidden mb-10">
+                    <button onclick="app.resumeQuiz()"
+                        class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-5 rounded-2xl shadow-xl hover:scale-[1.01] transition flex items-center justify-between group border border-indigo-400">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl animate-pulse">⌛</span>
+                            <div class="text-left">
+                                <div class="font-bold text-lg">前回の続きから再開</div>
+                                <div class="text-xs opacity-90" id="resume-info">モード名 - 0/0問目</div>
+                            </div>
+                        </div>
+                        <span class="text-2xl group-hover:translate-x-2 transition">▶</span>
+                    </button>
+                </div>
                 <!-- Level Based Quizzes -->
                 <div class="mb-8">
                     <h3 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
@@ -897,9 +908,16 @@
         <div id="tab-quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] dark:bg-darkbg hidden z-50">
             <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
                 <div class="flex justify-between items-center mb-6">
-                    <button onclick="app.quitQuiz()"
-                        class="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold flex items-center gap-1 p-2 transition"><span
-                            class="text-lg">←</span> 中断して戻る</button>
+                    <div class="flex gap-2">
+                        <button onclick="app.quitQuiz()"
+                            class="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold flex items-center gap-1 p-2 transition">
+                            <span class="text-lg">←</span> 中断
+                        </button>
+                        <a href="index.html"
+                            class="text-xs bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-2 rounded-lg font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition flex items-center gap-1">
+                            🏠 ホーム
+                        </a>
+                    </div>
                     <div class="text-xs font-mono text-slate-500 dark:text-slate-400 bg-white dark:bg-darkcard border border-slate-200 dark:border-slate-600 px-3 py-1 rounded-full shadow-sm"
                         id="mode-display">Random</div>
                 </div>
@@ -1673,7 +1691,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
         };
 
         var app = {
-            data: { questions: [], results: {}, history: [], bookmarks: [], theme: 'light' },
+            data: { questions: [], results: {}, history: [], bookmarks: [], theme: 'light', resumeData: null },
             state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', timer: null, currentSelection: new Set(), isQuizActive: false },
             chartInstance: null,
             categoryLinks: {
@@ -1848,6 +1866,55 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 var userQCount = this.data.questions.filter(q => q.id.includes('user')).length;
                 if (document.getElementById('user-q-count')) document.getElementById('user-q-count').innerText = userQCount;
                 setTimeout(() => this.renderChapters(), 10);
+                var resumeDiv = document.getElementById('resume-container');
+                if (this.data.resumeData && this.data.resumeData.queueIds?.length > 0) {
+                    resumeDiv.classList.remove('hidden');
+                    document.getElementById('resume-info').innerText =
+                        `${this.data.resumeData.modeName} - ${this.data.resumeData.currentIdx + 1}/${this.data.resumeData.queueIds.length}問目から`;
+                } else {
+                    resumeDiv.classList.add('hidden');
+                }
+
+                setTimeout(() => this.renderChapters(), 10);
+            },
+
+            resumeQuiz: function () {
+                var rd = this.data.resumeData;
+                if (!rd || !rd.queueIds) return;
+
+                // IDから問題を復元
+                var restoredQueue = rd.queueIds.map(id => this.data.questions.find(q => q.id === id)).filter(Boolean);
+
+                if (restoredQueue.length === 0) {
+                    alert("問題データが見つかりません。");
+                    this.data.resumeData = null;
+                    this.save();
+                    return;
+                }
+
+                // ステートを完全に復元
+                this.state.queue = restoredQueue;
+                this.state.currentIdx = rd.currentIdx;
+                this.state.modeName = rd.modeName;
+                this.state.sessionStats = rd.sessionStats || { correct: 0, wrongInfo: [] };
+                this.state.isQuizActive = true;
+
+                // 模擬試験ならタイマー再開
+                if (this.state.timer) clearInterval(this.state.timer);
+                if (rd.modeName.includes('模擬')) {
+                    document.getElementById('quiz-timer').classList.remove('hidden');
+                    var t = 90 * 60; // 簡易的に90分から再スタート
+                    this.state.timer = setInterval(() => {
+                        t--; document.getElementById('quiz-timer').innerText = `⏳ ${Math.floor(t / 60)}:${(t % 60).toString().padStart(2, '0')}`;
+                        if (t <= 0) { clearInterval(this.state.timer); this.finishSession(); }
+                    }, 1000);
+                } else {
+                    document.getElementById('quiz-timer').classList.add('hidden');
+                }
+
+                document.getElementById('mode-display').innerText = rd.modeName;
+                this.switchTab('quiz-view');
+                this.renderQuestion();
             },
             renderChapters: function () {
                 var grid = document.getElementById('chapter-grid');
@@ -1954,10 +2021,21 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 } else { document.getElementById('quiz-timer').classList.add('hidden'); }
                 this.switchTab('quiz-view');
                 this.renderQuestion();
+                this.data.resumeData = {
+                    queueIds: list.map(q => q.id), // IDだけ保存
+                    currentIdx: 0,
+                    modeName: name,
+                    sessionStats: this.state.sessionStats
+                };
+                this.save();
             },
             quitQuiz: function () {
                 if (this.state.timer) clearInterval(this.state.timer);
                 this.state.isQuizActive = false;
+
+                if (this.data.resumeData) this.data.resumeData.currentIdx = this.state.currentIdx;
+                this.save();
+
                 this.switchTab('dashboard');
             },
             startSearchQuiz: function () {
@@ -2008,6 +2086,8 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     });
                 }
                 document.getElementById('user-note-input').value = q.note || '';
+                this.data.resumeData.currentIdx = this.state.currentIdx;
+                this.save();
             },
             selectOption: function (i, btn) {
                 var q = this.state.queue[this.state.currentIdx];
@@ -2075,6 +2155,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
             finishSession: function () {
                 if (this.state.timer) clearInterval(this.state.timer);
                 this.state.isQuizActive = false;
+                this.data.resumeData = null;
                 var log = { date: Date.now(), correct: this.state.sessionStats.correct, total: this.state.queue.length, mode: this.state.modeName, weak: [...new Set(this.state.sessionStats.wrongInfo)] };
                 this.data.history.push(log);
                 this.save();
