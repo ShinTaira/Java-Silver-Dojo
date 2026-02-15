@@ -2102,8 +2102,11 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     });
                 }
                 document.getElementById('user-note-input').value = q.note || '';
-                this.data.resumeData.currentIdx = this.state.currentIdx;
-                this.save();
+
+                if (this.data.resumeData) {
+                    this.data.resumeData.currentIdx = this.state.currentIdx;
+                    this.save();
+                }
             },
             selectOption: function (i, btn) {
                 var q = this.state.queue[this.state.currentIdx];
