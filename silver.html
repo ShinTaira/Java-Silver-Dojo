@@ -382,7 +382,7 @@
                             <div class="text-3xl font-bold text-red-500 mt-1"><span id="wrong-count">0</span> 問</div>
                         </div>
                         <button onclick="app.startQuiz('review')" id="btn-review"
-                            class="px-6 py-2.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition disabled:opacity-50">復習する</button>
+                            class="px-6 py-2.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold rounded-lg hover:bg-red-100 transition disabled:opacity-50">復習する</button>
                     </div>
                 </div>
                 <div id="resume-container" class="hidden mb-10">
@@ -515,11 +515,23 @@
                                 <p class="text-slate-400 text-sm">黒本の問題のみを出題<br><span class="text-xs opacity-70">※登録数:
                                         <span id="user-q-count">0</span> 問</span></p>
                             </div>
-                            <div class="flex gap-3">
-                                <button onclick="app.startQuiz('user-random')"
-                                    class="px-5 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-sm font-bold transition">ランダム10問</button>
-                                <button onclick="app.startQuiz('user-all')"
-                                    class="px-5 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg text-sm font-bold shadow-lg transition">全問解く</button>
+                            <div class="flex flex-col sm:flex-row items-center gap-3">
+                                <div class="flex items-center gap-2 bg-white/10 p-2 rounded-lg border border-white/20">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase">出題数</label>
+                                    <select id="user-quiz-count"
+                                        class="bg-slate-800 text-white text-xs rounded border border-slate-600 px-2 py-1 outline-none">
+                                        <option value="10">10問</option>
+                                        <option value="30">30問</option>
+                                        <option value="80">80問（本番形式）</option>
+                                    </select>
+                                </div>
+                                <div class="flex gap-3">
+                                    <button
+                                        onclick="app.startQuiz('user-random', document.getElementById('user-quiz-count').value)"
+                                        class="px-5 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-sm font-bold transition">ランダム出題</button>
+                                    <button onclick="app.startQuiz('user-all')"
+                                        class="px-5 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg text-sm font-bold shadow-lg transition">全問解く</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1882,7 +1894,6 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 var rd = this.data.resumeData;
                 if (!rd || !rd.queueIds) return;
 
-                // IDから問題を復元
                 var restoredQueue = rd.queueIds.map(id => this.data.questions.find(q => q.id === id)).filter(Boolean);
 
                 if (restoredQueue.length === 0) {
@@ -1892,18 +1903,17 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     return;
                 }
 
-                // ステートを完全に復元
                 this.state.queue = restoredQueue;
                 this.state.currentIdx = rd.currentIdx;
                 this.state.modeName = rd.modeName;
                 this.state.sessionStats = rd.sessionStats || { correct: 0, wrongInfo: [] };
                 this.state.isQuizActive = true;
 
-                // 模擬試験ならタイマー再開
+                // --- タイマーの再起動 ---
                 if (this.state.timer) clearInterval(this.state.timer);
-                if (rd.modeName.includes('模擬')) {
+                if (rd.modeName.includes('模擬') || rd.modeName.includes('80問')) {
                     document.getElementById('quiz-timer').classList.remove('hidden');
-                    var t = 90 * 60; // 簡易的に90分から再スタート
+                    var t = 90 * 60;
                     this.state.timer = setInterval(() => {
                         t--; document.getElementById('quiz-timer').innerText = `⏳ ${Math.floor(t / 60)}:${(t % 60).toString().padStart(2, '0')}`;
                         if (t <= 0) { clearInterval(this.state.timer); this.finishSession(); }
@@ -1998,7 +2008,13 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 else if (mode === 'mock') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40); name = '模擬試験'; }
                 else if (mode === 'mock-set') { list = this.data.questions.filter(q => q.category === param); modeName = param; }
                 else if (mode === 'user-all') { list = this.data.questions.filter(q => q.id.includes('user')); name = 'オリジナル全問'; }
-                else if (mode === 'user-random') { list = this.data.questions.filter(q => q.id.includes('user')).sort(() => Math.random() - 0.5).slice(0, 10); name = 'オリジナル10問'; }
+                else if (mode === 'user-random') {
+                    var count = parseInt(param) || 10;
+                    list = this.data.questions.filter(q => q.id.includes('user'))
+                        .sort(() => Math.random() - 0.5)
+                        .slice(0, count);
+                    name = `オリジナル演習（${list.length}問）`;
+                }
 
                 if (list.length === 0) return alert('該当する問題がありません');
                 if (mode !== 'mock-set' && !mode.startsWith('level')) list.sort(() => Math.random() - 0.5);
