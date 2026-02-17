@@ -1199,17 +1199,46 @@
         var STORAGE_KEY = 'javaSilverDojo_GlobalData';
         var LEGACY_KEYS = ['javaSilverAI_v14_2', 'javaSilverAI_v14_8'];
         // --- 単語帳データ ---
+        // --- 単語帳データ ---
         const vocabList = [
-            { word: "class", mean: "設計図の始まり", memo: "ファイル名と一致するか確認！" },
-            { word: "public", mean: "全公開", memo: "カプセル化（隠蔽）との対比で覚える" },
-            { word: "static", mean: "共有・固定", memo: "newしなくても使える。インスタンスではなくクラスに属する" },
-            { word: "void", mean: "お返し（戻り値）なし", memo: "メソッド実行後に結果が返ってこない" },
-            { word: "main", mean: "起動スイッチ", memo: "プログラムはここから始まる" },
-            { word: "new", mean: "実体化（生む）", memo: "設計図(class)から使えるモノ(instance)を作る" },
-            { word: "return", mean: "結果を返す", memo: "メソッドの処理結果を呼び出し元に戻す" },
-            { word: "this", mean: "自分自身の", memo: "このクラスのインスタンス変数を指す" },
-            { word: "extends", mean: "拡張（継承）", memo: "親の機能を引き継いでパワーアップする" },
-            { word: "import", mean: "取り込み", memo: "別の場所にある便利な機能を持ってくる" }
+            // --- Lv.1 基礎 ---
+            { id: "v1", word: "class", mean: "設計図の始まり", memo: "Javaプログラムの最小単位。'public class' の名前はファイル名と完全に一致させる必要がある。" },
+            { id: "v2", word: "public", mean: "全公開（どこからでも使える）", memo: "「カプセル化（隠すこと）」の対義語。重要なデータにはつけず、メソッドにつけることが多い。" },
+            { id: "v3", word: "static", mean: "共有・固定（new不要）", memo: "インスタンス（実体）を作らなくても使える機能。クラス全体で1つだけ存在する。" },
+            { id: "v4", word: "void", mean: "戻り値なし（お返しなし）", memo: "メソッドが仕事をしたあと、結果の値を返さない場合に使う。return文が不要になる。" },
+            { id: "v5", word: "main", mean: "起動スイッチ", memo: "プログラムのスタート地点。JVMはまずこのメソッドを探して実行する。" },
+            { id: "v6", word: "new", mean: "実体化（生む）", memo: "設計図（class）から、実際に使えるモノ（インスタンス）をメモリ上に生成する命令。" },
+            { id: "v7", word: "return", mean: "結果を返す / 終了する", memo: "メソッドの呼び出し元に値を渡す。voidメソッドの場合は「そこで処理を終わる」意味になる。" },
+            { id: "v8", word: "this", mean: "自分自身の...", memo: "「このインスタンスの変数」を指す。引数とフィールド変数が同じ名前の時に区別するために必須。" },
+            { id: "v9", word: "extends", mean: "拡張する（継承）", memo: "親クラスの機能を引継ぎつつ、新しい機能を追加する際に使う親子関係の定義。" },
+            { id: "v10", word: "import", mean: "取り込み", memo: "別のパッケージ（フォルダ）にあるクラスを使いたい時に宣言する。例: java.util.List" },
+            { id: "v11", word: "final", mean: "変更不可（最後の）", memo: "変数につけば「定数」、メソッドにつけば「オーバーライド禁止」、クラスにつけば「継承禁止」。" },
+            { id: "v12", word: "abstract", mean: "未完成（抽象）", memo: "「具体的な処理は子供（サブクラス）が決めてね」という予約語。newできない。" },
+            { id: "v13", word: "interface", mean: "接点・規格（窓口）", memo: "「このメソッドを必ず持っています」というルール表。多重継承（implements）ができる。" },
+            { id: "v14", word: "package", mean: "フォルダ分け（所属）", memo: "クラスファイルの住所。同じ名前のクラスでもパッケージが違えば別物として扱える。" },
+            { id: "v15", word: "throws", mean: "例外の丸投げ", memo: "「このメソッドはエラーが起きるかも知れないから、呼ぶ側で対処してね」という宣言。" },
+
+            // --- Lv.2 実践・Silver試験対策 ---
+            { id: "v16", word: "private", mean: "非公開（自分だけ）", memo: "最も厳しい制限。同じクラス内からしかアクセスできない。「カプセル化」の基本。" },
+            { id: "v17", word: "protected", mean: "保護（身内と子供）", memo: "「同じパッケージ」または「別のパッケージのサブクラス」からアクセス可能。" },
+            { id: "v18", word: "implements", mean: "実装する（約束を守る）", memo: "インターフェースを取り込む時に使う。「クラス implements インターフェース」" },
+            { id: "v19", word: "super", mean: "親の...", memo: "親クラスのコンストラクタ(super())や、隠れたメソッドを呼ぶ時に使う。" },
+            { id: "v20", word: "var", mean: "型推論（おまかせ）", memo: "「右辺を見れば型がわかるでしょ？」という時に使う。ローカル変数宣言でのみ使用可能。" },
+            { id: "v21", word: "equals()", mean: "中身は同じ？", memo: "「==」は同一インスタンスかを見るが、equalsは「値（意味）」が同じかを見る（Stringなど）。" },
+            { id: "v22", word: "StringBuilder", mean: "可変の文字列", memo: "Stringと違い、中身を変更しても新しいインスタンスを作らない。append()で連結する。" },
+            { id: "v23", word: "Predicate", mean: "判定する人", memo: "「引数を受け取り、boolean(true/false)を返す」関数型インターフェース。testメソッドを持つ。" },
+            { id: "v24", word: "Consumer", mean: "消費する人", memo: "「引数を受け取り、何も返さない(void)」関数型インターフェース。acceptメソッドを持つ。" },
+            { id: "v25", word: "Function", mean: "変換する人", memo: "「引数を受け取り、結果を返す」関数型インターフェース。applyメソッドを持つ。" },
+            { id: "v26", word: "default", mean: "初期値 / 標準実装", memo: "switch文の「その他」や、インターフェースで「中身のあるメソッド」を定義する時に使う。" },
+            { id: "v27", word: "try-catch-finally", mean: "例外処理セット", memo: "try(試す) → catch(捕捉する) → finally(絶対やる)。finallyはreturnより後に実行される点に注意。" },
+            { id: "v28", word: "module-info.java", mean: "モジュール定義書", memo: "モジュールシステムの構成図。ルートディレクトリに配置する。" },
+            { id: "v29", word: "requires", mean: "必要とする（依存）", memo: "モジュール定義で「このモジュールを使います」と宣言するキーワード。" },
+            { id: "v30", word: "exports", mean: "公開する", memo: "モジュール定義で「このパッケージを外から使わせる」と宣言するキーワード。" },
+            { id: "v31", "word": "instanceof", "mean": "型の確認（～ですか？）", "memo": "オブジェクトが特定のクラスやインターフェースを持っているか確認する。「obj instanceof String」→ true/false" },
+            { id: "v32", "word": "enum", "mean": "列挙型（定数のリスト）", "memo": "決まった選択肢（曜日や季節など）を作る機能。コンストラクタは必ずprivateになるのが試験のポイント。" },
+            { id: "v33", "word": "break", "mean": "脱出する", "memo": "現在実行中のループやswitch文を強制終了して外に出る。多重ループではラベル機能と合わせて出題される。" },
+            { id: "v34", "word": "continue", "mean": "スキップする（次へ）", "memo": "ループ内の残りの処理を飛ばして、次の反復（更新式や条件判定）へ進む。" },
+            { id: "v35", "word": "throw", "mean": "例外を投げる（実行）", "memo": "「throws（宣言）」と混同注意！こちらは「throw new Exception()」のように、実際にエラーを発生させる命令。" }
         ];
 
         // --- 単語帳ロジック ---
