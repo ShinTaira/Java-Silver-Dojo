@@ -30,15 +30,64 @@
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <style>
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        textarea,
+        select {
+            border: 1px solid #cbd5e1;
+            /* slate-300 */
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            padding: 0.5rem 0.75rem;
+            /* px-3 py-2 */
+            width: 100%;
+            /* 親要素に合わせる */
+            color: #1e293b;
+            /* slate-800 */
+            appearance: none;
+            /* スマホでのデフォルトスタイルを解除 */
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: 2px solid #6366f1;
+            /* indigo-500 */
+            outline-offset: 1px;
+            border-color: #6366f1;
+        }
+
+        /* ダークモード時のフォーム */
+        .dark input[type="text"],
+        .dark input[type="password"],
+        .dark input[type="number"],
+        .dark textarea,
+        .dark select {
+            background-color: #1e293b;
+            /* slate-800 */
+            border-color: #475569;
+            /* slate-600 */
+            color: #f1f5f9;
+            /* slate-100 */
+        }
+
+        /* =========================================
+               2. アニメーション & 共通スタイル
+               ========================================= */
         body {
             font-family: 'Noto Sans JP', sans-serif;
             transition: background-color 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
+            /* スマホでタップ時の青い背景を消す */
         }
 
         .font-mono {
             font-family: 'Roboto Mono', monospace;
         }
 
+        /* スクロールバーのカスタマイズ */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -57,6 +106,7 @@
             background: #94a3b8;
         }
 
+        /* アニメーション定義 */
         .fade-in {
             animation: fadeIn 0.3s ease-out;
         }
@@ -73,6 +123,25 @@
             }
         }
 
+        .slide-down {
+            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================
+               3. カード & ボタンの装飾
+               ========================================= */
         .drill-card {
             transition: all 0.2s ease;
             border-bottom: 4px solid transparent;
@@ -83,6 +152,20 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
+        .hover-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .hover-card:hover {
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 選択肢ボタン */
         .option-btn {
             transition: all 0.1s ease;
         }
@@ -130,7 +213,7 @@
             }
         }
 
-        /* Coding Area specific */
+        /* コーディングエリア */
         .coding-textarea {
             background-color: #1e1e1e;
             color: #d4d4d4;
@@ -140,7 +223,7 @@
             tab-size: 4;
         }
 
-        /* Error Overlay */
+        /* エラー表示 */
         #global-error-display {
             display: none;
             position: fixed;
@@ -155,7 +238,9 @@
             z-index: 9999;
         }
 
-        /* Markdown Styling for AI Response */
+        /* =========================================
+               4. AI解説文 (Markdown) のスタイル
+               ========================================= */
         .ai-response {
             line-height: 1.7;
         }
@@ -226,7 +311,6 @@
             color: #94a3b8;
         }
 
-        /* Table Styles for AI Response */
         .ai-response table {
             border-collapse: collapse;
             width: 100%;
@@ -265,12 +349,12 @@
             background-color: #0f172a;
         }
 
-        /* Code Block in AI Response */
         .ai-response pre {
             margin: 1em 0;
             border-radius: 8px;
             overflow-x: auto;
             background-color: #1e1e1e !important;
+            padding: 1rem;
         }
 
         .ai-response code {
@@ -350,9 +434,9 @@
 
                         <a href="https://shintaira.github.io/Java-Study-Application/#modern-syntax" target="_blank"
                             rel="noopener noreferrer"
-                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1"
-                            title="Java早見表を別タブで開く">
-                            📑 早見表
+                            class="nav-item px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1"
+                            title="早見表">
+                            📑 <span class="hidden sm:inline">早見表</span>
                         </a>
                         <button onclick="app.switchTab('settings')" id="nav-settings"
                             class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">設定</button>
