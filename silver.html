@@ -374,6 +374,10 @@
             background-color: #334155;
             color: #fca5a5;
         }
+
+        .vocab-card-content {
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 
@@ -521,26 +525,29 @@
                 </div>
 
                 <!-- Main Actions -->
-                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div class="grid md:grid-cols-2 gap-4 sm:gap-6 mb-8">
+
                     <div
-                        class="bg-white dark:bg-darkcard p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
-                        <h3 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
-                            <span class="text-xl">🔍</span> キーワード演習
-                        </h3>
-                        <div class="flex gap-2">
-                            <input type="text" id="search-input"
-                                class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500 transition dark:text-white"
-                                placeholder="例: ラムダ, 例外, 継承...">
-                            <button onclick="app.startSearchQuiz()"
-                                class="bg-slate-800 dark:bg-slate-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-slate-700 dark:hover:bg-slate-600 transition">検索</button>
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white dark:bg-darkcard p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                        class="bg-white dark:bg-darkcard p-4 sm:p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-5 text-7xl select-none group-hover:scale-110 transition">
+                            🔤</div>
                         <div>
                             <h3
-                                class="text-base font-bold text-slate-700 dark:text-slate-200 mb-1 flex items-center gap-2">
-                                <span class="text-xl">🔖</span> ブックマーク
+                                class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-2 flex items-center gap-2">
+                                <span class="text-lg">🔤</span> 重要単語帳
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">コードを読むための必須単語（全10語）をマスターしよう！</p>
+                        </div>
+                        <button onclick="vocabMaster.start()"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3 rounded-lg text-sm font-bold transition shadow-md w-full">単語チェック開始</button>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-darkcard p-4 sm:p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                        <div>
+                            <h3
+                                class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-1 flex items-center gap-2">
+                                <span class="text-lg">🔖</span> ブックマーク
                             </h3>
                             <p class="text-xs text-slate-400">保存済み: <span id="bookmark-count"
                                     class="font-bold text-slate-700 dark:text-slate-300">0</span> 問</p>
@@ -1146,6 +1153,36 @@
                     class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition active:scale-95">OK</button>
             </div>
         </div>
+        <div id="vocab-modal"
+            class="fixed inset-0 bg-slate-900/90 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm fade-in">
+            <div
+                class="bg-white dark:bg-darkcard rounded-2xl shadow-2xl max-w-md w-full p-6 text-center relative border border-slate-200 dark:border-slate-700">
+                <button onclick="vocabMaster.close()"
+                    class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-white">✕</button>
+                <div class="mb-2 text-xs font-bold text-indigo-500 uppercase tracking-wider">Java Essential Words</div>
+                <div class="text-sm text-slate-400 mb-6" id="vocab-counter">1 / 10</div>
+
+                <div class="min-h-[200px] flex flex-col justify-center items-center py-4 cursor-pointer"
+                    onclick="vocabMaster.flip()">
+                    <div id="vocab-word" class="text-4xl font-bold text-slate-800 dark:text-white mb-6">Class</div>
+                    <div id="vocab-answer" class="hidden vocab-card-content">
+                        <div id="vocab-mean" class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">設計図
+                        </div>
+                        <div id="vocab-memo"
+                            class="text-sm text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 p-3 rounded-lg inline-block">
+                        </div>
+                    </div>
+                    <div id="vocab-hint-msg" class="text-xs text-slate-400 mt-4 animate-pulse">タップして答えを見る</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mt-6">
+                    <button onclick="vocabMaster.next(false)"
+                        class="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-bold hover:bg-slate-300 dark:hover:bg-slate-600">まだ</button>
+                    <button onclick="vocabMaster.next(true)"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-bold shadow-lg">覚えた！</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
@@ -1161,6 +1198,56 @@
 
         var STORAGE_KEY = 'javaSilverDojo_GlobalData';
         var LEGACY_KEYS = ['javaSilverAI_v14_2', 'javaSilverAI_v14_8'];
+        // --- 単語帳データ ---
+        const vocabList = [
+            { word: "class", mean: "設計図の始まり", memo: "ファイル名と一致するか確認！" },
+            { word: "public", mean: "全公開", memo: "カプセル化（隠蔽）との対比で覚える" },
+            { word: "static", mean: "共有・固定", memo: "newしなくても使える。インスタンスではなくクラスに属する" },
+            { word: "void", mean: "お返し（戻り値）なし", memo: "メソッド実行後に結果が返ってこない" },
+            { word: "main", mean: "起動スイッチ", memo: "プログラムはここから始まる" },
+            { word: "new", mean: "実体化（生む）", memo: "設計図(class)から使えるモノ(instance)を作る" },
+            { word: "return", mean: "結果を返す", memo: "メソッドの処理結果を呼び出し元に戻す" },
+            { word: "this", mean: "自分自身の", memo: "このクラスのインスタンス変数を指す" },
+            { word: "extends", mean: "拡張（継承）", memo: "親の機能を引き継いでパワーアップする" },
+            { word: "import", mean: "取り込み", memo: "別の場所にある便利な機能を持ってくる" }
+        ];
+
+        // --- 単語帳ロジック ---
+        var vocabMaster = {
+            currentIdx: 0,
+            start: function () {
+                this.currentIdx = 0;
+                document.getElementById('vocab-modal').classList.remove('hidden');
+                this.render();
+            },
+            close: function () {
+                document.getElementById('vocab-modal').classList.add('hidden');
+            },
+            render: function () {
+                const word = vocabList[this.currentIdx];
+                document.getElementById('vocab-counter').innerText = `${this.currentIdx + 1} / ${vocabList.length}`;
+                document.getElementById('vocab-word').innerText = word.word;
+                document.getElementById('vocab-mean').innerText = word.mean;
+                document.getElementById('vocab-memo').innerText = word.memo;
+
+                // 初期状態に戻す
+                document.getElementById('vocab-answer').classList.add('hidden');
+                document.getElementById('vocab-hint-msg').classList.remove('hidden');
+            },
+            flip: function () {
+                document.getElementById('vocab-answer').classList.remove('hidden');
+                document.getElementById('vocab-hint-msg').classList.add('hidden');
+            },
+            next: function (known) {
+                this.currentIdx++;
+                if (this.currentIdx >= vocabList.length) {
+                    alert('単語チェック完了！お疲れ様でした🎉');
+                    this.close();
+                } else {
+                    this.render();
+                }
+            }
+        };
 
         // Updated Chapter Map based on Official Exams
         const CHAPTER_TITLES = {
