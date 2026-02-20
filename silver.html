@@ -425,7 +425,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-1 sm:gap-2">
-                    <nav class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg overflow-x-auto">
+                    <nav class="hidden md:flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
                         <button onclick="app.switchTab('dashboard')" id="nav-dashboard"
                             class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">ホーム</button>
                         <button onclick="app.switchTab('create')" id="nav-create"
@@ -490,6 +490,29 @@
                         </div>
                         <span class="text-2xl group-hover:translate-x-2 transition">▶</span>
                     </button>
+                </div>
+                <div class="grid md:grid-cols-3 gap-4 mb-8">
+                    <div
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm md:col-span-1 flex flex-col justify-center items-center relative overflow-hidden group">
+                        <div
+                            class="absolute -right-4 -bottom-4 text-8xl opacity-5 select-none group-hover:scale-110 transition">
+                            🔥</div>
+                        <div class="text-xs text-slate-400 font-bold uppercase mb-1 z-10 tracking-wider">連続学習日数</div>
+                        <div class="text-5xl font-bold text-orange-500 z-10 my-2 drop-shadow-sm"><span
+                                id="stat-streak">0</span><span
+                                class="text-xl text-slate-400 dark:text-slate-500 ml-1 font-normal">日</span></div>
+                        <div id="stat-today-badge"
+                            class="z-10 px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs rounded-full font-bold border border-slate-200 dark:border-slate-700 transition-colors">
+                            今日の学習: 未達成</div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm md:col-span-2">
+                        <div class="text-xs text-slate-400 font-bold uppercase mb-2 tracking-wider">過去7日間の学習数 (解答数)
+                        </div>
+                        <div class="h-32 w-full">
+                            <canvas id="weeklyChart"></canvas>
+                        </div>
+                    </div>
                 </div>
                 <!-- Level Based Quizzes -->
                 <div class="mb-8">
@@ -715,28 +738,41 @@
                                 <span class="text-xs text-gray-400 font-mono">Main.java</span>
                                 <span class="text-[10px] text-gray-500">Auto-saved</span>
                             </div>
-                            <textarea id="coding-editor"
-                                class="coding-textarea flex-1 p-4 w-full h-full resize-none outline-none text-sm"
-                                spellcheck="false" placeholder="// ここにコードを書いてください..."></textarea>
+
+                            <div class="flex flex-1 relative overflow-hidden">
+                                <div id="coding-line-numbers"
+                                    class="bg-[#1e1e1e] border-r border-[#333] text-[#858585] text-xs text-right py-4 pr-3 pl-2 select-none font-mono min-w-[2.5rem] overflow-hidden">
+                                    1
+                                </div>
+                                <textarea id="coding-editor"
+                                    class="coding-textarea flex-1 p-4 w-full h-full resize-none outline-none text-sm whitespace-pre"
+                                    spellcheck="false" placeholder="// ここにコードを書いてください..."
+                                    onscroll="codingApp.syncScroll()"
+                                    oninput="codingApp.updateLineNumbers()"></textarea>
+                            </div>
                         </div>
 
-                        <div class="flex justify-between items-center">
-                            <button onclick="codingApp.showAnswer()"
-                                class="text-sm text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 underline">模範解答を見る</button>
+                        <div class="flex flex-wrap justify-between items-center gap-3">
+                            <div class="flex gap-2">
+                                <button onclick="codingApp.showHint()" id="btn-coding-hint"
+                                    class="text-sm bg-amber-50 hover:bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:hover:bg-amber-900/50 dark:text-amber-400 px-4 py-2 rounded-lg transition font-bold shadow-sm">💡
+                                    ヒントを見る</button>
+                                <button onclick="codingApp.showAnswer()" id="btn-coding-answer"
+                                    class="text-sm text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 underline px-2 py-2 hidden">模範解答を見る</button>
+                            </div>
                             <button onclick="codingApp.check()"
                                 class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition active:scale-95 flex items-center gap-2">
                                 <span>判定する</span> <span class="text-lg">▶</span>
                             </button>
                         </div>
 
-                        <!-- Result Area -->
                         <div id="coding-result"
                             class="hidden bg-white dark:bg-darkcard p-5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-lg fade-in">
                             <h4 class="font-bold text-lg mb-2 flex items-center gap-2" id="coding-result-title"></h4>
                             <p class="text-sm text-slate-600 dark:text-slate-300 mb-4" id="coding-result-msg"></p>
 
-                            <div
-                                class="bg-slate-50 dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-600">
+                            <div id="coding-answer-box"
+                                class="bg-slate-50 dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-600 hidden">
                                 <div class="text-xs text-slate-400 mb-1">模範解答:</div>
                                 <pre
                                     class="text-xs overflow-x-auto"><code class="language-java" id="coding-answer-code"></code></pre>
@@ -881,12 +917,12 @@
                             <select id="api-model-select"
                                 class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm outline-none dark:text-white"
                                 onchange="aiTutor.toggleCustomModelInput()">
-                                <option value="gemini-2.5-flash-preview-09-2025">gemini-2.5-flash (推奨・最新)</option>
+                                <option value="gemini-2.5-flash">gemini-2.5-flash (推奨・最新)</option>
                                 <option value="custom">カスタム入力...</option>
                             </select>
                             <input type="text" id="api-model-custom"
                                 class="w-full mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm outline-none hidden dark:text-white"
-                                placeholder="例: gemini-2.5-flash-preview-09-2025">
+                                placeholder="例: gemini-2.5-flash">
                         </div>
                     </div>
                     <div id="key-status" class="text-xs text-slate-400 mt-4 flex items-center gap-1"><span
@@ -915,7 +951,8 @@
                             <div class="flex justify-between items-center mb-2">
                                 <h4
                                     class="text-xs font-bold text-yellow-700 dark:text-yellow-500 uppercase tracking-wider flex items-center gap-1">
-                                    <span>📝</span> 質問する問題</h4>
+                                    <span>📝</span> 質問する問題
+                                </h4>
                                 <button onclick="aiTutor.clearQuestionContext()"
                                     class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-white">✕
                                     クリア</button>
@@ -960,8 +997,8 @@
 
         <!-- SETTINGS TAB -->
         <div id="tab-settings" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
-            <div class="max-w-2xl mx-auto space-y-8">
-                <!-- Theme Switcher -->
+            <div class="max-w-2xl mx-auto space-y-6">
+
                 <div
                     class="bg-white dark:bg-darkcard rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex justify-between items-center">
                     <div>
@@ -974,6 +1011,23 @@
                         <span aria-hidden="true" id="theme-toggle-circle"
                             class="translate-x-0 pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
                     </button>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-darkcard rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">🔤
+                            文字サイズ設定</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">問題文や解説の文字の大きさを調整します。</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="app.changeTextSize(-1)"
+                            class="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition shadow-sm">-</button>
+                        <span id="text-size-display"
+                            class="text-sm font-bold w-12 text-center text-slate-700 dark:text-slate-200">標準</span>
+                        <button onclick="app.changeTextSize(1)"
+                            class="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-slate-700 rounded-full font-bold hover:bg-slate-200 dark:hover:bg-slate-600 transition shadow-sm">+</button>
+                    </div>
                 </div>
 
                 <div
@@ -1005,7 +1059,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center text-xs text-slate-400">
+
+                <div class="text-center text-xs text-slate-400 mt-4">
                     <p>Java Silver Dojo Ver 17.1</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
                 </div>
@@ -1206,7 +1261,8 @@
                 <div id="res-weakness-box"
                     class="hidden bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-100 dark:border-red-800/50 text-left">
                     <h4 class="text-xs font-bold text-red-600 dark:text-red-400 uppercase mb-2 flex items-center gap-1">
-                        <span>🚑</span> 復習おすすめ分野</h4>
+                        <span>🚑</span> 復習おすすめ分野
+                    </h4>
                     <ul id="res-weakness-list" class="text-sm text-slate-700 dark:text-slate-300 space-y-1 font-bold">
                     </ul>
                 </div>
@@ -1246,6 +1302,36 @@
             </div>
         </div>
     </main>
+
+    <nav id="bottom-nav"
+        class="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-darkcard border-t border-slate-200 dark:border-slate-700 z-40 pb-safe transition-transform duration-300 transform translate-y-0 flex justify-around px-2 py-2">
+        <button onclick="app.switchTab('dashboard')" id="bottom-nav-dashboard"
+            class="flex flex-col items-center p-2 text-indigo-600 dark:text-indigo-400 w-1/5">
+            <span class="text-xl mb-1">🏠</span>
+            <span class="text-[10px] font-bold">ホーム</span>
+        </button>
+        <button onclick="app.switchTab('create')" id="bottom-nav-create"
+            class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-1/5 transition">
+            <span class="text-xl mb-1">📝</span>
+            <span class="text-[10px] font-bold">作成</span>
+        </button>
+        <button onclick="app.switchTab('coding')" id="bottom-nav-coding"
+            class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-1/5 transition">
+            <span class="text-xl mb-1">💻</span>
+            <span class="text-[10px] font-bold">実践</span>
+        </button>
+        <button onclick="app.switchTab('ai')" id="bottom-nav-ai"
+            class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-1/5 transition">
+            <span class="text-xl mb-1">🤖</span>
+            <span class="text-[10px] font-bold">AI先生</span>
+        </button>
+        <button onclick="app.switchTab('settings')" id="bottom-nav-settings"
+            class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-1/5 transition">
+            <span class="text-xl mb-1">⚙️</span>
+            <span class="text-[10px] font-bold">設定</span>
+        </button>
+    </nav>
+    <div class="h-16 md:hidden"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
@@ -1382,32 +1468,6 @@
         // --- MODULES DEFINITIONS ---
 
         var aiTutor = {
-            apiKey: '',
-            model: 'gemini-2.5-flash-preview-09-2025',
-            init: function () {
-                try {
-                    this.apiKey = localStorage.getItem('gemini_api_key') || '';
-                    var savedModel = localStorage.getItem('gemini_api_model');
-                    if (savedModel && (savedModel.includes('gemini-2.5') || savedModel === 'custom')) {
-                        this.model = savedModel;
-                    } else {
-                        this.model = 'gemini-2.5-flash-preview-09-2025';
-                    }
-
-                    var select = document.getElementById('api-model-select');
-                    if (select) {
-                        if (this.model === 'gemini-2.5-flash-preview-09-2025') {
-                            select.value = this.model;
-                            document.getElementById('api-model-custom').classList.add('hidden');
-                        } else {
-                            select.value = 'custom';
-                            document.getElementById('api-model-custom').classList.remove('hidden');
-                            document.getElementById('api-model-custom').value = this.model;
-                        }
-                    }
-                    this.updateStatus();
-                } catch (e) { console.warn("AI Init failed", e); }
-            },
             toggleCustomModelInput: function () {
                 var val = document.getElementById('api-model-select').value;
                 var customInput = document.getElementById('api-model-custom');
@@ -1995,6 +2055,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
 
         var codingApp = {
             currentDrill: null,
+            hintLevel: 0,
             init: function () {
                 var menu = document.getElementById('coding-menu');
                 menu.innerHTML = '';
@@ -2016,27 +2077,82 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
             },
             start: function (drill) {
                 this.currentDrill = drill;
+                this.hintLevel = 0;
+
                 document.getElementById('coding-menu').classList.add('hidden');
                 document.getElementById('coding-workspace').classList.remove('hidden');
                 document.getElementById('coding-title').innerText = drill.title;
                 document.getElementById('coding-tag').innerText = drill.tag;
                 document.getElementById('coding-desc').innerText = drill.desc;
-                if (drill.keywords && drill.keywords.length > 0) {
-                    document.getElementById('coding-hint-box').classList.remove('hidden');
-                    var kwDiv = document.getElementById('coding-keywords');
-                    kwDiv.innerHTML = drill.keywords.map(k => `<span class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] px-2 py-1 rounded border border-slate-200 dark:border-slate-600 font-mono">${k}</span>`).join('');
-                } else {
-                    document.getElementById('coding-hint-box').classList.add('hidden');
-                }
+
+                document.getElementById('coding-hint-box').classList.add('hidden');
+                document.getElementById('coding-result').classList.add('hidden');
+                document.getElementById('coding-answer-box').classList.add('hidden');
+
+                var btnHint = document.getElementById('btn-coding-hint');
+                var btnAnswer = document.getElementById('btn-coding-answer');
+                if (btnHint) { btnHint.classList.remove('hidden'); btnHint.innerText = '💡 ヒントを見る'; }
+                if (btnAnswer) btnAnswer.classList.add('hidden');
+
                 var editor = document.getElementById('coding-editor');
                 editor.value = '';
+                this.updateLineNumbers();
                 editor.focus();
-                document.getElementById('coding-result').classList.add('hidden');
             },
             close: function () {
                 document.getElementById('coding-menu').classList.remove('hidden');
                 document.getElementById('coding-workspace').classList.add('hidden');
                 this.currentDrill = null;
+            },
+            // 新規追加: 行番号の同期スクロール
+            syncScroll: function () {
+                var editor = document.getElementById('coding-editor');
+                var lineNumbers = document.getElementById('coding-line-numbers');
+                if (editor && lineNumbers) {
+                    lineNumbers.scrollTop = editor.scrollTop;
+                }
+            },
+            // 新規追加: 行番号の更新
+            updateLineNumbers: function () {
+                var editor = document.getElementById('coding-editor');
+                var lineNumbers = document.getElementById('coding-line-numbers');
+                if (!editor || !lineNumbers) return;
+
+                var lines = editor.value.split('\n').length;
+                var html = '';
+                for (var i = 1; i <= lines; i++) {
+                    html += i + '<br>';
+                }
+                // 最低1行は表示
+                if (lines === 0) html = '1<br>';
+                lineNumbers.innerHTML = html;
+                this.syncScroll();
+            },
+            // 修正: 段階的ヒント機能
+            showHint: function () {
+                if (!this.currentDrill) return;
+                this.hintLevel++;
+
+                if (this.hintLevel === 1) {
+                    // ヒント1段階目: キーワード表示
+                    if (this.currentDrill.keywords && this.currentDrill.keywords.length > 0) {
+                        document.getElementById('coding-hint-box').classList.remove('hidden');
+                        var kwDiv = document.getElementById('coding-keywords');
+                        kwDiv.innerHTML = this.currentDrill.keywords.map(k => `<span class="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] px-2 py-1 rounded border border-slate-200 dark:border-slate-600 font-mono">${k}</span>`).join('');
+                    } else {
+                        // キーワードがない場合はすぐに答えを表示させる
+                        this.hintLevel = 2;
+                    }
+                    var btnHint = document.getElementById('btn-coding-hint');
+                    if (btnHint) btnHint.innerText = '💡 さらにヒント（解答）を見る';
+                }
+
+                if (this.hintLevel >= 2) {
+                    // ヒント2段階目: 模範解答ボタンの表示
+                    document.getElementById('btn-coding-hint').classList.add('hidden');
+                    document.getElementById('btn-coding-answer').classList.remove('hidden');
+                    this.showAnswer();
+                }
             },
             check: function () {
                 if (!this.currentDrill) return;
@@ -2044,9 +2160,13 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 var keywords = this.currentDrill.keywords || [];
                 var missing = keywords.filter(k => !userCode.includes(k));
                 var isPerfect = missing.length === 0;
+
                 var resultTitle = document.getElementById('coding-result-title');
                 var resultMsg = document.getElementById('coding-result-msg');
-                var answerCode = document.getElementById('coding-answer-code');
+
+                document.getElementById('coding-result').classList.remove('hidden');
+                document.getElementById('coding-answer-box').classList.add('hidden');
+
                 if (isPerfect) {
                     resultTitle.innerHTML = '<span class="text-emerald-500">🎉 Excellent!</span>';
                     resultMsg.innerText = '必須キーワードがすべて含まれています。';
@@ -2054,20 +2174,22 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     resultTitle.innerHTML = '<span class="text-amber-500">⚠️ Keep Trying</span>';
                     resultMsg.innerText = `以下のキーワードが見つかりません: ${missing.join(', ')}`;
                 }
-                answerCode.textContent = this.currentDrill.answer;
-                if (typeof Prism !== 'undefined') Prism.highlightElement(answerCode);
-                document.getElementById('coding-result').classList.remove('hidden');
             },
             showAnswer: function () {
                 if (!this.currentDrill) return;
                 var resultTitle = document.getElementById('coding-result-title');
                 var resultMsg = document.getElementById('coding-result-msg');
                 var answerCode = document.getElementById('coding-answer-code');
+                var answerBox = document.getElementById('coding-answer-box');
+
                 resultTitle.innerHTML = '<span class="text-indigo-500">👀 模範解答</span>';
                 resultMsg.innerText = '解答例を確認して、自分のコードと比較してみましょう。';
                 answerCode.textContent = this.currentDrill.answer;
+
                 if (typeof Prism !== 'undefined') Prism.highlightElement(answerCode);
+
                 document.getElementById('coding-result').classList.remove('hidden');
+                answerBox.classList.remove('hidden');
             }
         };
 
@@ -2075,6 +2197,140 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
             data: { questions: [], results: {}, history: [], bookmarks: [], theme: 'light', resumeData: null },
             state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', timer: null, currentSelection: new Set(), isQuizActive: false },
             chartInstance: null,
+            weeklyChartInstance: null,
+            textSizeLevel: 1, // 0:小, 1:標準, 2:大, 3:特大
+            textSizeClasses: ['text-sm', 'text-base', 'text-xl', 'text-2xl'],
+            textSizeLabels: ['小さめ', '標準', '大きめ', '特大'],
+
+            changeTextSize: function (delta) {
+                this.textSizeLevel += delta;
+                if (this.textSizeLevel < 0) this.textSizeLevel = 0;
+                if (this.textSizeLevel > 3) this.textSizeLevel = 3;
+
+                this.applyTextSize();
+                this.data.textSizeLevel = this.textSizeLevel;
+                this.save();
+            },
+            applyTextSize: function () {
+                var el = document.getElementById('text-size-display');
+                if (el) el.innerText = this.textSizeLabels[this.textSizeLevel];
+
+                var qText = document.getElementById('q-text');
+                var expText = document.getElementById('explanation-text');
+
+                // 既存のサイズクラスを一旦すべて削除
+                this.textSizeClasses.forEach(cls => {
+                    if (qText) qText.classList.remove(cls, 'md:text-xl');
+                    if (expText) expText.classList.remove(cls, 'md:text-base');
+                });
+
+                // 新しいサイズクラスを適用
+                var newClass = this.textSizeClasses[this.textSizeLevel];
+                if (qText) qText.classList.add(newClass);
+                if (expText) expText.classList.add(newClass);
+            },
+            renderActivityStats: function () {
+                var dailyTotals = {};
+                var now = new Date();
+                var labels = [];
+                var dataPoints = [];
+
+                // 過去7日間のラベルを作成
+                for (var i = 6; i >= 0; i--) {
+                    var d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                    var dateStr = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                    var displayStr = (d.getMonth() + 1) + '/' + d.getDate();
+                    dailyTotals[dateStr] = 0;
+                    labels.push(displayStr);
+                }
+
+                // 履歴から解答数を日別に集計
+                this.data.history.forEach(function (h) {
+                    var d = new Date(h.date);
+                    var dateStr = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                    if (dailyTotals[dateStr] !== undefined) {
+                        dailyTotals[dateStr] += h.total;
+                    }
+                });
+
+                for (var i = 6; i >= 0; i--) {
+                    var d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                    var dateStr = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                    dataPoints.push(dailyTotals[dateStr]);
+                }
+
+                // グラフの描画
+                var ctx = document.getElementById('weeklyChart');
+                if (ctx && typeof Chart !== 'undefined') {
+                    if (this.weeklyChartInstance) {
+                        this.weeklyChartInstance.destroy();
+                    }
+                    var textColor = document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#64748b';
+                    var gridColor = document.documentElement.classList.contains('dark') ? '#334155' : '#f1f5f9';
+
+                    this.weeklyChartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: '解答数',
+                                data: dataPoints,
+                                backgroundColor: '#f97316', // orange-500
+                                borderRadius: 4,
+                                barThickness: 12
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: { beginAtZero: true, ticks: { precision: 0, color: textColor }, grid: { color: gridColor } },
+                                x: { grid: { display: false }, ticks: { color: textColor } }
+                            }
+                        }
+                    });
+                }
+
+                // ストリーク(連続学習日数)の計算
+                var uniqueDates = [...new Set(this.data.history.map(h => {
+                    var d = new Date(h.date);
+                    return d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                }))];
+
+                var streak = 0;
+                var currDate = new Date(now);
+                var todayStr = currDate.getFullYear() + '-' + (currDate.getMonth() + 1).toString().padStart(2, '0') + '-' + currDate.getDate().toString().padStart(2, '0');
+
+                var todayDone = uniqueDates.includes(todayStr);
+                if (todayDone) streak++;
+
+                currDate.setDate(currDate.getDate() - 1); // 昨日に戻す
+                while (true) {
+                    var ds = currDate.getFullYear() + '-' + (currDate.getMonth() + 1).toString().padStart(2, '0') + '-' + currDate.getDate().toString().padStart(2, '0');
+                    if (uniqueDates.includes(ds)) {
+                        streak++;
+                        currDate.setDate(currDate.getDate() - 1);
+                    } else {
+                        break; // 途切れたら終了
+                    }
+                }
+
+                // UI更新
+                var elStreak = document.getElementById('stat-streak');
+                if (elStreak) elStreak.innerText = streak;
+
+                var elBadge = document.getElementById('stat-today-badge');
+                if (elBadge) {
+                    if (todayDone) {
+                        elBadge.className = "z-10 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 text-xs rounded-full font-bold border border-emerald-200 dark:border-emerald-800 transition-colors";
+                        elBadge.innerText = "今日の学習: 達成！🎉";
+                    } else {
+                        elBadge.className = "z-10 px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs rounded-full font-bold border border-slate-200 dark:border-slate-700 transition-colors";
+                        elBadge.innerText = "今日の学習: 未達成💦";
+                    }
+                }
+            },
             categoryLinks: {
                 "簡単なJAVAプログラムの作成": "https://docs.oracle.com/javase/jp/11/docs/api/java.base/java/lang/package-summary.html",
                 "基本データ型と文字列操作": "https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html",
@@ -2144,6 +2400,9 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     html.classList.remove('dark');
                     if (circle) circle.classList.remove('translate-x-5');
                 }
+                if (this.state && !this.state.isQuizActive) {
+                    setTimeout(() => this.renderActivityStats(), 50);
+                }
             },
             loadData: function () {
                 try {
@@ -2159,6 +2418,8 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     if (!Array.isArray(this.data.bookmarks)) this.data.bookmarks = [];
                     if (!Array.isArray(this.data.questions)) this.data.questions = [];
                     this.updateDashboard();
+                    this.textSizeLevel = this.data.textSizeLevel !== undefined ? this.data.textSizeLevel : 1;
+                    this.applyTextSize();
                 } catch (e) { console.error("Load error", e); }
             },
             save: function () {
@@ -2170,19 +2431,44 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
             },
             switchTab: function (tab) {
                 if (tab !== 'quiz-view') this.state.isQuizActive = false;
+
+                // クイズ中（quiz-view）はボトムナビを隠す
+                var bottomNav = document.getElementById('bottom-nav');
+                if (bottomNav) {
+                    if (tab === 'quiz-view') bottomNav.classList.add('translate-y-full');
+                    else bottomNav.classList.remove('translate-y-full');
+                }
+
                 ['dashboard', 'ai', 'history', 'create', 'quiz-view', 'settings', 'coding'].forEach(id => {
                     document.getElementById('tab-' + id)?.classList.add('hidden');
+
+                    // PCナビの非アクティブ化
                     var btn = document.getElementById('nav-' + id);
                     if (btn) { btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-white'); btn.classList.add('text-slate-600', 'dark:text-slate-400'); }
+
+                    // ボトムナビの非アクティブ化
+                    var bBtn = document.getElementById('bottom-nav-' + id);
+                    if (bBtn) { bBtn.classList.remove('text-indigo-600', 'dark:text-indigo-400'); bBtn.classList.add('text-slate-400'); }
                 });
+
                 var target = document.getElementById('tab-' + tab);
                 if (target) {
                     target.classList.remove('hidden');
+
+                    // PCナビのアクティブ化
                     var activeBtn = document.getElementById('nav-' + tab);
                     if (activeBtn) {
                         activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
                         activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm', 'dark:bg-slate-700', 'dark:text-white');
                     }
+
+                    // ボトムナビのアクティブ化
+                    var activeBBtn = document.getElementById('bottom-nav-' + tab);
+                    if (activeBBtn) {
+                        activeBBtn.classList.remove('text-slate-400');
+                        activeBBtn.classList.add('text-indigo-600', 'dark:text-indigo-400');
+                    }
+
                     requestAnimationFrame(() => {
                         if (tab === 'dashboard') this.renderChapters();
                         if (tab === 'history') this.renderHistory();
@@ -2247,6 +2533,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 var userQCount = this.data.questions.filter(q => q.id.includes('user')).length;
                 if (document.getElementById('user-q-count')) document.getElementById('user-q-count').innerText = userQCount;
                 setTimeout(() => this.renderChapters(), 10);
+                setTimeout(() => this.renderActivityStats(), 10);
                 var resumeDiv = document.getElementById('resume-container');
                 if (this.data.resumeData && this.data.resumeData.queueIds?.length > 0) {
                     resumeDiv.classList.remove('hidden');
