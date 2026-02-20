@@ -632,6 +632,27 @@
                         </div>
                     </div>
                 </div>
+                <div class="mb-10">
+                    <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                        <span>⏱️ 本番形式 模擬試験</span>
+                    </h3>
+                    <div
+                        class="bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
+                        <div
+                            class="absolute right-0 top-0 p-4 text-8xl opacity-10 group-hover:scale-110 transition select-none">
+                            🎯</div>
+                        <div
+                            class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">Silver 本番チャレンジ</h4>
+                                <p class="text-red-100 text-sm">実際の試験に近い形式（65問 / 90分）で実力を測定します。<br>合格ライン: 65%以上</p>
+                            </div>
+                            <button onclick="app.startQuiz('mock-realistic')"
+                                class="shrink-0 px-6 py-3 bg-white text-red-600 rounded-xl font-bold shadow-lg hover:bg-red-50 transition active:scale-95">試験開始
+                                ▶</button>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Chapters Grid -->
                 <div class="mb-12">
@@ -889,6 +910,24 @@
                             </div>
                         </div>
 
+                        <div id="ai-question-context"
+                            class="hidden bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 mb-6 border border-yellow-200 dark:border-yellow-800 text-slate-800 dark:text-slate-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4
+                                    class="text-xs font-bold text-yellow-700 dark:text-yellow-500 uppercase tracking-wider flex items-center gap-1">
+                                    <span>📝</span> 質問する問題</h4>
+                                <button onclick="aiTutor.clearQuestionContext()"
+                                    class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-white">✕
+                                    クリア</button>
+                            </div>
+                            <div id="ai-context-text" class="text-sm line-clamp-2 mb-2 font-medium"></div>
+                            <textarea id="ai-user-question"
+                                class="w-full bg-white dark:bg-slate-800 border border-yellow-200 dark:border-yellow-700 rounded p-2 text-sm outline-none mt-2 dark:text-white"
+                                rows="2" placeholder="ここがわからない、もっと詳しく教えて..."></textarea>
+                            <button onclick="aiTutor.askAboutQuestion()" id="btn-ask-specific"
+                                class="mt-3 w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 rounded shadow-md transition disabled:opacity-50">質問を送信</button>
+                        </div>
+
                         <button onclick="aiTutor.getAdvice()" id="btn-get-advice"
                             class="w-full bg-white text-indigo-600 font-bold py-4 rounded-xl shadow-lg hover:bg-indigo-50 transition flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled>🧠 分析＆アドバイスをもらう</button>
@@ -1128,27 +1167,50 @@
                         </button>
                     </div>
                 </div>
+                <div class="mt-6 mb-6">
+                    <button onclick="app.askAiAboutQuestion()" id="btn-ask-ai-context"
+                        class="w-full bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-bold py-3 rounded-xl transition border border-indigo-200 dark:border-indigo-800 flex items-center justify-center gap-2">
+                        <span>🤖 この問題についてAI先生に質問する</span>
+                    </button>
+                </div>
             </div>
         </div>
 
         <div id="session-result"
-            class="fixed inset-0 bg-slate-900/90 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+            class="fixed inset-0 bg-slate-900/90 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
             <div
-                class="bg-white dark:bg-darkcard rounded-2xl shadow-2xl max-w-sm w-full p-8 text-center space-y-6 fade-in transform scale-100">
-                <div class="text-6xl mb-2 animate-bounce">🎉</div>
-                <h3 class="text-2xl font-bold text-slate-800 dark:text-white">お疲れ様でした！</h3>
+                class="bg-white dark:bg-darkcard rounded-2xl shadow-2xl max-w-md w-full p-8 text-center space-y-6 fade-in transform scale-100 my-8">
+                <div id="res-icon" class="text-6xl mb-2 animate-bounce">🎉</div>
+                <h3 id="res-title" class="text-2xl font-bold text-slate-800 dark:text-white">お疲れ様でした！</h3>
+
+                <div id="res-judgment" class="hidden">
+                    <span id="res-judgment-badge"
+                        class="inline-block px-4 py-2 rounded-full text-lg font-bold shadow-sm">合格</span>
+                    <p id="res-judgment-msg" class="text-sm text-slate-500 dark:text-slate-400 mt-2"></p>
+                </div>
+
                 <div
                     class="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800 p-5 rounded-xl border border-slate-100 dark:border-slate-700">
                     <div>
                         <div class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">正解数</div>
                         <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400 mt-1"><span
-                                id="res-score">0</span></div>
+                                id="res-score">0</span><span class="text-lg text-slate-400">/<span
+                                    id="res-total">0</span></span></div>
                     </div>
                     <div>
                         <div class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">正解率</div>
                         <div class="text-3xl font-bold text-slate-800 dark:text-white mt-1" id="res-rate">0%</div>
                     </div>
                 </div>
+
+                <div id="res-weakness-box"
+                    class="hidden bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-100 dark:border-red-800/50 text-left">
+                    <h4 class="text-xs font-bold text-red-600 dark:text-red-400 uppercase mb-2 flex items-center gap-1">
+                        <span>🚑</span> 復習おすすめ分野</h4>
+                    <ul id="res-weakness-list" class="text-sm text-slate-700 dark:text-slate-300 space-y-1 font-bold">
+                    </ul>
+                </div>
+
                 <button onclick="app.closeSessionResult()"
                     class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition active:scale-95">OK</button>
             </div>
@@ -1411,6 +1473,108 @@
                 var container = document.getElementById('ai-analysis-stats');
                 if (el) el.innerText = text;
                 if (container) container.classList.remove('hidden');
+            },
+            currentQuestionContext: null,
+            prefillQuestion: function (data) {
+                this.currentQuestionContext = data;
+                var contextBox = document.getElementById('ai-question-context');
+                var contextText = document.getElementById('ai-context-text');
+
+                contextText.innerText = data.text;
+                contextBox.classList.remove('hidden');
+
+                // APIキーがない場合はボタンを無効化
+                var btn = document.getElementById('btn-ask-specific');
+                if (btn) btn.disabled = !this.apiKey;
+
+                // スクロールして目立たせる
+                contextBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            },
+            clearQuestionContext: function () {
+                this.currentQuestionContext = null;
+                document.getElementById('ai-question-context').classList.add('hidden');
+                document.getElementById('ai-user-question').value = '';
+            },
+            askAboutQuestion: async function () {
+                if (!this.currentQuestionContext) return;
+
+                var userQ = document.getElementById('ai-user-question').value.trim() || "この問題の解説を読んでもわからないので、別の視点でわかりやすく教えてください。";
+                var qData = this.currentQuestionContext;
+
+                var prompt = `
+あなたはJava Silverのベテラン講師です。生徒から以下の問題について質問が来ました。
+
+【質問内容】
+${userQ}
+
+【問題データ】
+問題文:
+${qData.text}
+
+コード:
+\`\`\`java
+${qData.code}
+\`\`\`
+
+選択肢:
+${qData.options}
+
+生徒の回答: ${qData.userAns || "未回答"}
+正解: ${qData.correctAns}
+元の解説: ${qData.explanation}
+
+【指示】
+生徒の質問に対して、元の解説とは違うアプローチで、なぜその正解になるのか、どこにつまずきやすいのかを丁寧に解説してください。必要に応じてコード例も提示してください。
+`;
+
+                var btnSpecific = document.getElementById('btn-ask-specific');
+                var loading = document.getElementById('ai-loading');
+                var outputBox = document.getElementById('ai-output-box');
+                var contentDiv = document.getElementById('ai-response-content');
+
+                btnSpecific.disabled = true;
+                loading.classList.remove('hidden');
+                outputBox.classList.add('hidden');
+
+                var fetchWithRetry = async (model, retries = 1) => {
+                    var url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
+                    try {
+                        var res = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                        });
+                        if (!res.ok) throw new Error(res.statusText);
+                        return res.json();
+                    } catch (e) { throw e; }
+                };
+
+                try {
+                    var data = await fetchWithRetry(this.model);
+                    var text = data.candidates[0].content.parts[0].text;
+
+                    if (typeof marked !== 'undefined') {
+                        contentDiv.innerHTML = marked.parse(text);
+                        if (typeof Prism !== 'undefined') {
+                            setTimeout(() => {
+                                contentDiv.querySelectorAll('pre code').forEach((block) => {
+                                    block.classList.add('language-java');
+                                    Prism.highlightElement(block);
+                                });
+                            }, 10);
+                        }
+                    } else {
+                        contentDiv.innerText = text;
+                    }
+
+                    outputBox.classList.remove('hidden');
+                    this.clearQuestionContext(); // 質問完了後にコンテキストをクリア
+                } catch (e) {
+                    alert(`AI通信エラー: ${e.message}`);
+                } finally {
+                    btnSpecific.disabled = false;
+                    loading.classList.add('hidden');
+                }
             },
             getAdvice: async function () {
                 var stats = this.analyzeStats();
@@ -2210,7 +2374,8 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     list = list.slice(0, 30);
                     name = (mode === 'level-1') ? '初級 (30問)' : (mode === 'level-2') ? '中級 (30問)' : '上級 (30問)';
                 }
-                else if (mode === 'mock') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40); name = '模擬試験'; }
+                else if (mode === 'mock') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40); name = 'クイック模擬'; }
+                else if (mode === 'mock-realistic') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 65); name = '本番形式模擬試験'; }
                 else if (mode === 'mock-set') { list = this.data.questions.filter(q => q.category === param); modeName = param; }
                 else if (mode === 'user-all') { list = this.data.questions.filter(q => q.id.includes('user')); name = 'オリジナル全問'; }
                 else if (mode === 'user-random') {
@@ -2232,7 +2397,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 this.state.isQuizActive = true;
                 document.getElementById('mode-display').innerText = name;
                 if (this.state.timer) clearInterval(this.state.timer);
-                if (mode === 'mock') {
+                if (mode === 'mock' || mode === 'mock-realistic') {
                     document.getElementById('quiz-timer').classList.remove('hidden');
                     var t = 90 * 60;
                     this.state.timer = setInterval(() => {
@@ -2376,6 +2541,28 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 if (this.state.currentIdx >= this.state.queue.length) this.finishSession();
                 else { this.renderQuestion(); document.getElementById('tab-quiz-view').scrollTop = 0; }
             },
+            askAiAboutQuestion: function () {
+                var q = this.state.queue[this.state.currentIdx];
+                if (!q) return;
+
+                // ユーザーの回答（不正解の場合もあるためセットしておく）
+                var userAnsText = Array.from(this.state.currentSelection).map(i => String.fromCharCode(65 + i)).join(', ');
+                var correctAnsText = Array.isArray(q.answer) ? q.answer.map(i => String.fromCharCode(65 + i)).join(', ') : String.fromCharCode(65 + q.answer);
+
+                var contextData = {
+                    text: q.text,
+                    code: q.code || "なし",
+                    options: q.options ? q.options.map((opt, i) => `${String.fromCharCode(65 + i)}: ${opt}`).join('\n') : "なし",
+                    userAns: userAnsText,
+                    correctAns: correctAnsText,
+                    explanation: q.explanation
+                };
+
+                this.switchTab('ai');
+                if (typeof aiTutor !== 'undefined') {
+                    aiTutor.prefillQuestion(contextData);
+                }
+            },
             finishSession: function () {
                 if (this.state.timer) clearInterval(this.state.timer);
                 this.state.isQuizActive = false;
@@ -2383,8 +2570,55 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 var log = { date: Date.now(), correct: this.state.sessionStats.correct, total: this.state.queue.length, mode: this.state.modeName, weak: [...new Set(this.state.sessionStats.wrongInfo)] };
                 this.data.history.push(log);
                 this.save();
-                document.getElementById('res-score').innerText = `${log.correct}/${log.total}`;
-                document.getElementById('res-rate').innerText = Math.round((log.correct / log.total) * 100) + '%';
+
+                var rate = Math.round((log.correct / log.total) * 100);
+                document.getElementById('res-score').innerText = log.correct;
+                document.getElementById('res-total').innerText = log.total;
+                document.getElementById('res-rate').innerText = rate + '%';
+
+                // --- 新規追加: 合否判定と苦手分析の表示 ---
+                var isMock = this.state.modeName.includes('模擬');
+                var judgmentBox = document.getElementById('res-judgment');
+                var badge = document.getElementById('res-judgment-badge');
+                var msg = document.getElementById('res-judgment-msg');
+                var weaknessBox = document.getElementById('res-weakness-box');
+                var weaknessList = document.getElementById('res-weakness-list');
+
+                if (isMock) {
+                    judgmentBox.classList.remove('hidden');
+                    var passLine = 65; // 合格ライン
+                    if (rate >= passLine) {
+                        badge.className = 'inline-block px-6 py-2 rounded-full text-xl font-bold shadow-sm bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800';
+                        badge.innerText = '🎉 合格レベル';
+                        msg.innerText = '素晴らしい！この調子で本番も頑張りましょう！';
+                        document.getElementById('res-icon').innerText = '🏆';
+                        document.getElementById('res-title').innerText = '試験終了！';
+                    } else {
+                        badge.className = 'inline-block px-6 py-2 rounded-full text-xl font-bold shadow-sm bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-400 border border-rose-200 dark:border-rose-800';
+                        badge.innerText = '💦 不合格レベル';
+                        msg.innerText = `合格まであと ${passLine - rate}% です。復習しましょう！`;
+                        document.getElementById('res-icon').innerText = '📚';
+                        document.getElementById('res-title').innerText = '試験終了！';
+                    }
+                } else {
+                    judgmentBox.classList.add('hidden');
+                    document.getElementById('res-icon').innerText = '🎉';
+                    document.getElementById('res-title').innerText = 'お疲れ様でした！';
+                }
+
+                if (log.weak && log.weak.length > 0) {
+                    weaknessBox.classList.remove('hidden');
+                    // 重複カテゴリを集計して多い順にソート
+                    var weakCounts = {};
+                    this.state.sessionStats.wrongInfo.forEach(c => weakCounts[c] = (weakCounts[c] || 0) + 1);
+                    var sortedWeaks = Object.entries(weakCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+
+                    weaknessList.innerHTML = sortedWeaks.map(w => `<li class="flex justify-between items-center"><span class="line-clamp-1">・${w[0]}</span><span class="text-xs bg-red-200 text-red-700 dark:bg-red-800 dark:text-red-200 px-2 py-0.5 rounded-full">${w[1]}問ミス</span></li>`).join('');
+                } else {
+                    weaknessBox.classList.add('hidden');
+                }
+                // ----------------------------------------
+
                 document.getElementById('session-result').classList.remove('hidden');
             },
             closeSessionResult: function () { document.getElementById('session-result').classList.add('hidden'); this.switchTab('history'); },
