@@ -1468,6 +1468,32 @@
         // --- MODULES DEFINITIONS ---
 
         var aiTutor = {
+            apiKey: '',
+            model: 'gemini-2.5-flash',
+            init: function () {
+                try {
+                    this.apiKey = localStorage.getItem('gemini_api_key') || '';
+                    var savedModel = localStorage.getItem('gemini_api_model');
+                    if (savedModel && (savedModel.includes('gemini-2.5') || savedModel === 'custom')) {
+                        this.model = savedModel;
+                    } else {
+                        this.model = 'gemini-2.5-flash';
+                    }
+
+                    var select = document.getElementById('api-model-select');
+                    if (select) {
+                        if (this.model === 'gemini-2.5-flash') {
+                            select.value = this.model;
+                            document.getElementById('api-model-custom').classList.add('hidden');
+                        } else {
+                            select.value = 'custom';
+                            document.getElementById('api-model-custom').classList.remove('hidden');
+                            document.getElementById('api-model-custom').value = this.model;
+                        }
+                    }
+                    this.updateStatus();
+                } catch (e) { console.warn("AI Init failed", e); }
+            },
             toggleCustomModelInput: function () {
                 var val = document.getElementById('api-model-select').value;
                 var customInput = document.getElementById('api-model-custom');
