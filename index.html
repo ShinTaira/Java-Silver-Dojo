@@ -36,6 +36,7 @@
                 transform: scale(0.8) translateY(-10px);
                 opacity: 0;
             }
+
             100% {
                 transform: scale(1) translateY(0);
                 opacity: 1;
@@ -50,79 +51,89 @@
     </style>
 </head>
 
-<body class="bg-slate-50 dark:bg-darkbg text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center p-4 relative">
+<body
+    class="bg-slate-50 dark:bg-darkbg text-slate-800 dark:text-slate-200 min-h-screen flex flex-col items-center justify-center p-4 relative">
 
-    <!-- Floating Action Buttons (Top Left) -->
     <div class="fixed top-4 left-4 z-50 flex flex-col gap-3">
 
-        <!-- Official Java Link -->
         <a href="https://www.oracle.com/jp/java/" target="_blank" rel="noopener noreferrer"
             class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 pr-5 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:scale-105 hover:shadow-xl transition-all duration-300 group pop-animation"
             title="Oracle Java 公式サイトへ">
-            <div class="w-10 h-10 flex items-center justify-center bg-red-50 dark:bg-red-900/20 rounded-full group-hover:bg-red-100 dark:group-hover:bg-red-900/40 transition-colors">
-                <!-- Coffee Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-red-600 dark:text-red-400">
-                    <path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z" />
+            <div
+                class="w-10 h-10 flex items-center justify-center bg-red-50 dark:bg-red-900/20 rounded-full group-hover:bg-red-100 dark:group-hover:bg-red-900/40 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="w-5 h-5 text-red-600 dark:text-red-400">
+                    <path
+                        d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z" />
                 </svg>
             </div>
             <div class="flex flex-col">
                 <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider leading-none">Official</span>
-                <span class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">Java 公式サイト</span>
+                <span
+                    class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">Java
+                    公式サイト</span>
             </div>
         </a>
 
-        <!-- Exam Registration Link (Pearson VUE) -->
         <a href="https://www.pearsonvue.co.jp/Clients/Oracle.aspx" target="_blank" rel="noopener noreferrer"
             class="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 pr-5 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 hover:scale-105 hover:shadow-xl transition-all duration-300 group pop-animation"
             style="animation-delay: 0.1s;" title="試験の予約・申し込み (Pearson VUE)">
-            <div class="w-10 h-10 flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/20 rounded-full group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40 transition-colors">
-                <!-- Calendar/Check Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-indigo-600 dark:text-indigo-400">
-                    <path d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z" />
+            <div
+                class="w-10 h-10 flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/20 rounded-full group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    class="w-5 h-5 text-indigo-600 dark:text-indigo-400">
+                    <path
+                        d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z" />
                 </svg>
             </div>
             <div class="flex flex-col">
                 <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider leading-none">Booking</span>
-                <span class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">試験申し込み</span>
+                <span
+                    class="text-xs font-bold text-slate-700 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">試験申し込み</span>
             </div>
         </a>
 
     </div>
 
-    <!-- Theme Toggle (Top Right) -->
     <div class="absolute top-4 right-4 z-50">
-        <button onclick="toggleTheme()" class="p-2 rounded-full bg-white dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
+        <button onclick="toggleTheme()"
+            class="p-2 rounded-full bg-white dark:bg-slate-800 shadow-md border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">
             <span id="theme-icon">🌙</span>
         </button>
     </div>
 
     <div class="max-w-6xl w-full pt-20 md:pt-0">
         <div class="text-center mb-12">
-            <div class="inline-flex items-center justify-center w-24 h-24 bg-white dark:bg-slate-800 rounded-3xl shadow-lg mb-6 border border-slate-100 dark:border-slate-700">
+            <div
+                class="inline-flex items-center justify-center w-24 h-24 bg-white dark:bg-slate-800 rounded-3xl shadow-lg mb-6 border border-slate-100 dark:border-slate-700">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-14 h-14">
                     <path d="M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z" fill="#5382a1" />
                     <path d="M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z" fill="#5382a1" />
                     <path d="M75,45 H85 C90,45 90,55 85,60 H75 Z" fill="#5382a1" />
-                    <path d="M40,30 Q50,10 60,30 T80,30" fill="none" stroke="#f89820" stroke-width="6" stroke-linecap="round" />
-                    <path d="M30,20 Q40,0 50,20 T70,20" fill="none" stroke="#f89820" stroke-width="6" stroke-linecap="round" />
+                    <path d="M40,30 Q50,10 60,30 T80,30" fill="none" stroke="#f89820" stroke-width="6"
+                        stroke-linecap="round" />
+                    <path d="M30,20 Q40,0 50,20 T70,20" fill="none" stroke="#f89820" stroke-width="6"
+                        stroke-linecap="round" />
                 </svg>
             </div>
-            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-3">Java 完全攻略道場</h1>
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-3">Java 完全攻略道場
+            </h1>
             <p class="text-slate-500 dark:text-slate-400 text-lg">あなたのレベルに合わせてコースを選択してください</p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
 
-            <!-- Bronze Course -->
             <a href="bronze.html"
                 class="group relative block bg-white dark:bg-darkcard rounded-2xl p-8 shadow-sm border border-orange-100 dark:border-orange-900/30 hover:shadow-xl hover:border-orange-300 dark:hover:border-orange-700 transition-all duration-300 card-hover">
-                <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl group-hover:scale-110 transition-transform select-none">
+                <div
+                    class="absolute top-0 right-0 p-6 opacity-10 text-8xl group-hover:scale-110 transition-transform select-none">
                     🥉</div>
                 <div class="relative z-10">
                     <span
                         class="inline-block px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-xs font-bold mb-4 border border-orange-100 dark:border-orange-800">Ver
                         1.0</span>
-                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-orange-700 dark:group-hover:text-orange-500 transition-colors">
+                    <h2
+                        class="text-2xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-orange-700 dark:group-hover:text-orange-500 transition-colors">
                         Bronze コース</h2>
                     <p class="text-slate-500 dark:text-slate-400 text-sm mb-6 line-clamp-3 leading-relaxed">
                         プログラミング未経験者向け。<br>Java言語の基礎知識、変数、演算子、制御構文をゼロから学びます。</p>
@@ -132,16 +143,17 @@
                 </div>
             </a>
 
-            <!-- Silver Course -->
             <a href="silver.html"
                 class="group relative block bg-white dark:bg-darkcard rounded-2xl p-8 shadow-sm border border-indigo-100 dark:border-indigo-900/30 hover:shadow-xl hover:border-indigo-300 dark:hover:border-indigo-700 transition-all duration-300 card-hover">
-                <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl group-hover:scale-110 transition-transform select-none">
+                <div
+                    class="absolute top-0 right-0 p-6 opacity-10 text-8xl group-hover:scale-110 transition-transform select-none">
                     🥈</div>
                 <div class="relative z-10">
                     <span
                         class="inline-block px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-bold mb-4 border border-indigo-100 dark:border-indigo-800">Ver
                         17.1</span>
-                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                    <h2
+                        class="text-2xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         Silver コース</h2>
                     <p class="text-slate-500 dark:text-slate-400 text-sm mb-6 line-clamp-3 leading-relaxed">
                         オブジェクト指向の理解がカギ。<br>継承、例外処理、ラムダ式の基礎など、開発に必要な標準知識を網羅。</p>
@@ -151,18 +163,21 @@
                 </div>
             </a>
 
-            <!-- Gold Course -->
             <a href="gold.html"
                 class="group relative block bg-white dark:bg-darkcard rounded-2xl p-8 shadow-sm border border-amber-100 dark:border-amber-900/30 hover:shadow-xl hover:border-amber-300 dark:hover:border-amber-700 transition-all duration-300 card-hover">
-                <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl group-hover:scale-110 transition-transform select-none">
+                <div
+                    class="absolute top-0 right-0 p-6 opacity-10 text-8xl group-hover:scale-110 transition-transform select-none">
                     🥇</div>
                 <div class="relative z-10">
                     <span
                         class="inline-block px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold mb-4 border border-amber-100 dark:border-amber-800">Ver
                         11.0</span>
-                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Gold
+                    <h2
+                        class="text-2xl font-bold text-slate-800 dark:text-white mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                        Gold
                         コース</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm mb-6 line-clamp-3 leading-relaxed">上級者への登竜門。<br>Stream
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mb-6 line-clamp-3 leading-relaxed">
+                        上級者への登竜門。<br>Stream
                         API、並列処理、I/O、JDBCなど、実践的な応用技術を極める。</p>
                     <div class="flex items-center text-amber-600 dark:text-amber-400 font-bold text-sm">
                         道場に入る <span class="ml-2 text-lg transition-transform group-hover:translate-x-1">→</span>
@@ -202,7 +217,64 @@
             }
         }
 
-        window.addEventListener('DOMContentLoaded', initTheme);
+        // --- ここから追加：学習サマリー読み込み機能 ---
+        function loadLearningStats() {
+            // 各コースのリンク先と、対応するローカルストレージのキー
+            const courses = [
+                { href: 'bronze.html', key: 'javaBronzeDojo_Data' },
+                { href: 'silver.html', key: 'javaSilverDojo_GlobalData' },
+                { href: 'gold.html', key: 'javaGoldDojo_Data' }
+            ];
+
+            courses.forEach(course => {
+                try {
+                    const data = JSON.parse(localStorage.getItem(course.key));
+                    // データが存在しない、またはまだ1問も解いていない場合はスキップ
+                    if (!data || !data.results || !data.questions) return;
+
+                    const results = data.results;
+                    const answered = Object.keys(results).length;
+                    if (answered === 0) return;
+
+                    // 正解率と苦手問題数を計算
+                    const correct = Object.values(results).filter(Boolean).length;
+                    const rate = Math.round((correct / answered) * 100);
+                    const weakCount = data.questions.filter(q => results[q.id] === false).length;
+
+                    // バッジのHTMLを作成 (正解率65%以上で緑色、それ以外はグレー)
+                    const badgeColor = rate >= 65
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800'
+                        : 'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700';
+
+                    const badgeHtml = `
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="px-2.5 py-1 text-[11px] font-bold rounded-md border ${badgeColor}">
+                                🎯 正解率 ${rate}%
+                            </span>
+                            ${weakCount > 0 ? `
+                            <span class="px-2.5 py-1 text-[11px] font-bold rounded-md border bg-red-50 text-red-600 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800">
+                                🔥 苦手 ${weakCount}問
+                            </span>` : ''}
+                        </div>
+                    `;
+
+                    // 対象のカード要素（aタグ）を取得して、説明文（pタグ）の下にバッジを挿入
+                    const card = document.querySelector(`a[href="${course.href}"]`);
+                    if (card) {
+                        const desc = card.querySelector('p');
+                        if (desc) desc.insertAdjacentHTML('afterend', badgeHtml);
+                    }
+                } catch (e) {
+                    console.error("Stats load error for " + course.key, e);
+                }
+            });
+        }
+
+        // 読み込み時にテーマ設定と学習サマリー表示を実行
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            loadLearningStats();
+        });
     </script>
 </body>
 
