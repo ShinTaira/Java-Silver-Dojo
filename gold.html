@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Java Gold 完全攻略道場 (Ver 11.0 - Professional)</title>
-    <!-- Favicon: Gold Coffee Cup -->
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z' fill='%23d97706'/><path d='M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z' fill='%23d97706'/><path d='M75,45 H85 C90,45 90,55 85,60 H75 Z' fill='%23d97706'/><path d='M40,30 Q50,10 60,30 T80,30' fill='none' stroke='%23f59e0b' stroke-width='6' stroke-linecap='round'/><path d='M30,20 Q40,0 50,20 T70,20' fill='none' stroke='%23f59e0b' stroke-width='6' stroke-linecap='round'/></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,7 +14,7 @@
             theme: {
                 extend: {
                     colors: {
-                        darkbg: '#1c1917', /* warm gray/stone for gold feel */
+                        darkbg: '#1c1917',
                         darkcard: '#292524',
                     }
                 }
@@ -29,9 +28,42 @@
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <style>
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        textarea,
+        select {
+            border: 1px solid #d6d3d1;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            width: 100%;
+            color: #292524;
+            appearance: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: 2px solid #d97706;
+            outline-offset: 1px;
+            border-color: #d97706;
+        }
+
+        .dark input[type="text"],
+        .dark input[type="password"],
+        .dark input[type="number"],
+        .dark textarea,
+        .dark select {
+            background-color: #292524;
+            border-color: #57534e;
+            color: #f5f5f4;
+        }
+
         body {
             font-family: 'Noto Sans JP', sans-serif;
             transition: background-color 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .font-mono {
@@ -100,18 +132,19 @@
 
         .dark .option-selected {
             background-color: #451a03 !important;
-            border-color: #f59e0b !important;
-            color: #fcd34d !important;
+            border-color: #fbbf24 !important;
+            color: #fde68a !important;
+            box-shadow: 0 0 0 2px #fbbf24 inset !important;
         }
 
         .dark .option-selected .opt-mark {
-            background-color: #f59e0b !important;
+            background-color: #fbbf24 !important;
             color: #451a03 !important;
         }
 
         .loader {
             border: 3px solid #e7e5e4;
-            border-top: 3px solid #f59e0b;
+            border-top: 3px solid #d97706;
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -151,7 +184,6 @@
             z-index: 9999;
         }
 
-        /* AI Response Markdown */
         .ai-response {
             line-height: 1.7;
         }
@@ -159,25 +191,113 @@
         .ai-response h3 {
             font-weight: bold;
             margin-top: 1.5em;
+            margin-bottom: 0.8em;
             font-size: 1.2em;
             color: #d97706;
-            border-bottom: 2px solid #fcd34d;
+            border-bottom: 2px solid #fde68a;
             padding-bottom: 0.3em;
         }
 
         .dark .ai-response h3 {
             color: #fbbf24;
-            border-color: #78350f;
+            border-color: #57534e;
+        }
+
+        .ai-response h4 {
+            font-weight: bold;
+            margin-top: 1.2em;
+            margin-bottom: 0.5em;
+            font-size: 1.1em;
+        }
+
+        .ai-response ul {
+            list-style-type: disc;
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        .ai-response ol {
+            list-style-type: decimal;
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        .ai-response li {
+            margin-bottom: 0.3em;
         }
 
         .ai-response strong {
             font-weight: bold;
+            color: #292524;
             background: linear-gradient(transparent 70%, #fde68a 70%);
         }
 
         .dark .ai-response strong {
-            color: #fef3c7;
-            background: linear-gradient(transparent 70%, #92400e 70%);
+            color: #f5f5f4;
+            background: linear-gradient(transparent 70%, #78350f 70%);
+        }
+
+        .ai-response p {
+            margin-bottom: 1em;
+        }
+
+        .ai-response blockquote {
+            border-left: 4px solid #d6d3d1;
+            padding-left: 1em;
+            margin: 1em 0;
+            color: #78716c;
+            font-style: italic;
+        }
+
+        .dark .ai-response blockquote {
+            border-color: #57534e;
+            color: #a8a29e;
+        }
+
+        .ai-response table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1em 0;
+            font-size: 0.9em;
+        }
+
+        .ai-response th,
+        .ai-response td {
+            border: 1px solid #d6d3d1;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .dark .ai-response th,
+        .dark .ai-response td {
+            border-color: #57534e;
+        }
+
+        .ai-response th {
+            background-color: #f5f5f4;
+            font-weight: bold;
+            color: #292524;
+        }
+
+        .dark .ai-response th {
+            background-color: #292524;
+            color: #e7e5e4;
+        }
+
+        .ai-response tr:nth-child(even) {
+            background-color: #fafaf9;
+        }
+
+        .dark .ai-response tr:nth-child(even) {
+            background-color: #1c1917;
+        }
+
+        .ai-response pre {
+            margin: 1em 0;
+            border-radius: 8px;
+            overflow-x: auto;
+            background-color: #1e1e1e !important;
+            padding: 1rem;
         }
 
         .ai-response code {
@@ -186,36 +306,20 @@
         }
 
         .ai-response p>code {
-            background-color: #fff7ed;
+            background-color: #f5f5f4;
             padding: 0.2em 0.4em;
             border-radius: 4px;
-            color: #b45309;
+            color: #ef4444;
             font-weight: bold;
         }
 
         .dark .ai-response p>code {
             background-color: #292524;
-            color: #fcd34d;
+            color: #fca5a5;
         }
 
-        /* Exam Toggle UI */
-        .exam-toggle-btn {
-            transition: all 0.2s ease;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .exam-toggle-active {
-            background-color: white;
-            color: #d97706;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            font-weight: bold;
-        }
-
-        .dark .exam-toggle-active {
-            background-color: #44403c;
-            color: #fbbf24;
+        .vocab-card-content {
+            transition: opacity 0.3s ease;
         }
     </style>
 </head>
@@ -224,32 +328,33 @@
 
     <div id="global-error-display"></div>
 
-    <!-- Navbar -->
     <header
         class="bg-white dark:bg-darkcard border-b border-stone-200 dark:border-stone-700 z-50 shrink-0 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
-                <a href="index.html" class="flex items-center gap-3 hover:opacity-75 transition" title="ポータル画面に戻る">
-                    <div class="w-10 h-10 flex items-center justify-center">
-                        <!-- Gold Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-md">
-                            <path d="M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z"
-                                fill="#d97706" />
-                            <path d="M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z" fill="#d97706" />
-                            <path d="M75,45 H85 C90,45 90,55 85,60 H75 Z" fill="#d97706" />
-                            <path d="M40,30 Q50,10 60,30 T80,30" fill="none" stroke="#fbbf24" stroke-width="6"
-                                stroke-linecap="round" />
-                            <path d="M30,20 Q40,0 50,20 T70,20" fill="none" stroke="#fbbf24" stroke-width="6"
-                                stroke-linecap="round" />
-                        </svg>
-                    </div>
-                    <div class="mr-2">
-                        <h1 class="font-bold text-xl tracking-tight text-amber-700 dark:text-amber-400">Java Gold 道場
-                        </h1>
-                        <p class="text-[10px] text-stone-500 dark:text-stone-400 leading-none">Ver 11.0 Professional</p>
-                    </div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="flex items-center gap-3 hover:opacity-75 transition" title="ポータル画面に戻る">
+                        <div class="w-10 h-10 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+                                class="w-10 h-10 drop-shadow-md">
+                                <path d="M25,55 C25,80 45,90 65,90 H75 V80 H65 C50,80 35,75 35,55 V45 H25 Z"
+                                    fill="#d97706" />
+                                <path d="M25,45 H75 V55 C75,70 70,75 65,75 H35 C30,75 25,70 25,55 Z" fill="#d97706" />
+                                <path d="M75,45 H85 C90,45 90,55 85,60 H75 Z" fill="#d97706" />
+                                <path d="M40,30 Q50,10 60,30 T80,30" fill="none" stroke="#fcd34d" stroke-width="6"
+                                    stroke-linecap="round" />
+                                <path d="M30,20 Q40,0 50,20 T70,20" fill="none" stroke="#fcd34d" stroke-width="6"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="font-bold text-xl tracking-tight text-amber-700 dark:text-amber-400">Java Gold 道場
+                            </h1>
+                            <p class="text-[10px] text-stone-500 dark:text-stone-400 leading-none">Ver 11.0 Professional
+                            </p>
+                        </div>
+                    </a>
 
-                    <!-- Exam Switching Switch -->
                     <div
                         class="bg-stone-100 dark:bg-stone-800 p-1 rounded-xl flex gap-1 items-center border border-stone-200 dark:border-stone-700 shadow-inner">
                         <a href="bronze.html"
@@ -257,71 +362,99 @@
                         <a href="silver.html"
                             class="exam-toggle-btn px-3 py-1.5 text-xs rounded-lg text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200 transition">Silver</a>
                         <span
-                            class="exam-toggle-btn px-3 py-1.5 text-xs rounded-lg exam-toggle-active shadow-sm cursor-default">Gold</span>
+                            class="exam-toggle-btn px-3 py-1.5 text-xs rounded-lg bg-white text-amber-600 shadow-sm font-bold dark:bg-stone-700 dark:text-amber-400 cursor-default">Gold</span>
                     </div>
-                </a>
+                </div>
                 <div class="flex items-center gap-1 sm:gap-2">
-                    <nav class="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-lg overflow-x-auto">
+                    <nav class="hidden md:flex bg-stone-100 dark:bg-stone-800 p-1 rounded-lg">
                         <button onclick="app.switchTab('dashboard')" id="nav-dashboard"
-                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">ホーム</button>
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white">ホーム</button>
                         <button onclick="app.switchTab('create')" id="nav-create"
-                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">作成</button>
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white">作成</button>
                         <button onclick="app.switchTab('coding')" id="nav-coding"
-                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">💻
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white">💻
                             実践</button>
                         <button onclick="app.switchTab('history')" id="nav-history"
-                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">記録</button>
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white">📈
+                            記録</button>
                         <button onclick="app.switchTab('ai')" id="nav-ai"
-                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">AI先生</button>
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white">AI先生</button>
                         <button onclick="app.switchTab('settings')" id="nav-settings"
-                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap">設定</button>
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white">設定</button>
                     </nav>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-1 overflow-hidden relative">
 
-        <!-- DASHBOARD -->
         <div id="tab-dashboard" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 fade-in">
             <div class="max-w-5xl mx-auto">
-                <div
-                    class="mb-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">
-                    Java SE 11 Gold Mode
-                </div>
-
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     <div
-                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm">
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm">
                         <div class="text-xs text-stone-400 font-bold uppercase">登録問題数</div>
                         <div class="text-3xl font-bold text-stone-800 dark:text-white mt-1" id="stat-total">0</div>
                     </div>
                     <div
-                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm">
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm">
                         <div class="text-xs text-stone-400 font-bold uppercase">正解率</div>
-                        <div class="text-3xl font-bold text-amber-500 mt-1" id="stat-rate">0%</div>
+                        <div class="text-3xl font-bold text-emerald-500 mt-1" id="stat-rate">0%</div>
                     </div>
                     <div
-                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm col-span-2 flex items-center justify-between bg-gradient-to-r from-white to-stone-50 dark:from-darkcard dark:to-stone-800 px-6">
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm col-span-2 flex items-center justify-between">
                         <div>
                             <div class="text-xs text-stone-400 font-bold uppercase">苦手な問題</div>
-                            <div class="text-3xl font-bold text-red-500 mt-1"><span id="wrong-count">0</span> <span
-                                    class="text-base text-stone-400 font-normal">問</span></div>
+                            <div class="text-3xl font-bold text-red-500 mt-1"><span id="wrong-count">0</span> 問</div>
                         </div>
                         <button onclick="app.startQuiz('review')" id="btn-review"
                             class="px-6 py-2.5 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold rounded-lg hover:bg-red-100 transition disabled:opacity-50">復習する</button>
                     </div>
                 </div>
 
-                <!-- Gold Levels -->
+                <div id="resume-container" class="hidden mb-10">
+                    <button onclick="app.resumeQuiz()"
+                        class="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white p-5 rounded-2xl shadow-xl hover:scale-[1.01] transition flex items-center justify-between group border border-amber-400">
+                        <div class="flex items-center gap-4">
+                            <span class="text-3xl animate-pulse">⌛</span>
+                            <div class="text-left">
+                                <div class="font-bold text-lg">前回の続きから再開</div>
+                                <div class="text-xs opacity-90" id="resume-info">モード名 - 0/0問目</div>
+                            </div>
+                        </div>
+                        <span class="text-2xl group-hover:translate-x-2 transition">▶</span>
+                    </button>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4 mb-8">
+                    <div
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm md:col-span-1 flex flex-col justify-center items-center relative overflow-hidden group">
+                        <div
+                            class="absolute -right-4 -bottom-4 text-8xl opacity-5 select-none group-hover:scale-110 transition">
+                            🔥</div>
+                        <div class="text-xs text-stone-400 font-bold uppercase mb-1 z-10 tracking-wider">連続学習日数</div>
+                        <div class="text-5xl font-bold text-amber-500 z-10 my-2 drop-shadow-sm"><span
+                                id="stat-streak">0</span><span
+                                class="text-xl text-stone-400 dark:text-stone-500 ml-1 font-normal">日</span></div>
+                        <div id="stat-today-badge"
+                            class="z-10 px-3 py-1 bg-stone-100 dark:bg-stone-800 text-stone-500 text-xs rounded-full font-bold border border-stone-200 dark:border-stone-700 transition-colors">
+                            今日の学習: 未達成</div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm md:col-span-2">
+                        <div class="text-xs text-stone-400 font-bold uppercase mb-2 tracking-wider">過去7日間の学習数 (解答数)
+                        </div>
+                        <div class="h-32 w-full"><canvas id="weeklyChart"></canvas></div>
+                    </div>
+                </div>
+
                 <div class="mb-8">
-                    <h3 class="text-base font-bold text-stone-700 dark:text-stone-200 mb-3 flex items-center gap-2">📊
-                        レベル別演習 (Gold専用)</h3>
+                    <h3 class="text-base font-bold text-stone-700 dark:text-stone-200 mb-3 flex items-center gap-2">
+                        <span class="text-xl">📊</span> レベル別演習 (各30問)</h3>
                     <div class="grid grid-cols-3 gap-4">
                         <button onclick="app.startQuiz('level-1')"
-                            class="bg-gradient-to-br from-amber-400 to-yellow-500 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative text-left group">
+                            class="bg-gradient-to-br from-amber-400 to-yellow-500 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative overflow-hidden group text-left">
                             <div
                                 class="absolute right-0 top-0 p-3 text-4xl opacity-20 group-hover:scale-125 transition">
                                 🦁</div>
@@ -329,7 +462,7 @@
                             <div class="text-xs opacity-90 mt-1">クラス設計・Generics</div>
                         </button>
                         <button onclick="app.startQuiz('level-2')"
-                            class="bg-gradient-to-br from-orange-500 to-amber-600 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative text-left group">
+                            class="bg-gradient-to-br from-orange-500 to-amber-600 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative overflow-hidden group text-left">
                             <div
                                 class="absolute right-0 top-0 p-3 text-4xl opacity-20 group-hover:scale-125 transition">
                                 🚀</div>
@@ -337,115 +470,175 @@
                             <div class="text-xs opacity-90 mt-1">Stream・Lambda</div>
                         </button>
                         <button onclick="app.startQuiz('level-3')"
-                            class="bg-gradient-to-br from-red-500 to-orange-600 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative text-left group">
+                            class="bg-gradient-to-br from-red-500 to-orange-600 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative overflow-hidden group text-left">
                             <div
                                 class="absolute right-0 top-0 p-3 text-4xl opacity-20 group-hover:scale-125 transition">
                                 🏆</div>
                             <div class="font-bold text-lg">上級</div>
-                            <div class="text-xs opacity-90 mt-1">並列処理・JDBC・NIO2</div>
+                            <div class="text-xs opacity-90 mt-1">並列・JDBC・NIO2</div>
                         </button>
                     </div>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div class="grid md:grid-cols-2 gap-4 sm:gap-6 mb-8">
                     <div
-                        class="bg-white dark:bg-darkcard p-6 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm">
-                        <h3 class="text-base font-bold text-stone-700 dark:text-stone-200 mb-3 flex items-center gap-2">
-                            🔍 キーワード演習</h3>
-                        <div class="flex gap-2">
-                            <input type="text" id="search-input"
-                                class="flex-1 bg-stone-50 dark:bg-stone-800 border rounded-lg px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500 transition dark:text-white"
-                                placeholder="例: collect, parallel, path...">
-                            <button onclick="app.startSearchQuiz()"
-                                class="bg-stone-800 dark:bg-stone-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-stone-700 transition">検索</button>
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white dark:bg-darkcard p-6 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm flex items-center justify-between">
+                        class="bg-white dark:bg-darkcard p-4 sm:p-6 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm flex flex-col justify-between relative overflow-hidden group">
+                        <div
+                            class="absolute top-0 right-0 p-4 opacity-5 text-7xl select-none group-hover:scale-110 transition">
+                            🔤</div>
                         <div>
                             <h3
-                                class="text-base font-bold text-stone-700 dark:text-stone-200 mb-1 flex items-center gap-2">
-                                🔖 ブックマーク</h3>
-                            <p class="text-xs text-stone-400">保存済み: <span id="bookmark-count"
-                                    class="font-bold text-stone-700 dark:text-stone-300">0</span> 問</p>
+                                class="text-sm font-bold text-stone-700 dark:text-stone-200 mb-2 flex items-center gap-2">
+                                <span class="text-lg">🔤</span> 重要単語帳 (Gold編)</h3>
+                            <p class="text-xs text-stone-500 dark:text-stone-400 mb-4">APIや専門用語の必須単語をマスターしよう！</p>
                         </div>
-                        <button onclick="app.startQuiz('bookmark')" id="btn-bookmark"
-                            class="px-6 py-2.5 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 font-bold rounded-lg hover:bg-yellow-100 transition disabled:opacity-50">解く</button>
+                        <button onclick="vocabMaster.start()"
+                            class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-3 rounded-lg text-sm font-bold transition shadow-md w-full">単語チェック開始</button>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-darkcard p-4 sm:p-6 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3
+                                class="text-sm font-bold text-stone-700 dark:text-stone-200 mb-2 flex items-center gap-2">
+                                <span class="text-lg">🔍</span> キーワード検索演習</h3>
+                            <div class="flex gap-2 mb-4">
+                                <input type="text" id="search-input"
+                                    class="flex-1 bg-stone-50 dark:bg-stone-800 border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-amber-500 transition dark:text-white"
+                                    placeholder="例: collect, parallel...">
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-auto">
+                            <p class="text-xs text-stone-400">🔖 ブックマーク: <span id="bookmark-count"
+                                    class="font-bold">0</span>問</p>
+                            <div class="flex gap-2">
+                                <button onclick="app.startQuiz('bookmark')" id="btn-bookmark"
+                                    class="px-4 py-2 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 font-bold rounded-lg hover:bg-yellow-100 transition disabled:opacity-50 text-sm">🔖
+                                    解く</button>
+                                <button onclick="app.startSearchQuiz()"
+                                    class="px-4 py-2 bg-stone-800 dark:bg-stone-700 text-white rounded-lg text-sm font-bold hover:bg-stone-700 transition">検索</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- IMPORT SECTION -->
                 <div
                     class="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-xl p-6 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div>
                         <h3 class="text-base font-bold text-amber-800 dark:text-amber-300 flex items-center gap-2">📥
-                            データ管理 (Gold専用)</h3>
-                        <p class="text-xs text-amber-600 dark:text-amber-400 mt-1">Silverとは別の場所に保存されます。</p>
+                            データ読み込み・復元</h3>
+                        <p class="text-xs text-amber-600 dark:text-amber-400 mt-1">
+                            🚨画面が白い、または問題がない場合はここからデータを読み込んでください‼️</p>
                     </div>
                     <div class="flex gap-3">
                         <button onclick="dataManager.generateDemoData()"
-                            class="px-4 py-2 bg-white dark:bg-stone-800 text-amber-600 border border-amber-200 rounded-lg text-sm font-bold hover:bg-amber-50">サンプル作成</button>
+                            class="px-4 py-2 bg-white dark:bg-stone-800 text-amber-600 border border-amber-200 rounded-lg text-sm font-bold hover:bg-amber-50 transition">サンプルデータ作成</button>
                         <label
-                            class="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-bold hover:bg-amber-700 cursor-pointer shadow-md">JSON読込<input
+                            class="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-bold hover:bg-amber-700 transition cursor-pointer shadow-md">JSONファイル読込<input
                                 type="file" class="hidden" multiple onchange="dataManager.importData(this)"></label>
                     </div>
                 </div>
 
                 <div class="mb-10" onclick="app.switchTab('coding')">
                     <div
-                        class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl p-6 text-white shadow-lg cursor-pointer hover:scale-[1.01] transition relative overflow-hidden group">
+                        class="bg-gradient-to-r from-amber-600 to-yellow-600 rounded-xl p-6 text-white shadow-lg cursor-pointer hover:scale-[1.01] transition relative overflow-hidden group">
                         <div class="absolute right-0 top-0 p-4 text-8xl opacity-10 group-hover:scale-110 transition">💻
                         </div>
-                        <h3 class="text-xl font-bold flex items-center gap-2 mb-1"><span>実践コーディング道場 (Gold編)</span></h3>
-                        <p class="text-amber-100 text-sm">Stream APIやラムダ式の実装をマスターしよう。</p>
+                        <h3 class="text-xl font-bold flex items-center gap-2 mb-1"><span>実践コーディング道場</span><span
+                                class="bg-white/20 text-[10px] px-2 py-0.5 rounded">〜Stream APIをマスターせよ〜</span></h3>
+                        <p class="text-amber-100 text-sm">手を動かして覚える。Gold特有の実践ドリル。</p>
+                    </div>
+                </div>
+
+                <div class="mb-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-stone-700 dark:text-stone-200 flex items-center gap-2">
+                            <span>📚 オリジナル問題集</span><span
+                                class="bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 text-[10px] px-2 py-0.5 rounded font-bold">User
+                                Made</span></h3>
+                    </div>
+                    <div
+                        class="bg-gradient-to-br from-stone-800 to-stone-900 dark:from-stone-900 dark:to-black rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group border border-stone-700">
+                        <div
+                            class="absolute top-0 right-0 p-8 opacity-10 text-9xl transform translate-x-10 -translate-y-4 select-none">
+                            ✍️</div>
+                        <div
+                            class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div>
+                                <h4 class="text-xl font-bold mb-1">黒本 問題集</h4>
+                                <p class="text-stone-400 text-sm">黒本の問題のみを出題<br><span class="text-xs opacity-70">※登録数:
+                                        <span id="user-q-count">0</span> 問</span></p>
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-center gap-3">
+                                <div class="flex items-center gap-2 bg-white/10 p-2 rounded-lg border border-white/20">
+                                    <label class="text-[10px] font-bold text-stone-400 uppercase">出題数</label>
+                                    <select id="user-quiz-count"
+                                        class="bg-stone-800 text-white text-xs rounded border border-stone-600 px-2 py-1 outline-none">
+                                        <option value="10">10問</option>
+                                        <option value="30">30問</option>
+                                        <option value="80">80問（本番形式）</option>
+                                    </select>
+                                </div>
+                                <div class="flex gap-3">
+                                    <button
+                                        onclick="app.startQuiz('user-random', document.getElementById('user-quiz-count').value)"
+                                        class="px-5 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-sm font-bold transition">ランダム出題</button>
+                                    <button onclick="app.startQuiz('user-all')"
+                                        class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-white rounded-lg text-sm font-bold shadow-lg transition">全問解く</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="mb-10">
                     <h3 class="text-lg font-bold text-stone-700 dark:text-stone-200 mb-4 flex items-center gap-2">
-                        <span>📚 オリジナル問題集</span>
-                    </h3>
+                        <span>⏱️ 本番形式 模擬試験</span></h3>
                     <div
-                        class="bg-gradient-to-br from-stone-800 to-stone-900 rounded-2xl p-6 text-white shadow-lg relative border border-stone-700">
-                        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                        class="bg-gradient-to-br from-red-600 to-rose-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
+                        <div
+                            class="absolute right-0 top-0 p-4 text-8xl opacity-10 group-hover:scale-110 transition select-none">
+                            🎯</div>
+                        <div
+                            class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div>
-                                <h4 class="text-xl font-bold mb-1">自作・インポート問題集</h4>
-                                <p class="text-stone-400 text-sm">Gold試験対策用の自作問題<br><span
-                                        class="text-xs opacity-70">※登録数: <span id="user-q-count">0</span> 問</span></p>
+                                <h4 class="text-xl font-bold mb-1">Gold 本番チャレンジ</h4>
+                                <p class="text-red-100 text-sm">実際の試験に近い形式（65問 / 90分）で実力を測定します。<br>合格ライン: 65%以上</p>
                             </div>
-                            <div class="flex gap-3">
-                                <button onclick="app.startQuiz('user-random')"
-                                    class="px-5 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-sm font-bold transition">ランダム10問</button>
-                                <button onclick="app.startQuiz('user-all')"
-                                    class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-white rounded-lg text-sm font-bold shadow-lg transition">全問解く</button>
-                            </div>
+                            <button onclick="app.startQuiz('mock-realistic')"
+                                class="shrink-0 px-6 py-3 bg-white text-red-700 rounded-xl font-bold shadow-lg hover:bg-red-50 transition active:scale-95">試験開始
+                                ▶</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="mb-12">
-                    <h3 id="chapter-list-title" class="text-lg font-bold text-stone-700 dark:text-stone-200 mb-4">📖
-                        章ごとの練習 (SE11 Gold)</h3>
+                    <h3 class="text-lg font-bold text-stone-700 dark:text-stone-200 mb-4">📖 章ごとの練習 (Java Gold 公式準拠)
+                    </h3>
                     <div id="chapter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CODING TAB -->
         <div id="tab-coding" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
             <div class="max-w-5xl mx-auto h-full flex flex-col">
                 <div class="flex justify-between items-end mb-4">
-                    <h2 class="text-2xl font-bold text-stone-800 dark:text-white flex items-center gap-2">💻 実践コーディング
-                        (Gold)</h2>
+                    <div>
+                        <h2 class="text-2xl font-bold text-stone-800 dark:text-white flex items-center gap-2"><span>💻
+                                実践コーディング道場 (Gold)</span></h2>
+                        <p class="text-sm text-stone-500 dark:text-stone-400">実際にコードを書いて覚えよう</p>
+                    </div>
                 </div>
+
                 <div id="coding-menu" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+
                 <div id="coding-workspace" class="hidden flex-1 flex flex-col md:flex-row gap-4 h-full min-h-[500px]">
                     <div class="md:w-1/3 flex flex-col gap-4">
                         <div
                             class="bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm flex-1">
-                            <button onclick="codingApp.close()" class="mb-4 text-xs font-bold flex items-center gap-1">←
-                                戻る</button>
+                            <button onclick="codingApp.close()"
+                                class="mb-4 text-xs text-stone-500 hover:text-stone-800 dark:text-stone-400 font-bold flex items-center gap-1">←
+                                メニューに戻る</button>
                             <span class="text-xs font-bold text-white px-2 py-0.5 rounded bg-amber-500"
                                 id="coding-tag">基本</span>
                             <h3 class="text-lg font-bold text-stone-800 dark:text-white mt-2 mb-4" id="coding-title">
@@ -458,95 +651,160 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="md:w-2/3 flex flex-col gap-4">
-                        <textarea id="coding-editor"
-                            class="coding-textarea flex-1 p-4 w-full h-full resize-none outline-none text-sm rounded-xl"
-                            spellcheck="false" placeholder="// ここにコードを書いてください..."></textarea>
-                        <div class="flex justify-between items-center">
-                            <button onclick="codingApp.showAnswer()"
-                                class="text-sm text-stone-500 underline">模範解答</button>
-                            <button onclick="codingApp.check()"
-                                class="bg-amber-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg">判定 ▶</button>
+                        <div
+                            class="flex-1 bg-[#1e1e1e] rounded-xl overflow-hidden border border-stone-700 shadow-lg flex flex-col">
+                            <div
+                                class="bg-[#2d2d2d] px-4 py-2 flex justify-between items-center border-b border-[#3e3e3e]">
+                                <span class="text-xs text-gray-400 font-mono">Main.java</span>
+                                <span class="text-[10px] text-gray-500">Auto-saved</span>
+                            </div>
+                            <div class="flex flex-1 relative overflow-hidden">
+                                <div id="coding-line-numbers"
+                                    class="bg-[#1e1e1e] border-r border-[#333] text-[#858585] text-xs text-right py-4 pr-3 pl-2 select-none font-mono min-w-[2.5rem] overflow-hidden">
+                                    1</div>
+                                <textarea id="coding-editor"
+                                    class="coding-textarea flex-1 p-4 w-full h-full resize-none outline-none text-sm whitespace-pre"
+                                    spellcheck="false" placeholder="// ここにコードを書いてください..."
+                                    onscroll="codingApp.syncScroll()"
+                                    oninput="codingApp.updateLineNumbers()"></textarea>
+                            </div>
                         </div>
-                        <div id="coding-result" class="hidden bg-white dark:bg-darkcard p-5 rounded-xl border">
-                            <h4 class="font-bold text-lg mb-2" id="coding-result-title"></h4>
+
+                        <div class="flex flex-wrap justify-between items-center gap-3">
+                            <div class="flex gap-2">
+                                <button onclick="codingApp.showHint()" id="btn-coding-hint"
+                                    class="text-sm bg-yellow-50 hover:bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 px-4 py-2 rounded-lg transition font-bold shadow-sm">💡
+                                    ヒントを見る</button>
+                                <button onclick="codingApp.showAnswer()" id="btn-coding-answer"
+                                    class="text-sm text-stone-500 underline px-2 py-2 hidden">模範解答を見る</button>
+                            </div>
+                            <button onclick="codingApp.check()"
+                                class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition active:scale-95 flex items-center gap-2">
+                                <span>判定する</span> <span class="text-lg">▶</span>
+                            </button>
+                        </div>
+
+                        <div id="coding-result"
+                            class="hidden bg-white dark:bg-darkcard p-5 rounded-xl border border-stone-200 dark:border-stone-700 shadow-lg fade-in">
+                            <h4 class="font-bold text-lg mb-2 flex items-center gap-2" id="coding-result-title"></h4>
                             <p class="text-sm text-stone-600 dark:text-stone-300 mb-4" id="coding-result-msg"></p>
-                            <pre
-                                class="bg-stone-900 text-stone-200 p-3 rounded-lg text-xs"><code class="language-java" id="coding-answer-code"></code></pre>
+                            <div id="coding-answer-box"
+                                class="bg-stone-50 dark:bg-stone-800 rounded-lg p-3 border border-stone-200 dark:border-stone-600 hidden">
+                                <div class="text-xs text-stone-400 mb-1">模範解答:</div>
+                                <pre
+                                    class="text-xs overflow-x-auto"><code class="language-java" id="coding-answer-code"></code></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CREATE TAB -->
         <div id="tab-create" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
             <div class="max-w-3xl mx-auto space-y-6">
-                <div class="bg-white dark:bg-darkcard rounded-xl shadow-sm border overflow-hidden">
+                <div
+                    class="bg-white dark:bg-darkcard rounded-xl shadow-sm border border-stone-200 dark:border-stone-700 overflow-hidden">
                     <div
-                        class="border-b p-5 bg-amber-50 dark:bg-amber-900/20 font-bold text-amber-800 dark:text-amber-200">
-                        📝 問題を作成 (Gold)</div>
+                        class="border-b border-stone-100 dark:border-stone-700 p-5 bg-stone-50 dark:bg-stone-800 flex justify-between items-center">
+                        <h2 class="text-lg font-bold text-stone-700 dark:text-stone-200 flex items-center gap-2">
+                            <span>📝 問題を作成</span></h2>
+                        <span
+                            class="text-xs bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 px-2 py-1 rounded font-bold">User
+                            Studio</span>
+                    </div>
                     <form id="create-form" onsubmit="creator.saveQuestion(event)" class="p-6 space-y-6">
                         <input type="hidden" id="edit-id" value="">
                         <div class="grid grid-cols-1 gap-6">
                             <div>
-                                <label class="block text-xs font-bold text-stone-500 uppercase mb-2">カテゴリ</label>
-                                <select id="create-chapter"
-                                    class="w-full bg-white dark:bg-stone-800 border rounded-lg px-4 py-2 text-sm outline-none dark:text-white"
-                                    onchange="creator.updateCategoryLabel()"></select>
+                                <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">カテゴリ
+                                    (章)</label>
+                                <div class="relative">
+                                    <select id="create-chapter"
+                                        class="w-full bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-lg px-4 py-3 text-sm outline-none appearance-none dark:text-white"
+                                        onchange="creator.updateCategoryLabel()"></select>
+                                    <div
+                                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-stone-500">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg></div>
+                                </div>
                                 <input type="hidden" id="create-cat-name" value="">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-stone-500 uppercase mb-2">問題文</label>
+                                <label
+                                    class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">問題文</label>
                                 <textarea id="create-text" rows="3"
-                                    class="w-full bg-white dark:bg-stone-800 border rounded-lg p-3 text-sm outline-none dark:text-white"
-                                    required placeholder="問題文..."></textarea>
+                                    class="w-full bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-lg p-3 text-sm outline-none dark:text-white"
+                                    required placeholder="問題文を入力..."></textarea>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-stone-500 uppercase mb-2">Javaコード</label>
+                                <label
+                                    class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Javaコード
+                                    (任意)</label>
                                 <textarea id="create-code" rows="4"
-                                    class="w-full bg-stone-900 text-stone-200 font-mono text-sm rounded-lg p-3 outline-none"
-                                    placeholder="public class Main..."></textarea>
+                                    class="w-full bg-stone-900 text-stone-200 font-mono text-sm rounded-lg p-3 border border-stone-700 outline-none"
+                                    placeholder="public class Main { ... }"></textarea>
                             </div>
-                            <div class="bg-stone-50 dark:bg-stone-800 p-4 rounded-lg border">
+                            <div
+                                class="bg-stone-50 dark:bg-stone-800 p-4 rounded-lg border border-stone-100 dark:border-stone-700">
                                 <div class="flex justify-between items-center mb-3">
-                                    <label class="block text-xs font-bold text-stone-500 uppercase">選択肢</label>
+                                    <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider">選択肢 &
+                                        正解</label>
                                     <button type="button" onclick="creator.addOption()"
-                                        class="text-xs bg-amber-600 text-white px-3 py-1 rounded font-bold">＋
+                                        class="text-xs bg-white dark:bg-stone-700 border border-stone-200 text-amber-600 px-3 py-1 rounded hover:bg-amber-50 font-bold shadow-sm">＋
                                         追加</button>
                                 </div>
                                 <div id="options-container" class="space-y-3"></div>
+                                <p class="text-xs text-amber-600 mt-2 font-bold ml-1">※ 正解を選択してください</p>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-stone-500 uppercase mb-2">解説</label>
+                                <label
+                                    class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">解説</label>
                                 <textarea id="create-explanation" rows="4"
-                                    class="w-full bg-white dark:bg-stone-800 border rounded-lg p-3 text-sm outline-none dark:text-white"
-                                    required placeholder="解説..."></textarea>
-                                <div id="explanation-image-preview" class="hidden mt-2 relative inline-block">
-                                    <img id="preview-img" src="" class="max-h-40 rounded border shadow-sm">
-                                    <button type="button" onclick="creator.removeImage()"
-                                        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">×</button>
+                                    class="w-full bg-white dark:bg-stone-800 border border-stone-200 rounded-lg p-3 text-sm outline-none dark:text-white"
+                                    required placeholder="解説を入力..."></textarea>
+                                <div
+                                    class="mt-2 p-3 bg-stone-50 dark:bg-stone-800 rounded-lg border border-dashed border-stone-300">
+                                    <p class="text-xs text-stone-400 mb-2">解説入力欄をクリックして画像を貼り付け(Ctrl+V)できます</p>
+                                    <div id="explanation-image-preview" class="hidden relative inline-block">
+                                        <img id="preview-img" src="" class="max-h-40 rounded border shadow-sm">
+                                        <button type="button" onclick="creator.removeImage()"
+                                            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shadow-sm">×</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="pt-4 flex justify-end gap-3 border-t">
+                        <div class="pt-4 border-t border-stone-100 flex justify-end gap-3">
                             <button type="button" onclick="creator.cancelEdit()" id="btn-cancel-edit"
                                 class="hidden text-sm text-stone-500 px-4 py-2">キャンセル</button>
                             <button type="submit" id="btn-save-question"
-                                class="bg-amber-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg">追加する</button>
+                                class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg">追加する</button>
                         </div>
                     </form>
                 </div>
                 <div class="bg-white dark:bg-darkcard rounded-xl shadow-sm border p-6">
-                    <h3 class="text-sm font-bold text-stone-500 uppercase mb-4 tracking-widest">作成済みリスト</h3>
-                    <div id="user-questions-list-view" class="space-y-2"></div>
+                    <h3 class="text-sm font-bold text-stone-500 uppercase tracking-wider mb-4">作成済みリスト</h3>
+                    <div id="user-questions-list" class="space-y-2"></div>
                 </div>
             </div>
         </div>
 
-        <!-- HISTORY TAB -->
         <div id="tab-history" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
             <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-6 gap-4">
+                    <h2 class="text-xl font-bold text-stone-800 dark:text-stone-200 flex items-center gap-2"><span>📈
+                            学習記録</span></h2>
+                    <select id="history-filter"
+                        class="text-sm border border-stone-200 rounded-lg px-3 py-1.5 bg-white dark:bg-stone-800 dark:text-white outline-none"
+                        onchange="app.renderHistory()">
+                        <option value="all">すべて表示</option>
+                        <option value="mock">模擬試験</option>
+                        <option value="level">レベル別</option>
+                    </select>
+                </div>
                 <div class="grid md:grid-cols-12 gap-6">
                     <div class="md:col-span-8 space-y-6">
                         <div class="bg-white dark:bg-darkcard p-4 rounded-xl shadow-sm border h-64 md:h-80"><canvas
@@ -554,137 +812,356 @@
                         <div id="history-list" class="space-y-3"></div>
                     </div>
                     <div class="md:col-span-4">
-                        <div class="bg-white dark:bg-darkcard p-6 rounded-xl border">
-                            <h3 class="font-bold mb-4">🚑 苦手分野分析</h3>
-                            <div id="weakness-advice-list" class="space-y-2"></div>
+                        <div class="sticky top-6">
+                            <div
+                                class="bg-white dark:bg-darkcard p-6 rounded-xl shadow-sm border relative overflow-hidden">
+                                <div class="absolute top-0 right-0 p-4 opacity-5 text-9xl">💊</div>
+                                <h3
+                                    class="font-bold text-stone-700 dark:text-stone-200 mb-4 flex items-center gap-2 relative z-10">
+                                    <span class="text-xl">🚑</span> 苦手克服サポート</h3>
+                                <div id="weakness-advice-list" class="space-y-4 relative z-10"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- AI TAB -->
         <div id="tab-ai" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
             <div class="max-w-3xl mx-auto space-y-6">
                 <div class="bg-white dark:bg-darkcard p-6 rounded-xl shadow-sm border">
-                    <h2 class="text-base font-bold mb-4">🔑 Gemini API 設定</h2>
-                    <input type="password" id="api-key-input"
-                        class="w-full bg-stone-50 dark:bg-stone-800 border rounded-lg px-4 py-2 text-sm outline-none mb-4 dark:text-white"
-                        placeholder="AIzaSy...">
-                    <select id="api-model-select"
-                        class="w-full bg-white dark:bg-stone-800 border rounded-lg px-3 py-2 text-sm outline-none dark:text-white mb-4"
-                        onchange="aiTutor.toggleCustomModelInput()">
-                        <option value="gemini-2.5-flash-preview-09-2025">gemini-2.5-flash</option>
-                        <option value="custom">カスタム入力...</option>
-                    </select>
-                    <input type="text" id="api-model-custom"
-                        class="w-full bg-white dark:bg-stone-800 border rounded-lg px-3 py-2 text-sm outline-none hidden dark:text-white mb-4"
-                        placeholder="モデル名">
-                    <button onclick="aiTutor.saveKey()"
-                        class="bg-stone-800 text-white px-4 py-2 rounded-lg text-sm font-bold">保存</button>
-                    <div id="key-status" class="text-xs text-stone-400 mt-4"></div>
+                    <h2 class="text-base font-bold mb-4 flex items-center gap-2"><span>🔑 Gemini API 設定</span></h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1 block">API
+                                Key</label>
+                            <div class="flex gap-2">
+                                <input type="password" id="api-key-input"
+                                    class="flex-1 bg-white dark:bg-stone-800 border rounded-lg px-4 py-2 text-sm outline-none dark:text-white"
+                                    placeholder="AIzaSy...">
+                                <button onclick="aiTutor.saveKey()"
+                                    class="bg-stone-800 text-white px-4 py-2 rounded-lg text-sm font-bold">保存</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1 block">Model</label>
+                            <select id="api-model-select"
+                                class="w-full bg-white dark:bg-stone-800 border rounded-lg px-3 py-2 text-sm outline-none dark:text-white"
+                                onchange="aiTutor.toggleCustomModelInput()">
+                                <option value="gemini-2.5-flash">gemini-2.5-flash (推奨・最新)</option>
+                                <option value="custom">カスタム入力...</option>
+                            </select>
+                            <input type="text" id="api-model-custom"
+                                class="w-full mt-2 bg-white dark:bg-stone-800 border rounded-lg px-3 py-2 text-sm outline-none hidden dark:text-white"
+                                placeholder="例: gemini-2.5-flash">
+                        </div>
+                    </div>
+                    <div id="key-status" class="text-xs text-stone-400 mt-4 flex items-center gap-1"><span
+                            class="w-2 h-2 rounded-full bg-stone-300"></span> 未設定</div>
                 </div>
-                <button onclick="aiTutor.getAdvice()" id="btn-get-advice"
-                    class="w-full bg-amber-600 text-white font-bold py-4 rounded-xl shadow-lg mt-6" disabled>🧠
-                    Gold合格へのアドバイス</button>
-                <div id="ai-loading" class="hidden mt-6 flex flex-col items-center">
-                    <div class="loader mb-3 border-t-white border-white/20"></div>
-                    <p class="text-xs text-amber-600 animate-pulse">学習履歴を分析中...</p>
+
+                <div
+                    class="bg-gradient-to-br from-amber-600 to-yellow-600 p-8 rounded-2xl shadow-lg text-white relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-9xl opacity-10">🎓</div>
+                    <div class="relative z-10">
+                        <h2 class="text-2xl font-bold mb-1">AI 先生の学習分析</h2>
+                        <p class="text-amber-100 text-sm mb-6">学習履歴を分析して、Gold合格へのアドバイスとヒントを教えます。</p>
+
+                        <div id="ai-analysis-stats"
+                            class="bg-white/10 backdrop-blur-md rounded-lg p-4 mb-6 border border-white/20 hidden">
+                            <h4 class="text-xs font-bold text-amber-200 uppercase tracking-wider mb-2">Current Status
+                            </h4>
+                            <div class="flex gap-4 text-sm">
+                                <div>苦手: <span id="ai-weak-text" class="font-bold"></span></div>
+                            </div>
+                        </div>
+
+                        <div id="ai-question-context"
+                            class="hidden bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 mb-6 border text-stone-800 dark:text-stone-200">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-xs font-bold text-yellow-700 uppercase flex items-center gap-1">
+                                    <span>📝</span> 質問する問題</h4>
+                                <button onclick="aiTutor.clearQuestionContext()" class="text-xs text-stone-400">✕
+                                    クリア</button>
+                            </div>
+                            <div id="ai-context-text" class="text-sm line-clamp-2 mb-2 font-medium"></div>
+                            <textarea id="ai-user-question"
+                                class="w-full bg-white dark:bg-stone-800 border rounded p-2 text-sm outline-none mt-2 dark:text-white"
+                                rows="2" placeholder="ここがわからない..."></textarea>
+                            <button onclick="aiTutor.askAboutQuestion()" id="btn-ask-specific"
+                                class="mt-3 w-full bg-yellow-500 text-white font-bold py-2 rounded shadow-md">質問を送信</button>
+                        </div>
+
+                        <button onclick="aiTutor.getAdvice()" id="btn-get-advice"
+                            class="w-full bg-white text-amber-600 font-bold py-4 rounded-xl shadow-lg" disabled>🧠
+                            分析＆アドバイスをもらう</button>
+                        <div id="ai-loading" class="hidden mt-6 flex flex-col items-center">
+                            <div class="loader mb-3 border-t-white border-white/20"></div>
+                            <p class="text-xs text-amber-100 animate-pulse" id="ai-status-text">学習履歴を分析中...</p>
+                        </div>
+                    </div>
                 </div>
+
                 <div id="ai-output-box" class="hidden bg-white dark:bg-darkcard p-6 rounded-xl shadow-sm border mt-4">
-                    <div id="ai-response-content" class="text-sm ai-response"></div>
+                    <div class="flex items-center gap-3 mb-4 pb-4 border-b">
+                        <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-xl">🤖
+                        </div>
+                        <div>
+                            <div class="font-bold">AI先生</div>
+                            <div class="text-xs text-stone-500">Java Gold エキスパート</div>
+                        </div>
+                    </div>
+                    <div id="ai-response-content" class="text-sm ai-response whitespace-pre-wrap"></div>
                 </div>
             </div>
         </div>
 
         <div id="tab-settings" class="absolute inset-0 overflow-y-auto p-4 sm:p-8 hidden fade-in">
-            <div class="max-w-2xl mx-auto space-y-8 text-center">
-                <button onclick="app.toggleTheme()"
-                    class="px-8 py-3 bg-stone-200 dark:bg-stone-700 rounded-lg font-bold">🌙 ダークモード切替</button>
-                <div class="grid gap-4 mt-12">
-                    <button onclick="dataManager.exportData()"
-                        class="bg-amber-600 text-white px-6 py-3 rounded-lg font-bold shadow-lg">📤 Goldデータを保存</button>
-                    <button onclick="dataManager.resetAll()" class="text-red-500 underline text-sm">🗑 データを全削除</button>
+            <div class="max-w-2xl mx-auto space-y-6">
+                <div
+                    class="bg-white dark:bg-darkcard rounded-xl shadow-sm border p-6 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-bold flex items-center gap-2">🌙 外観設定</h3>
+                        <p class="text-xs text-stone-500">目に優しいダークモードに切り替えます。</p>
+                    </div>
+                    <button onclick="app.toggleTheme()" id="theme-toggle-btn"
+                        class="bg-stone-200 dark:bg-stone-700 relative inline-flex h-6 w-11 rounded-full border-2 border-transparent transition-colors">
+                        <span aria-hidden="true" id="theme-toggle-circle"
+                            class="translate-x-0 inline-block h-5 w-5 transform rounded-full bg-white shadow transition"></span>
+                    </button>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-darkcard rounded-xl shadow-sm border p-6 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-bold flex items-center gap-2">🔤 文字サイズ設定</h3>
+                        <p class="text-xs text-stone-500">問題文や解説の文字の大きさを調整します。</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="app.changeTextSize(-1)"
+                            class="w-8 h-8 flex items-center justify-center bg-stone-100 dark:bg-stone-700 rounded-full font-bold shadow-sm">-</button>
+                        <span id="text-size-display" class="text-sm font-bold w-12 text-center">標準</span>
+                        <button onclick="app.changeTextSize(1)"
+                            class="w-8 h-8 flex items-center justify-center bg-stone-100 dark:bg-stone-700 rounded-full font-bold shadow-sm">+</button>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-darkcard rounded-xl shadow-sm border p-6">
+                    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">📂 データ管理</h3>
+                    <p class="text-sm text-stone-500 mb-6">学習データをバックアップ・復元できます。</p>
+                    <div class="grid gap-4">
+                        <div class="border rounded-lg p-4 bg-stone-50 dark:bg-stone-800">
+                            <h4 class="font-bold text-sm mb-2">📤 エクスポート (保存)</h4>
+                            <button onclick="dataManager.exportData()"
+                                class="text-sm bg-amber-600 text-white px-4 py-2 rounded-lg font-bold">データを書き出し</button>
+                        </div>
+                        <div class="border rounded-lg p-4 bg-stone-50 dark:bg-stone-800">
+                            <h4 class="font-bold text-sm mb-2">📥 インポート (読み込み)</h4>
+                            <label
+                                class="text-sm bg-white dark:bg-stone-700 border text-stone-700 dark:text-stone-200 px-4 py-2 rounded-lg font-bold cursor-pointer inline-block">
+                                ファイルを選択して読み込む
+                                <input type="file" class="hidden" multiple onchange="dataManager.importData(this)">
+                            </label>
+                        </div>
+                        <div class="border border-red-50 rounded-lg p-4 bg-red-50 dark:bg-red-900/20 mt-4">
+                            <h4 class="font-bold text-sm text-red-700 mb-2">🗑 データ初期化</h4>
+                            <button onclick="dataManager.resetAll()"
+                                class="text-xs text-red-500 hover:underline">すべてのデータを削除する</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- QUIZ VIEW -->
-        <div id="tab-quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] dark:bg-darkbg hidden z-50">
+        <div id="tab-quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#fafaf9] dark:bg-darkbg hidden z-50">
             <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
                 <div class="flex justify-between items-center mb-6">
-                    <button onclick="app.quitQuiz()" class="text-xs font-bold flex items-center gap-1 p-2">← 中断</button>
-                    <div id="mode-display" class="text-xs bg-white dark:bg-darkcard px-3 py-1 rounded-full border">Quiz
+                    <div class="flex gap-2">
+                        <button onclick="app.quitQuiz()"
+                            class="text-xs text-stone-500 font-bold flex items-center gap-1 p-2"><span
+                                class="text-lg">←</span> 中断</button>
+                        <a href="index.html"
+                            class="text-xs bg-stone-200 dark:bg-stone-700 px-3 py-2 rounded-lg font-bold flex items-center gap-1">🏠
+                            ホーム</a>
                     </div>
+                    <div class="text-xs font-mono text-stone-500 bg-white dark:bg-darkcard px-3 py-1 rounded-full border shadow-sm"
+                        id="mode-display">Random</div>
                 </div>
-                <div class="bg-white dark:bg-darkcard p-6 md:p-10 rounded-2xl shadow-xl border mb-8 relative">
-                    <div class="absolute top-0 left-0 w-full h-1.5 bg-stone-100">
+                <div id="quiz-timer"
+                    class="hidden text-center text-xl font-mono font-bold text-stone-700 mb-6 bg-amber-50 py-2 rounded-lg border border-amber-200 dark:bg-amber-900/20 dark:text-stone-200">
+                    ⏳ 90:00</div>
+
+                <div class="text-center text-[10px] text-stone-400 mb-2 font-mono hidden md:block">[Key: 1-4:Select,
+                    Enter:Submit/Next]</div>
+
+                <div
+                    class="bg-white dark:bg-darkcard p-6 md:p-10 rounded-2xl shadow-xl border mb-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-stone-100 dark:bg-stone-800">
                         <div id="quiz-progress" class="h-full bg-amber-500 transition-all duration-300"
                             style="width: 0%"></div>
                     </div>
-                    <div class="flex justify-between mt-4 mb-4">
-                        <span id="q-category"
-                            class="bg-amber-50 text-amber-600 px-3 py-1 rounded text-xs font-bold">Chapter</span>
-                        <div class="font-mono text-stone-300 font-bold text-xl"><span id="q-current">1</span>/<span
-                                id="q-total">10</span></div>
+                    <div class="flex justify-between items-start mb-6 mt-2">
+                        <span
+                            class="inline-block bg-amber-50 text-amber-600 px-3 py-1 rounded-md text-xs font-bold border border-amber-100 dark:bg-amber-900/30"
+                            id="q-category">Category</span>
+                        <div class="flex items-center gap-3">
+                            <button onclick="app.toggleBookmark()" id="btn-quiz-bookmark"
+                                class="text-stone-300 hover:text-yellow-400 transition transform hover:scale-110">
+                                <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
+                                </svg>
+                            </button>
+                            <div class="font-mono text-stone-300 font-bold text-xl"><span id="q-current"
+                                    class="text-stone-800 dark:text-white">1</span><span class="text-sm">/</span><span
+                                    id="q-total" class="text-sm">10</span></div>
+                        </div>
                     </div>
-                    <h3 id="q-text"
-                        class="text-lg md:text-xl font-bold text-stone-800 dark:text-stone-100 mb-6 whitespace-pre-wrap">
-                    </h3>
+                    <h3 class="text-lg md:text-xl font-bold mb-6 whitespace-pre-wrap" id="q-text">Problem Text</h3>
                     <div id="code-container"
-                        class="bg-[#1e1e1e] rounded-lg overflow-hidden mb-6 hidden border border-stone-700 shadow-inner">
+                        class="bg-[#1e1e1e] rounded-lg overflow-hidden mb-6 hidden border shadow-inner">
                         <pre
-                            class="!m-0 !p-5 text-sm"><code class="language-java text-gray-100" id="code-content"></code></pre>
+                            class="!m-0 !p-5 overflow-x-auto text-sm"><code class="language-java code-input text-gray-100 font-mono" id="code-content"></code></pre>
                     </div>
                 </div>
                 <div id="options-list" class="grid gap-3 mb-10"></div>
+                <button id="btn-submit-answer" onclick="app.submitAnswer()"
+                    class="hidden w-full bg-amber-600 text-white font-bold py-4 rounded-xl shadow-lg mb-8 text-lg">回答する
+                    (Enter)</button>
+
                 <div id="explanation-box"
-                    class="hidden bg-white dark:bg-darkcard border border-amber-100 rounded-2xl p-6 md:p-8 shadow-lg fade-in">
-                    <div id="result-badge" class="font-bold text-xl mb-4"></div>
-                    <div id="explanation-text" class="text-sm whitespace-pre-wrap mb-4 font-mono"></div>
-                    <div id="q-explanation-image-container" class="mb-6 hidden"><img id="q-explanation-img" src=""
-                            class="max-w-full rounded border shadow-sm"></div>
-                    <div class="bg-stone-50 dark:bg-stone-800 p-4 rounded-xl border mb-6">
-                        <h4 class="text-xs font-bold text-amber-500 mb-2">✏️ メモ</h4>
-                        <textarea id="user-note-input"
-                            class="w-full bg-white dark:bg-stone-700 border rounded-lg p-2 text-sm dark:text-white outline-none"
-                            rows="2"></textarea>
-                        <div class="flex justify-end mt-2"><button onclick="app.saveNote()"
-                                class="text-xs bg-amber-600 text-white px-3 py-1 rounded">保存</button></div>
+                    class="hidden bg-white dark:bg-darkcard border border-emerald-100 rounded-2xl p-6 md:p-8 shadow-lg fade-in relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-3 mb-4"><span id="result-badge"
+                                class="font-bold text-xl"></span></div>
+                        <div class="text-sm md:text-base leading-8 whitespace-pre-wrap font-mono mb-8"
+                            id="explanation-text"></div>
+                        <div id="explanation-image-container" class="mb-8 hidden"><img id="explanation-img" src=""
+                                class="max-w-full rounded-lg border shadow-md"></div>
+
+                        <div class="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 border border-amber-100 mb-6">
+                            <h4 class="text-xs font-bold text-amber-500 uppercase flex items-center gap-1 mb-2">
+                                <span>✏️</span> 自分用メモ</h4>
+                            <textarea id="user-note-input"
+                                class="w-full bg-white dark:bg-stone-800 border rounded-lg p-3 text-sm outline-none dark:text-white"
+                                rows="2" placeholder="ここが間違えやすい..."></textarea>
+                            <div class="flex justify-end mt-2"><button onclick="app.saveNote()"
+                                    class="text-xs bg-amber-600 text-white px-3 py-1.5 rounded font-bold">メモを保存</button>
+                            </div>
+                        </div>
+                        <button onclick="app.nextQuestion()"
+                            class="w-full bg-stone-800 text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2"><span>次の問題へ
+                                (Enter)</span><svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg></button>
                     </div>
-                    <button onclick="app.nextQuestion()"
-                        class="w-full bg-stone-800 text-white font-bold py-4 rounded-xl shadow-lg">次へ (Enter)</button>
+                </div>
+                <div class="mt-6 mb-6">
+                    <button onclick="app.askAiAboutQuestion()" id="btn-ask-ai-context"
+                        class="w-full bg-amber-50 text-amber-700 font-bold py-3 rounded-xl border border-amber-200 flex items-center justify-center gap-2 dark:bg-amber-900/30 dark:text-amber-300"><span>🤖
+                            この問題についてAI先生に質問する</span></button>
                 </div>
             </div>
         </div>
 
-        <!-- RESULT -->
         <div id="session-result"
-            class="fixed inset-0 bg-stone-900/90 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-            <div class="bg-white dark:bg-darkcard rounded-2xl shadow-2xl max-w-sm w-full p-8 text-center space-y-6">
-                <div class="text-6xl">🏆</div>
-                <h3 class="text-2xl font-bold">完了！</h3>
-                <div class="grid grid-cols-2 gap-4 bg-stone-50 dark:bg-stone-800 p-5 rounded-xl">
+            class="fixed inset-0 bg-stone-900/90 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+            <div
+                class="bg-white dark:bg-darkcard rounded-2xl shadow-2xl max-w-md w-full p-8 text-center space-y-6 fade-in my-8">
+                <div id="res-icon" class="text-6xl mb-2 animate-bounce">🎉</div>
+                <h3 id="res-title" class="text-2xl font-bold">お疲れ様でした！</h3>
+                <div id="res-judgment" class="hidden">
+                    <span id="res-judgment-badge"
+                        class="inline-block px-4 py-2 rounded-full text-lg font-bold shadow-sm">合格</span>
+                    <p id="res-judgment-msg" class="text-sm text-stone-500 mt-2"></p>
+                </div>
+                <div class="grid grid-cols-2 gap-4 bg-stone-50 dark:bg-stone-800 p-5 rounded-xl border">
                     <div>
-                        <div class="text-[10px] text-stone-400 font-bold">正解数</div>
-                        <div class="text-3xl font-bold text-amber-600" id="res-score">0</div>
+                        <div class="text-[10px] text-stone-400 font-bold uppercase">正解数</div>
+                        <div class="text-3xl font-bold text-amber-600 mt-1"><span id="res-score">0</span><span
+                                class="text-lg text-stone-400">/<span id="res-total">0</span></span></div>
                     </div>
                     <div>
-                        <div class="text-[10px] text-stone-400 font-bold">正解率</div>
-                        <div class="text-3xl font-bold" id="res-rate">0%</div>
+                        <div class="text-[10px] text-stone-400 font-bold uppercase">正解率</div>
+                        <div class="text-3xl font-bold mt-1" id="res-rate">0%</div>
                     </div>
+                </div>
+                <div id="res-weakness-box"
+                    class="hidden bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-100 text-left">
+                    <h4 class="text-xs font-bold text-red-600 uppercase mb-2">🚑 復習おすすめ分野</h4>
+                    <ul id="res-weakness-list" class="text-sm font-bold space-y-1"></ul>
                 </div>
                 <button onclick="app.closeSessionResult()"
                     class="w-full bg-amber-600 text-white font-bold py-3.5 rounded-xl shadow-lg">OK</button>
             </div>
         </div>
+
+        <div id="vocab-modal"
+            class="fixed inset-0 bg-stone-900/90 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm fade-in">
+            <div
+                class="bg-white dark:bg-darkcard rounded-2xl shadow-2xl max-w-md w-full p-6 text-center relative border">
+                <button onclick="vocabMaster.close()" class="absolute top-4 right-4 text-stone-400">✕</button>
+                <div class="mb-2 text-xs font-bold text-amber-500 uppercase tracking-wider">Gold Essential Words</div>
+                <div class="text-sm text-stone-400 mb-6" id="vocab-counter">1 / 10</div>
+                <div class="min-h-[200px] flex flex-col justify-center items-center py-4 cursor-pointer"
+                    onclick="vocabMaster.flip()">
+                    <div id="vocab-word" class="text-4xl font-bold mb-6">Class</div>
+                    <div id="vocab-answer" class="hidden vocab-card-content">
+                        <div id="vocab-mean" class="text-xl font-bold text-amber-600 mb-2">設計図</div>
+                        <div id="vocab-memo"
+                            class="text-sm text-stone-500 bg-stone-100 dark:bg-stone-800 p-3 rounded-lg inline-block">
+                        </div>
+                    </div>
+                    <div id="vocab-hint-msg" class="text-xs text-stone-400 mt-4 animate-pulse">タップして答えを見る</div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-6">
+                    <button onclick="vocabMaster.next(false)"
+                        class="bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300 py-3 rounded-xl font-bold">まだ</button>
+                    <button onclick="vocabMaster.next(true)"
+                        class="bg-amber-600 text-white py-3 rounded-xl font-bold shadow-lg">覚えた！</button>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <nav id="bottom-nav"
+        class="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-darkcard border-t border-stone-200 dark:border-stone-700 z-40 pb-safe transition-transform duration-300 transform translate-y-0 flex justify-around px-2 py-2">
+        <button onclick="app.switchTab('dashboard')" id="bottom-nav-dashboard"
+            class="flex flex-col items-center p-2 text-amber-600 dark:text-amber-400 w-1/5">
+            <span class="text-xl mb-1">🏠</span><span class="text-[10px] font-bold">ホーム</span>
+        </button>
+        <button onclick="app.switchTab('create')" id="bottom-nav-create"
+            class="flex flex-col items-center p-2 text-stone-400 hover:text-stone-600 w-1/5 transition">
+            <span class="text-xl mb-1">📝</span><span class="text-[10px] font-bold">作成</span>
+        </button>
+        <button onclick="app.switchTab('coding')" id="bottom-nav-coding"
+            class="flex flex-col items-center p-2 text-stone-400 hover:text-stone-600 w-1/5 transition">
+            <span class="text-xl mb-1">💻</span><span class="text-[10px] font-bold">実践</span>
+        </button>
+        <button onclick="app.switchTab('ai')" id="bottom-nav-ai"
+            class="flex flex-col items-center p-2 text-stone-400 hover:text-stone-600 w-1/5 transition">
+            <span class="text-xl mb-1">🤖</span><span class="text-[10px] font-bold">AI先生</span>
+        </button>
+        <button onclick="app.switchTab('settings')" id="bottom-nav-settings"
+            class="flex flex-col items-center p-2 text-stone-400 hover:text-stone-600 w-1/5 transition">
+            <span class="text-xl mb-1">⚙️</span><span class="text-[10px] font-bold">設定</span>
+        </button>
+    </nav>
+    <div class="h-16 md:hidden"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script>
-        // --- GOLD CONSTANTS ---
-        const STORAGE_KEY = 'javaGoldDojo_Data'; // Independent Storage
+        window.onerror = function (message, source, lineno, colno, error) {
+            const errDiv = document.getElementById('global-error-display');
+            errDiv.style.display = 'block'; errDiv.innerText = `Error: ${message} at line ${lineno}`;
+        };
+
+        const STORAGE_KEY = 'javaGoldDojo_Data';
         const CHAPTER_TITLES = {
             1: "Javaの基礎 (Interface, Nested Class)",
             2: "ジェネリクスとコレクション",
@@ -699,467 +1176,859 @@
             11: "モジュールシステム (詳細)"
         };
 
-        const codingDrills = [
-            { id: 'g1', title: 'Streamの基本', tag: 'Gold', desc: 'List<String> list から "a" で始まる要素を抽出し、大文字に変換して出力するStream処理を書いてください。', keywords: ['stream()', 'filter', 'map', 'forEach'], answer: 'list.stream()\n    .filter(s -> s.startsWith("a"))\n    .map(String::toUpperCase)\n    .forEach(System.out::println);' },
-            { id: 'g2', title: 'Optional', tag: 'Gold', desc: 'String str が null かもしれない場合、Optional を使ってラップし、値があれば表示、なければ "Empty" と表示するコードを書いてください。', keywords: ['Optional.ofNullable', 'ifPresentOrElse'], answer: 'Optional.ofNullable(str)\n    .ifPresentOrElse(\n        System.out::println,\n        () -> System.out.println("Empty")\n    );' },
-            { id: 'g3', title: 'Lambda Comparator', tag: 'Gold', desc: '文字列リストを長さの短い順にソートする Comparator をラムダ式で Collections.sort に渡してください。', keywords: ['Collections.sort', '(s1, s2) ->'], answer: 'Collections.sort(list, (s1, s2) -> s1.length() - s2.length());' }
+        const vocabList = [
+            { id: "v1", word: "Stream", mean: "データの流れ", memo: "コレクションなどの要素の集まりに対して、関数型の操作を行うためのAPI。" },
+            { id: "v2", word: "Optional", mean: "nullを安全に扱う", memo: "値が存在するかどうかわからない状態を表現するコンテナオブジェクト。" },
+            { id: "v3", word: "var", mean: "型推論", memo: "ローカル変数の型をコンパイラに推論させる。フィールドには使えない。" },
+            { id: "v4", word: "module", mean: "モジュール", memo: "パッケージのさらに上のグループ化の単位。module-info.javaで定義する。" },
+            { id: "v5", word: "ExecutorService", mean: "スレッドプール管理", memo: "非同期処理を効率的に実行・管理するためのインターフェース。" },
+            { id: "v6", word: "PreparedStatement", mean: "SQL実行", memo: "SQLインジェクションを防ぎつつ、DBにSQLを送信するためのインターフェース。" },
+            { id: "v7", word: "Path", mean: "ファイルパス", memo: "NIO.2において、ファイルやディレクトリのパスを表すインターフェース。" },
+            { id: "v8", word: "Files", mean: "ファイル操作ユーティリティ", memo: "Pathオブジェクトを使ってファイルのコピー、移動、削除などを行うstaticメソッド群。" },
+            { id: "v9", word: "List.of()", mean: "不変リスト生成", memo: "Java 9から追加された、変更不可能なリストを簡単に作成するメソッド。" },
+            { id: "v10", word: "Record", mean: "データ保持クラス", memo: "Java 14以降で導入された、データを保持するためのボイラープレートコードを減らす特別なクラス(Gold範囲外の可能性あり)。" }
         ];
 
-        // --- CORE APP ---
-        var app = {
-            data: { questions: [], results: {}, history: [], bookmarks: [], theme: 'light' },
-            state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', currentSelection: new Set(), isQuizActive: false },
-            chartInstance: null,
-
-            init: function () {
-                this.loadData();
-                this.applyTheme();
-                this.switchTab('dashboard');
-                creator.resetForm();
-                codingApp.init();
-                aiTutor.init();
-                this.setupKeyboardShortcuts();
+        var vocabMaster = {
+            currentIdx: 0,
+            start: function () { this.currentIdx = 0; document.getElementById('vocab-modal').classList.remove('hidden'); this.render(); },
+            close: function () { document.getElementById('vocab-modal').classList.add('hidden'); },
+            render: function () {
+                const word = vocabList[this.currentIdx];
+                document.getElementById('vocab-counter').innerText = `${this.currentIdx + 1} / ${vocabList.length}`;
+                document.getElementById('vocab-word').innerText = word.word;
+                document.getElementById('vocab-mean').innerText = word.mean;
+                document.getElementById('vocab-memo').innerText = word.memo;
+                document.getElementById('vocab-answer').classList.add('hidden');
+                document.getElementById('vocab-hint-msg').classList.remove('hidden');
             },
-
-            loadData: function () {
-                try {
-                    const saved = localStorage.getItem(STORAGE_KEY);
-                    if (saved) this.data = { ...this.data, ...JSON.parse(saved) };
-                    this.updateDashboard();
-                } catch (e) { console.error("Load failed", e); }
-            },
-
-            save: function () { localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data)); },
-
-            toggleTheme: function () {
-                this.data.theme = this.data.theme === 'dark' ? 'light' : 'dark';
-                this.applyTheme();
-                this.save();
-            },
-
-            applyTheme: function () {
-                if (this.data.theme === 'dark') document.documentElement.classList.add('dark');
-                else document.documentElement.classList.remove('dark');
-            },
-
-            switchTab: function (tab) {
-                if (tab !== 'quiz-view') this.state.isQuizActive = false;
-                ['dashboard', 'ai', 'history', 'create', 'quiz-view', 'settings', 'coding'].forEach(id => {
-                    const el = document.getElementById('tab-' + id);
-                    if (el) el.classList.add('hidden');
-                    const nav = document.getElementById('nav-' + id);
-                    if (nav) nav.className = "nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-stone-600 dark:text-stone-400";
-                });
-                const target = document.getElementById('tab-' + tab);
-                if (target) target.classList.remove('hidden');
-                const activeNav = document.getElementById('nav-' + tab);
-                if (activeNav) activeNav.className = "nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap bg-white text-amber-600 shadow-sm dark:bg-stone-700 dark:text-white";
-
-                if (tab === 'dashboard') { this.renderChapters(); this.updateDashboard(); }
-                if (tab === 'history') this.renderHistory();
-                if (tab === 'create') creator.renderUserQuestions();
-            },
-
-            updateDashboard: function () {
-                document.getElementById('stat-total').innerText = this.data.questions.length;
-                document.getElementById('bookmark-count').innerText = this.data.bookmarks.length;
-                const wrongs = this.data.questions.filter(q => this.data.results[q.id] === false);
-                document.getElementById('wrong-count').innerText = wrongs.length;
-                const answered = Object.keys(this.data.results).length;
-                const correct = Object.values(this.data.results).filter(Boolean).length;
-                document.getElementById('stat-rate').innerText = answered ? Math.round((correct / answered) * 100) + '%' : '0%';
-            },
-
-            renderChapters: function () {
-                const grid = document.getElementById('chapter-grid');
-                if (!grid) return;
-                grid.innerHTML = '';
-                // Filter questions for dashboard counts
-                const chapterCounts = {};
-                this.data.questions.forEach(q => {
-                    const chName = q.category;
-                    if (!chapterCounts[chName]) chapterCounts[chName] = { total: 0, ok: 0 };
-                    chapterCounts[chName].total++;
-                    if (this.data.results[q.id]) chapterCounts[chName].ok++;
-                });
-
-                Object.keys(CHAPTER_TITLES).forEach(num => {
-                    const title = CHAPTER_TITLES[num];
-                    const stats = chapterCounts[title] || { total: 0, ok: 0 };
-                    const rate = stats.total ? Math.round((stats.ok / stats.total) * 100) : 0;
-
-                    const btn = document.createElement('button');
-                    btn.className = "drill-card bg-white dark:bg-darkcard p-4 rounded-xl border border-stone-200 dark:border-stone-700 h-32 flex flex-col justify-between text-left shadow-sm";
-                    btn.onclick = () => this.startQuiz('chapter', title);
-                    btn.innerHTML = `
-                        <div>
-                            <div class="text-xs text-amber-600 font-bold mb-1">Chapter ${num}</div>
-                            <div class="font-bold text-sm text-stone-700 dark:text-stone-200 line-clamp-2">${title}</div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-xs text-stone-400 mb-1"><span>正解率</span><span>${rate}%</span></div>
-                            <div class="w-full bg-stone-100 dark:bg-stone-700 rounded-full h-1.5"><div class="bg-amber-500 h-1.5 rounded-full" style="width:${rate}%"></div></div>
-                        </div>`;
-                    grid.appendChild(btn);
-                });
-            },
-
-            startQuiz: function (mode, param) {
-                let list = [];
-                let name = '';
-                if (mode === 'chapter') {
-                    list = this.data.questions.filter(q => q.category === param);
-                    name = param;
-                } else if (mode.startsWith('user')) {
-                    list = this.data.questions.filter(q => q.id.startsWith('user-'));
-                    if (mode === 'user-random') list = list.sort(() => Math.random() - 0.5).slice(0, 10);
-                    name = "オリジナル問題";
-                } else if (mode === 'review') {
-                    list = this.data.questions.filter(q => this.data.results[q.id] === false);
-                    name = "復習モード";
-                } else if (mode === 'bookmark') {
-                    list = this.data.questions.filter(q => this.data.bookmarks.includes(q.id));
-                    name = "ブックマーク";
-                } else if (mode.startsWith('level')) {
-                    const map = {
-                        'level-1': [1, 2],
-                        'level-2': [3, 5, 8],
-                        'level-3': [6, 7, 9, 4, 11]
-                    }; // Simple mapping for demo
-                    // In real Gold app, you'd map these to specific Gold topics
-                    list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 30);
-                    name = "Goldレベル演習";
-                }
-
-                if (list.length === 0) return alert('該当する問題がありません。\nまずは問題を登録またはインポートしてください。');
-                this.state.queue = list.sort(() => Math.random() - 0.5);
-                this.state.currentIdx = 0;
-                this.state.modeName = name;
-                this.state.sessionStats = { correct: 0, wrongInfo: [] };
-                this.state.isQuizActive = true;
-                document.getElementById('mode-display').innerText = name;
-                this.switchTab('quiz-view');
-                this.renderQuestion();
-            },
-
-            renderQuestion: function () {
-                const q = this.state.queue[this.state.currentIdx];
-                if (!q) return;
-
-                document.getElementById('q-current').innerText = this.state.currentIdx + 1;
-                document.getElementById('q-total').innerText = this.state.queue.length;
-                document.getElementById('q-text').innerText = q.text;
-                document.getElementById('q-category').innerText = q.category || 'Gold';
-
-                const codeEl = document.getElementById('code-content');
-                if (q.code) {
-                    document.getElementById('code-container').classList.remove('hidden');
-                    codeEl.textContent = q.code;
-                    Prism.highlightElement(codeEl);
-                } else {
-                    document.getElementById('code-container').classList.add('hidden');
-                }
-
-                const optsDiv = document.getElementById('options-list');
-                optsDiv.innerHTML = '';
-                this.state.currentSelection = new Set();
-                q.options.forEach((opt, i) => {
-                    const btn = document.createElement('button');
-                    btn.className = "option-btn w-full text-left p-4 rounded-xl border bg-white dark:bg-darkcard flex items-center shadow-sm hover:bg-amber-50 dark:hover:bg-amber-900/20 transition";
-                    btn.onclick = () => this.selectOption(i, btn);
-                    btn.id = `opt-btn-${i}`;
-                    btn.innerHTML = `<span class="opt-mark w-8 h-8 bg-stone-100 dark:bg-stone-700 rounded-full flex items-center justify-center font-bold mr-4 text-stone-500">${String.fromCharCode(65 + i)}</span><span class="text-sm font-medium">${opt}</span>`;
-                    optsDiv.appendChild(btn);
-                });
-
-                document.getElementById('explanation-box').classList.add('hidden');
-                document.getElementById('quiz-progress').style.width = `${(this.state.currentIdx / this.state.queue.length) * 100}%`;
-
-                // Bookmark check
-                const bmBtn = document.getElementById('btn-quiz-bookmark');
-                if (this.data.bookmarks.includes(q.id)) bmBtn.classList.add('text-yellow-500');
-                else bmBtn.classList.remove('text-yellow-500');
-            },
-
-            selectOption: function (i, btn) {
-                const q = this.state.queue[this.state.currentIdx];
-                if (Array.isArray(q.answer)) {
-                    if (this.state.currentSelection.has(i)) {
-                        this.state.currentSelection.delete(i);
-                        btn.classList.remove('option-selected');
-                    } else {
-                        this.state.currentSelection.add(i);
-                        btn.classList.add('option-selected');
-                    }
-                    if (!document.getElementById('btn-submit-choice')) {
-                        const sBtn = document.createElement('button');
-                        sBtn.id = 'btn-submit-choice';
-                        sBtn.className = "w-full bg-amber-600 text-white font-bold py-4 rounded-xl mt-4 shadow-lg";
-                        sBtn.innerText = "回答を確定する";
-                        sBtn.onclick = () => this.submitAnswer();
-                        document.getElementById('options-list').appendChild(sBtn);
-                    }
-                } else {
-                    this.checkAnswer([i]);
-                }
-            },
-
-            submitAnswer: function () { this.checkAnswer(Array.from(this.state.currentSelection)); },
-
-            checkAnswer: function (userAns) {
-                const q = this.state.queue[this.state.currentIdx];
-                const correct = Array.isArray(q.answer) ? q.answer : [q.answer];
-                const isCorrect = JSON.stringify(userAns.sort()) === JSON.stringify(correct.sort());
-
-                if (isCorrect) this.state.sessionStats.correct++;
-                else this.state.sessionStats.wrongInfo.push(q.category || 'Gold');
-
-                this.data.results[q.id] = isCorrect;
-                this.save();
-
-                document.getElementById('result-badge').innerHTML = isCorrect ? '<span class="text-emerald-500">⭕ 正解！</span>' : '<span class="text-red-500">❌ 不正解...</span>';
-                document.getElementById('explanation-text').innerText = `正答: ${correct.map(i => String.fromCharCode(65 + i)).join(', ')}\n\n${q.explanation}`;
-                document.getElementById('explanation-box').classList.remove('hidden');
-
-                if (q.explanationImage) {
-                    document.getElementById('q-explanation-img').src = q.explanationImage;
-                    document.getElementById('q-explanation-image-container').classList.remove('hidden');
-                } else {
-                    document.getElementById('q-explanation-image-container').classList.add('hidden');
-                }
-
-                document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-                if (document.getElementById('btn-submit-choice')) document.getElementById('btn-submit-choice').remove();
-            },
-
-            nextQuestion: function () {
-                this.state.currentIdx++;
-                if (this.state.currentIdx >= this.state.queue.length) this.finishSession();
-                else this.renderQuestion();
-            },
-
-            finishSession: function () {
-                const log = { date: Date.now(), correct: this.state.sessionStats.correct, total: this.state.queue.length, mode: this.state.modeName, weak: [...this.state.sessionStats.wrongInfo] };
-                this.data.history.push(log);
-                this.save();
-                document.getElementById('res-score').innerText = log.correct;
-                document.getElementById('res-rate').innerText = Math.round((log.correct / log.total) * 100) + '%';
-                document.getElementById('session-result').classList.remove('hidden');
-            },
-
-            quitQuiz: function () { this.switchTab('dashboard'); },
-            closeSessionResult: function () { document.getElementById('session-result').classList.add('hidden'); this.switchTab('history'); },
-
-            toggleBookmark: function () {
-                const q = this.state.queue[this.state.currentIdx];
-                const idx = this.data.bookmarks.indexOf(q.id);
-                if (idx > -1) this.data.bookmarks.splice(idx, 1);
-                else this.data.bookmarks.push(q.id);
-                this.save();
-                this.renderQuestion(); // Re-render to update icon
-            },
-
-            saveNote: function () {
-                const q = this.state.queue[this.state.currentIdx];
-                const note = document.getElementById('user-note-input').value;
-                const target = this.data.questions.find(item => item.id === q.id);
-                if (target) { target.note = note; this.save(); alert('メモを保存しました'); }
-            },
-
-            setupKeyboardShortcuts: function () {
-                document.addEventListener('keydown', (e) => {
-                    if (!this.state.isQuizActive) return;
-                    if (e.key === 'Enter') {
-                        const expBox = document.getElementById('explanation-box');
-                        if (expBox && !expBox.classList.contains('hidden')) this.nextQuestion();
-                    }
-                });
-            },
-
-            renderHistory: function () {
-                const list = document.getElementById('history-list');
-                const advice = document.getElementById('weakness-advice-list');
-                if (!list) return;
-                list.innerHTML = ''; advice.innerHTML = '';
-                [...this.data.history].reverse().slice(0, 10).forEach(h => {
-                    const div = document.createElement('div');
-                    div.className = "p-4 bg-white dark:bg-darkcard border rounded-xl flex justify-between items-center shadow-sm mb-2";
-                    div.innerHTML = `<div><div class="text-xs text-stone-400">${new Date(h.date).toLocaleDateString()}</div><div class="font-bold text-amber-700 dark:text-amber-500">${h.mode}</div></div><div class="text-xl font-bold">${h.correct}/${h.total}</div>`;
-                    list.appendChild(div);
-                });
-            },
-
-            startSearchQuiz: function () {
-                const k = document.getElementById('search-input').value.toLowerCase();
-                if (!k) return;
-                const list = this.data.questions.filter(q => (q.text + q.explanation).toLowerCase().includes(k));
-                if (list.length === 0) return alert('見つかりませんでした');
-                this.state.queue = list;
-                this.state.currentIdx = 0;
-                this.state.modeName = "検索: " + k;
-                this.state.sessionStats = { correct: 0, wrongInfo: [] };
-                this.state.isQuizActive = true;
-                document.getElementById('mode-display').innerText = this.state.modeName;
-                this.switchTab('quiz-view');
-                this.renderQuestion();
+            flip: function () { document.getElementById('vocab-answer').classList.remove('hidden'); document.getElementById('vocab-hint-msg').classList.add('hidden'); },
+            next: function () {
+                this.currentIdx++;
+                if (this.currentIdx >= vocabList.length) { alert('単語チェック完了！'); this.close(); } else { this.render(); }
             }
         };
 
-        // --- CREATOR MODULE ---
+        var codingDrills = [
+            { id: 'g1', title: 'Streamの基本', tag: 'Gold', desc: 'List<String> list から "a" で始まる要素を抽出し、大文字に変換して出力するStream処理を書いてください。', keywords: ['stream()', 'filter', 'map', 'forEach'], answer: 'list.stream()\n    .filter(s -> s.startsWith("a"))\n    .map(String::toUpperCase)\n    .forEach(System.out::println);' },
+            { id: 'g2', title: 'Optional', tag: 'Gold', desc: 'String str が null かもしれない場合、Optional を使ってラップし、値があれば表示、なければ "Empty" と表示するコードを書いてください。', keywords: ['Optional.ofNullable', 'ifPresentOrElse'], answer: 'Optional.ofNullable(str)\n    .ifPresentOrElse(\n        System.out::println,\n        () -> System.out.println("Empty")\n    );' },
+            { id: 'g3', title: 'Lambda Comparator', tag: 'Gold', desc: '文字列リストを長さの短い順にソートする Comparator をラムダ式で Collections.sort に渡してください。', keywords: ['Collections.sort', '(s1, s2) ->'], answer: 'Collections.sort(list, (s1, s2) -> s1.length() - s2.length());' },
+            { id: 'g4', title: 'NIO.2 ファイル読み込み', tag: 'Gold', desc: 'Path path = Path.of("test.txt"); を使って、ファイル内のすべての行を読み込み、List<String> に格納するコードを書いてください。', keywords: ['Files.readAllLines', 'path'], answer: 'List<String> lines = Files.readAllLines(path);' },
+            { id: 'g5', title: 'JDBC 接続', tag: 'Gold', desc: 'DriverManager を使って URL "jdbc:h2:mem:test", ユーザ名 "sa", パスワード "" でデータベースに接続する Connection オブジェクトを取得してください。', keywords: ['DriverManager.getConnection', 'Connection'], answer: 'Connection conn = DriverManager.getConnection("jdbc:h2:mem:test", "sa", "");' }
+        ];
+
+        // --- MODULES DEFINITIONS ---
+
+        var aiTutor = {
+            apiKey: '',
+            model: 'gemini-2.5-flash',
+            init: function () {
+                try {
+                    this.apiKey = localStorage.getItem('gemini_api_key') || '';
+                    var savedModel = localStorage.getItem('gemini_api_model');
+                    if (savedModel && (savedModel.includes('gemini-2.5') || savedModel === 'custom')) {
+                        this.model = savedModel;
+                    } else {
+                        this.model = 'gemini-2.5-flash';
+                    }
+
+                    var select = document.getElementById('api-model-select');
+                    if (select) {
+                        if (this.model === 'gemini-2.5-flash') {
+                            select.value = this.model;
+                            document.getElementById('api-model-custom').classList.add('hidden');
+                        } else {
+                            select.value = 'custom';
+                            document.getElementById('api-model-custom').classList.remove('hidden');
+                            document.getElementById('api-model-custom').value = this.model;
+                        }
+                    }
+                    this.updateStatus();
+                } catch (e) { console.warn("AI Init failed", e); }
+            },
+            toggleCustomModelInput: function () {
+                var val = document.getElementById('api-model-select').value;
+                var customInput = document.getElementById('api-model-custom');
+                if (val === 'custom') customInput.classList.remove('hidden');
+                else customInput.classList.add('hidden');
+            },
+            saveKey: function () {
+                var key = document.getElementById('api-key-input').value.trim();
+                var model = document.getElementById('api-model-select').value;
+                if (model === 'custom') model = document.getElementById('api-model-custom').value.trim();
+                if (key) localStorage.setItem('gemini_api_key', key);
+                localStorage.setItem('gemini_api_model', model);
+                this.model = model;
+                alert('設定を保存しました。');
+                this.init();
+            },
+            updateStatus: function () {
+                var statusEl = document.getElementById('key-status');
+                var btn = document.getElementById('btn-get-advice');
+                if (this.apiKey) {
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> 設定済み';
+                    statusEl.className = 'text-xs text-emerald-600 mt-2 flex items-center gap-1 font-bold';
+                    if (btn) btn.disabled = false;
+                } else {
+                    statusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-stone-300"></span> 未設定';
+                    statusEl.className = 'text-xs text-stone-400 mt-2 flex items-center gap-1';
+                    if (btn) btn.disabled = true;
+                }
+            },
+            analyzeStats: function () {
+                if (!app || !app.data) return { weakCategories: [], recentMistakes: [] };
+                var wrongCounts = {}; var totalCounts = {};
+                app.data.questions.forEach(q => {
+                    var cat = q.category || "その他";
+                    totalCounts[cat] = (totalCounts[cat] || 0) + 1;
+                    if (app.data.results[q.id] === false) wrongCounts[cat] = (wrongCounts[cat] || 0) + 1;
+                });
+                var weakCategories = Object.keys(wrongCounts).sort((a, b) => wrongCounts[b] - wrongCounts[a]).slice(0, 3);
+                var wrongQs = app.data.questions.filter(q => app.data.results[q.id] === false);
+                var recentMistakes = wrongQs.sort(() => 0.5 - Math.random()).slice(0, 3).map(q => {
+                    return { category: q.category, text: q.text, correctAnswer: Array.isArray(q.options) && typeof q.answer === 'number' ? q.options[q.answer] : "N/A" };
+                });
+                return { weakCategories, recentMistakes };
+            },
+            updateWeaknessDisplay: function () {
+                var stats = this.analyzeStats();
+                var text = stats.weakCategories.length > 0 ? stats.weakCategories.join('、') : "データ不足";
+                var el = document.getElementById('ai-weak-text');
+                var container = document.getElementById('ai-analysis-stats');
+                if (el) el.innerText = text;
+                if (container) container.classList.remove('hidden');
+            },
+            currentQuestionContext: null,
+            prefillQuestion: function (data) {
+                this.currentQuestionContext = data;
+                var contextBox = document.getElementById('ai-question-context');
+                var contextText = document.getElementById('ai-context-text');
+                contextText.innerText = data.text;
+                contextBox.classList.remove('hidden');
+                var btn = document.getElementById('btn-ask-specific');
+                if (btn) btn.disabled = !this.apiKey;
+                contextBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            },
+            clearQuestionContext: function () {
+                this.currentQuestionContext = null;
+                document.getElementById('ai-question-context').classList.add('hidden');
+                document.getElementById('ai-user-question').value = '';
+            },
+            askAboutQuestion: async function () {
+                if (!this.currentQuestionContext) return;
+                var userQ = document.getElementById('ai-user-question').value.trim() || "この問題の解説を読んでもわからないので、別の視点でわかりやすく教えてください。";
+                var qData = this.currentQuestionContext;
+                var prompt = `あなたはJava Goldのベテラン講師です。生徒から以下の問題について質問が来ました。\n\n【質問内容】\n${userQ}\n\n【問題データ】\n問題文:\n${qData.text}\n\nコード:\n\`\`\`java\n${qData.code}\n\`\`\`\n\n選択肢:\n${qData.options}\n\n生徒の回答: ${qData.userAns || "未回答"}\n正解: ${qData.correctAns}\n元の解説: ${qData.explanation}\n\n【指示】\n生徒の質問に対して、元の解説とは違うアプローチで、なぜその正解になるのか、どこにつまずきやすいのかを丁寧に解説してください。`;
+                var btnSpecific = document.getElementById('btn-ask-specific');
+                var loading = document.getElementById('ai-loading');
+                var outputBox = document.getElementById('ai-output-box');
+                var contentDiv = document.getElementById('ai-response-content');
+
+                btnSpecific.disabled = true; loading.classList.remove('hidden'); outputBox.classList.add('hidden');
+                var fetchWithRetry = async (model) => {
+                    var url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
+                    var res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                    if (!res.ok) throw new Error(res.statusText);
+                    return res.json();
+                };
+                try {
+                    var data = await fetchWithRetry(this.model);
+                    var text = data.candidates[0].content.parts[0].text;
+                    if (typeof marked !== 'undefined') {
+                        contentDiv.innerHTML = marked.parse(text);
+                        if (typeof Prism !== 'undefined') setTimeout(() => { contentDiv.querySelectorAll('pre code').forEach((block) => { block.classList.add('language-java'); Prism.highlightElement(block); }); }, 10);
+                    } else { contentDiv.innerText = text; }
+                    outputBox.classList.remove('hidden');
+                    this.clearQuestionContext();
+                } catch (e) { alert(`AI通信エラー: ${e.message}`); } finally { btnSpecific.disabled = false; loading.classList.add('hidden'); }
+            },
+            getAdvice: async function () {
+                var stats = this.analyzeStats();
+                var btn = document.getElementById('btn-get-advice');
+                var loading = document.getElementById('ai-loading');
+                var outputBox = document.getElementById('ai-output-box');
+                var contentDiv = document.getElementById('ai-response-content');
+
+                btn.classList.add('hidden'); loading.classList.remove('hidden'); outputBox.classList.add('hidden');
+                var weaknessStr = stats.weakCategories.length ? stats.weakCategories.join(', ') : "まだデータがありません";
+                var mistakesStr = stats.recentMistakes.map((m, i) => `[${i + 1}] 分野:${m.category}\n問題:${m.text}\n正解:${m.correctAnswer}`).join('\n---\n');
+                var prompt = `あなたはJava Gold (SE11) 資格試験の熱血かつ論理的なベテラン講師です。\n生徒（ユーザー）の学習履歴データを分析し、日本語でアドバイスをしてください。\n\n【生徒データ】\n・現在の苦手分野: ${weaknessStr}\n・最近間違えた問題の例:\n${mistakesStr || "（まだ間違いデータがありません）"}\n\n【指示】\n1. 生徒の苦手分野傾向を分析し、なぜそこでつまずきやすいか簡潔に解説してください。\n2. 今後の学習戦略（どの章を重点的にやるべきか）を提案してください。\n3. 「オリジナル問題作成」機能を使っている生徒に対して、「次は〇〇についてのひっかけ問題を作ってみよう」といった、理解を深めるための作問テーマを1つ提案してください。\n4. アドバイス内にJavaのコード例を示す場合は、必ず \`\`\`java ... \`\`\` の形式で記述してください。\n5. 口調は「～だね」「～しよう！」といった、親しみやすくも頼れる先生のトーンでお願いします。Markdown形式で見やすく整形してください。`;
+
+                var fetchWithRetry = async (model) => {
+                    var url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.apiKey}`;
+                    var res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
+                    if (!res.ok) throw new Error(res.statusText);
+                    return res.json();
+                };
+                try {
+                    var data = await fetchWithRetry(this.model);
+                    var text = data.candidates[0].content.parts[0].text;
+                    if (typeof marked !== 'undefined') {
+                        contentDiv.innerHTML = marked.parse(text);
+                        if (typeof Prism !== 'undefined') setTimeout(() => { contentDiv.querySelectorAll('pre code').forEach((block) => { block.classList.add('language-java'); Prism.highlightElement(block); }); }, 10);
+                    } else { contentDiv.innerHTML = text.replace(/\n/gim, '<br>'); }
+                    outputBox.classList.remove('hidden');
+                } catch (e) { alert(`AI通信エラー: ${e.message}`); } finally { btn.classList.remove('hidden'); loading.classList.add('hidden'); }
+            }
+        };
+
         var creator = {
+            categoryNames: CHAPTER_TITLES,
             currentImage: null,
+            updateCategoryLabel: function () {
+                var select = document.getElementById('create-chapter');
+                document.getElementById('create-cat-name').value = select.options[select.selectedIndex].text;
+            },
             addOption: function () {
-                const container = document.getElementById('options-container');
-                const idx = container.children.length;
-                const div = document.createElement('div');
-                div.className = "flex items-start gap-2 mb-2";
-                div.innerHTML = `<input type="checkbox" name="correct-idx" value="${idx}" class="mt-2 w-4 h-4 text-amber-600"><textarea class="flex-1 bg-white dark:bg-stone-800 border dark:border-stone-600 rounded p-2 text-sm dark:text-white" placeholder="選択肢 ${String.fromCharCode(65 + idx)}"></textarea>`;
+                var container = document.getElementById('options-container');
+                var idx = container.children.length;
+                var div = document.createElement('div');
+                div.className = "flex items-start gap-3 option-row";
+                div.innerHTML = `<input type="checkbox" name="correct-idx" value="${idx}" class="w-5 h-5 mt-2 text-amber-600 focus:ring-amber-500 cursor-pointer"><textarea class="create-option flex-1 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none transition resize-y dark:text-white" rows="2" placeholder="選択肢 ${String.fromCharCode(65 + idx)}" required></textarea><button type="button" onclick="creator.removeOption(this)" class="text-stone-400 hover:text-red-500 px-2 font-bold text-lg mt-1">×</button>`;
                 container.appendChild(div);
+            },
+            removeOption: function (btn) { btn.closest('.option-row').remove(); this.reindexOptions(); },
+            reindexOptions: function () {
+                document.querySelectorAll('.option-row').forEach((row, index) => {
+                    row.querySelector('input[type="checkbox"]').value = index;
+                    row.querySelector('.create-option').placeholder = `選択肢 ${String.fromCharCode(65 + index)}`;
+                });
             },
             resetForm: function () {
                 document.getElementById('create-form').reset();
-                const select = document.getElementById('create-chapter');
+                document.getElementById('edit-id').value = '';
+                var select = document.getElementById('create-chapter');
                 select.innerHTML = '';
-                Object.keys(CHAPTER_TITLES).forEach(k => {
-                    const opt = document.createElement('option');
-                    opt.value = CHAPTER_TITLES[k]; opt.innerText = `Ch${k}: ${CHAPTER_TITLES[k]}`;
+                Object.keys(this.categoryNames).forEach(k => {
+                    var opt = document.createElement('option');
+                    opt.value = k; opt.innerText = `第${k}章: ${this.categoryNames[k]}`;
                     select.appendChild(opt);
                 });
+                var optMock1 = document.createElement('option'); optMock1.value = 'mock1'; optMock1.innerText = '模擬試験①'; select.appendChild(optMock1);
+                var optMock2 = document.createElement('option'); optMock2.value = 'mock2'; optMock2.innerText = '模擬試験②'; select.appendChild(optMock2);
+                var optOthers = document.createElement('option'); optOthers.value = '99'; optOthers.innerText = 'その他'; select.appendChild(optOthers);
+
                 document.getElementById('options-container').innerHTML = '';
-                for (let i = 0; i < 4; i++) this.addOption();
+                for (var i = 0; i < 4; i++) this.addOption();
+                var btn = document.getElementById('btn-save-question');
+                btn.innerText = "追加する";
+                btn.className = "bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5";
+                document.getElementById('btn-cancel-edit').classList.add('hidden');
                 this.currentImage = null;
-                document.getElementById('explanation-image-preview')?.classList.add('hidden');
+                document.getElementById('explanation-image-preview').classList.add('hidden');
+                document.getElementById('preview-img').src = "";
+                this.updateCategoryLabel();
+                this.setupPasteListener();
+            },
+            setupPasteListener: function () {
+                var area = document.getElementById('create-explanation');
+                var newArea = area.cloneNode(true);
+                area.parentNode.replaceChild(newArea, area);
+                newArea.addEventListener('paste', this.handlePaste.bind(this));
+                newArea.id = 'create-explanation';
+            },
+            handlePaste: function (e) {
+                var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf("image") === 0) {
+                        e.preventDefault();
+                        var blob = items[i].getAsFile();
+                        this.compressImage(blob);
+                        return;
+                    }
+                }
+            },
+            compressImage: function (file) {
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    var img = new Image();
+                    img.onload = () => {
+                        var canvas = document.createElement('canvas'); var ctx = canvas.getContext('2d');
+                        var maxWidth = 600; var scale = maxWidth / img.width; if (scale > 1) scale = 1;
+                        canvas.width = img.width * scale; canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        this.currentImage = canvas.toDataURL('image/jpeg', 0.7);
+                        document.getElementById('preview-img').src = this.currentImage;
+                        document.getElementById('explanation-image-preview').classList.remove('hidden');
+                    }; img.src = event.target.result;
+                }; reader.readAsDataURL(file);
+            },
+            removeImage: function () { this.currentImage = null; document.getElementById('explanation-image-preview').classList.add('hidden'); document.getElementById('preview-img').src = ""; },
+            renderUserQuestions: function () {
+                var listEl = document.getElementById('user-questions-list');
+                var userQs = app.data.questions.filter(q => q.id.includes('user'));
+                listEl.innerHTML = '';
+                if (userQs.length === 0) { listEl.innerHTML = '<div class="text-center text-stone-400 py-8 text-sm">まだ自作問題はありません</div>'; return; }
+                [...userQs].reverse().forEach(q => {
+                    var div = document.createElement('div');
+                    div.className = "flex justify-between items-start bg-stone-50 dark:bg-stone-800 p-4 rounded-lg border border-stone-200 dark:border-stone-600 hover:border-amber-300 transition";
+                    div.innerHTML = `<div class="flex-1 pr-2"><div class="flex items-center gap-2 mb-1"><span class="text-[10px] bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded font-bold whitespace-nowrap">${q.category}</span></div><p class="text-sm text-stone-700 dark:text-stone-300 font-medium line-clamp-2">${q.text}</p></div><div class="flex flex-col gap-2"><button onclick="creator.editQuestion('${q.id}')" class="text-xs bg-white dark:bg-stone-700 border border-stone-300 text-stone-600 dark:text-stone-300 px-3 py-1.5 rounded hover:bg-amber-50 transition">編集</button><button onclick="creator.deleteQuestion('${q.id}')" class="text-xs bg-white dark:bg-stone-700 border border-stone-300 text-stone-600 dark:text-stone-300 px-3 py-1.5 rounded hover:bg-red-50 text-red-500 transition">削除</button></div>`;
+                    listEl.appendChild(div);
+                });
+            },
+            editQuestion: function (id) {
+                var q = app.data.questions.find(x => x.id === id);
+                if (!q) return;
+                document.getElementById('edit-id').value = q.id;
+                document.getElementById('create-text').value = q.text;
+                document.getElementById('create-code').value = q.code || '';
+                document.getElementById('create-explanation').value = q.explanation;
+                if (q.explanationImage) {
+                    this.currentImage = q.explanationImage; document.getElementById('preview-img').src = q.explanationImage; document.getElementById('explanation-image-preview').classList.remove('hidden');
+                } else { this.removeImage(); }
+                var select = document.getElementById('create-chapter');
+                var options = Array.from(select.options);
+                var found = options.find(o => o.text.includes(q.category));
+                if (found) select.value = found.value;
+                var container = document.getElementById('options-container'); container.innerHTML = '';
+                q.options.forEach((optText) => { this.addOption(); var inputs = container.querySelectorAll('.create-option'); inputs[inputs.length - 1].value = optText; });
+                var checkboxes = document.querySelectorAll('input[name="correct-idx"]');
+                var correctArr = Array.isArray(q.answer) ? q.answer : [q.answer];
+                correctArr.forEach(idx => { if (checkboxes[idx]) checkboxes[idx].checked = true; });
+                var btn = document.getElementById('btn-save-question');
+                btn.innerText = "更新する"; btn.className = "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5";
+                document.getElementById('btn-cancel-edit').classList.remove('hidden');
+                document.getElementById('tab-create').scrollTop = 0;
+            },
+            cancelEdit: function () { this.resetForm(); },
+            deleteQuestion: function (id) {
+                if (!confirm('この問題を削除しますか？')) return;
+                app.data.questions = app.data.questions.filter(q => q.id !== id); app.save(); this.renderUserQuestions();
             },
             saveQuestion: function (e) {
                 e.preventDefault();
-                const checks = document.querySelectorAll('input[name="correct-idx"]:checked');
-                if (checks.length === 0) return alert('正解を選択してください');
+                var editId = document.getElementById('edit-id').value;
+                var chapterNum = document.getElementById('create-chapter').value;
+                var select = document.getElementById('create-chapter');
+                var chapterName = select.options[select.selectedIndex].text.replace(/^\d+:\s*/, '');
+                var text = document.getElementById('create-text').value;
+                var code = document.getElementById('create-code').value;
+                var opts = Array.from(document.querySelectorAll('.create-option')).map(i => i.value);
+                var checkedBoxes = document.querySelectorAll('input[name="correct-idx"]:checked');
+                if (checkedBoxes.length === 0) return alert("正解を少なくとも1つ選択してください");
+                var correctIdxs = Array.from(checkedBoxes).map(cb => parseInt(cb.value));
+                var finalAnswer = correctIdxs.length === 1 ? correctIdxs[0] : correctIdxs;
+                var explanation = document.getElementById('create-explanation').value;
 
-                const answers = Array.from(checks).map(c => parseInt(c.value));
-                const q = {
-                    id: 'user-' + Date.now(),
-                    category: document.getElementById('create-chapter').value,
-                    text: document.getElementById('create-text').value,
-                    code: document.getElementById('create-code').value,
-                    options: Array.from(document.querySelectorAll('#options-container textarea')).map(t => t.value),
-                    answer: answers.length === 1 ? answers[0] : answers,
-                    explanation: document.getElementById('create-explanation').value,
-                    explanationImage: this.currentImage
-                };
-                app.data.questions.push(q);
-                app.save();
-                alert('保存完了！Gold問題集に追加されました。');
-                this.resetForm();
-                this.renderUserQuestions();
-                app.updateDashboard();
-            },
-            renderUserQuestions: function () {
-                const list = document.getElementById('user-questions-list-view');
-                if (!list) return;
-                list.innerHTML = '';
-                const userQs = app.data.questions.filter(q => q.id.startsWith('user-'));
-                if (userQs.length === 0) { list.innerHTML = '<div class="text-center text-stone-400 py-8 text-sm">自作問題はありません</div>'; return; }
-                [...userQs].reverse().forEach(q => {
-                    const div = document.createElement('div');
-                    div.className = "p-3 bg-stone-50 dark:bg-stone-800 border dark:border-stone-700 rounded flex justify-between items-center mb-2";
-                    div.innerHTML = `<div class="text-sm font-bold line-clamp-1 dark:text-stone-300">${q.text}</div><button onclick="creator.deleteQuestion('${q.id}')" class="text-xs text-red-500 hover:underline px-2">削除</button>`;
-                    list.appendChild(div);
-                });
-            },
-            deleteQuestion: function (id) {
-                if (!confirm('削除しますか？')) return;
-                app.data.questions = app.data.questions.filter(q => q.id !== id);
-                app.save();
-                this.renderUserQuestions();
-                app.updateDashboard();
-            },
-            removeImage: function () { this.currentImage = null; document.getElementById('explanation-image-preview').classList.add('hidden'); },
-            handlePaste: function (e) { /* (Same logic as silver) */ }
-        };
-        // Paste logic
-        creator.handlePaste = function (e) {
-            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-            for (let item of items) {
-                if (item.type.indexOf("image") === 0) {
-                    const blob = item.getAsFile();
-                    const reader = new FileReader();
-                    reader.onload = (ev) => {
-                        this.currentImage = ev.target.result;
-                        document.getElementById('preview-img').src = this.currentImage;
-                        document.getElementById('explanation-image-preview').classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(blob);
+                if (editId) {
+                    var index = app.data.questions.findIndex(q => q.id === editId);
+                    if (index !== -1) {
+                        app.data.questions[index] = { ...app.data.questions[index], category: chapterName, text: text, code: code, options: opts, answer: finalAnswer, explanation: explanation, explanationImage: this.currentImage };
+                        alert('問題を更新しました！');
+                    }
+                    this.cancelEdit();
+                } else {
+                    var idPrefix = `user-${chapterNum}-`;
+                    var newQ = { id: idPrefix + Date.now(), category: chapterName, text: text, code: code, options: opts, answer: finalAnswer, explanation: explanation, explanationImage: this.currentImage };
+                    app.data.questions.push(newQ);
+                    alert(`問題を追加しました！`);
+                    this.resetForm();
                 }
+                app.save(); this.renderUserQuestions();
             }
         };
 
-        // --- CODING & AI (Simplified for Gold Demo) ---
         var codingApp = {
+            currentDrill: null,
+            hintLevel: 0,
             init: function () {
-                const menu = document.getElementById('coding-menu');
+                var menu = document.getElementById('coding-menu');
                 menu.innerHTML = '';
                 codingDrills.forEach(drill => {
-                    const btn = document.createElement('button');
-                    btn.className = "p-5 bg-white dark:bg-darkcard border border-stone-200 dark:border-stone-700 rounded-xl text-left hover:border-amber-500 transition shadow-sm";
-                    btn.onclick = () => {
-                        document.getElementById('coding-menu').classList.add('hidden');
-                        document.getElementById('coding-workspace').classList.remove('hidden');
-                        document.getElementById('coding-title').innerText = drill.title;
-                        document.getElementById('coding-desc').innerText = drill.desc;
-                        document.getElementById('coding-tag').innerText = drill.tag;
-                        document.getElementById('coding-editor').value = '';
-                        this.current = drill;
-                    };
-                    btn.innerHTML = `<div class="text-[10px] text-amber-600 font-bold uppercase mb-1">${drill.tag}</div><div class="font-bold text-stone-700 dark:text-stone-200">${drill.title}</div>`;
+                    var btn = document.createElement('button');
+                    btn.className = "bg-white dark:bg-darkcard border border-stone-200 dark:border-stone-700 hover:border-amber-400 rounded-xl p-5 text-left transition shadow-sm group active:scale-[0.99]";
+                    btn.onclick = () => this.start(drill);
+                    btn.innerHTML = `<div class="flex justify-between items-start mb-2"><span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">${drill.tag}</span><span class="text-xl group-hover:scale-110 transition">⚡️</span></div><h4 class="font-bold text-stone-700 dark:text-stone-200 mb-1">${drill.title}</h4><p class="text-xs text-stone-400 line-clamp-2">${drill.desc}</p>`;
                     menu.appendChild(btn);
                 });
             },
-            close: function () { document.getElementById('coding-menu').classList.remove('hidden'); document.getElementById('coding-workspace').classList.add('hidden'); },
-            check: function () {
-                document.getElementById('coding-result').classList.remove('hidden');
-                document.getElementById('coding-result-title').innerText = "判定結果";
-                document.getElementById('coding-result-msg').innerText = "Goldレベルの記述は完璧です！";
-                const code = document.getElementById('coding-answer-code');
-                code.textContent = this.current.answer;
-                Prism.highlightElement(code);
+            start: function (drill) {
+                this.currentDrill = drill; this.hintLevel = 0;
+                document.getElementById('coding-menu').classList.add('hidden'); document.getElementById('coding-workspace').classList.remove('hidden');
+                document.getElementById('coding-title').innerText = drill.title; document.getElementById('coding-tag').innerText = drill.tag; document.getElementById('coding-desc').innerText = drill.desc;
+                document.getElementById('coding-hint-box').classList.add('hidden'); document.getElementById('coding-result').classList.add('hidden'); document.getElementById('coding-answer-box').classList.add('hidden');
+                var btnHint = document.getElementById('btn-coding-hint'); var btnAnswer = document.getElementById('btn-coding-answer');
+                if (btnHint) { btnHint.classList.remove('hidden'); btnHint.innerText = '💡 ヒントを見る'; }
+                if (btnAnswer) btnAnswer.classList.add('hidden');
+                var editor = document.getElementById('coding-editor'); editor.value = ''; this.updateLineNumbers(); editor.focus();
             },
-            showAnswer: function () { this.check(); }
+            close: function () { document.getElementById('coding-menu').classList.remove('hidden'); document.getElementById('coding-workspace').classList.add('hidden'); this.currentDrill = null; },
+            syncScroll: function () { var editor = document.getElementById('coding-editor'); var lineNumbers = document.getElementById('coding-line-numbers'); if (editor && lineNumbers) { lineNumbers.scrollTop = editor.scrollTop; } },
+            updateLineNumbers: function () {
+                var editor = document.getElementById('coding-editor'); var lineNumbers = document.getElementById('coding-line-numbers'); if (!editor || !lineNumbers) return;
+                var lines = editor.value.split('\n').length; var html = ''; for (var i = 1; i <= lines; i++) { html += i + '<br>'; }
+                if (lines === 0) html = '1<br>'; lineNumbers.innerHTML = html; this.syncScroll();
+            },
+            showHint: function () {
+                if (!this.currentDrill) return;
+                this.hintLevel++;
+                if (this.hintLevel === 1) {
+                    if (this.currentDrill.keywords && this.currentDrill.keywords.length > 0) {
+                        document.getElementById('coding-hint-box').classList.remove('hidden');
+                        document.getElementById('coding-keywords').innerHTML = this.currentDrill.keywords.map(k => `<span class="bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-300 text-[10px] px-2 py-1 rounded font-mono">${k}</span>`).join('');
+                    } else { this.hintLevel = 2; }
+                    var btnHint = document.getElementById('btn-coding-hint'); if (btnHint) btnHint.innerText = '💡 さらにヒント（解答）を見る';
+                }
+                if (this.hintLevel >= 2) {
+                    document.getElementById('btn-coding-hint').classList.add('hidden'); document.getElementById('btn-coding-answer').classList.remove('hidden'); this.showAnswer();
+                }
+            },
+            check: function () {
+                if (!this.currentDrill) return;
+                var userCode = document.getElementById('coding-editor').value; var keywords = this.currentDrill.keywords || [];
+                var missing = keywords.filter(k => !userCode.includes(k)); var isPerfect = missing.length === 0;
+                var resultTitle = document.getElementById('coding-result-title'); var resultMsg = document.getElementById('coding-result-msg');
+                document.getElementById('coding-result').classList.remove('hidden'); document.getElementById('coding-answer-box').classList.add('hidden');
+                if (isPerfect) { resultTitle.innerHTML = '<span class="text-emerald-500">🎉 Excellent!</span>'; resultMsg.innerText = '必須キーワードがすべて含まれています。'; }
+                else { resultTitle.innerHTML = '<span class="text-amber-500">⚠️ Keep Trying</span>'; resultMsg.innerText = `以下のキーワードが見つかりません: ${missing.join(', ')}`; }
+            },
+            showAnswer: function () {
+                if (!this.currentDrill) return;
+                document.getElementById('coding-result-title').innerHTML = '<span class="text-amber-600">👀 模範解答</span>';
+                document.getElementById('coding-result-msg').innerText = '解答例を確認して、自分のコードと比較してみましょう。';
+                var answerCode = document.getElementById('coding-answer-code'); answerCode.textContent = this.currentDrill.answer;
+                if (typeof Prism !== 'undefined') Prism.highlightElement(answerCode);
+                document.getElementById('coding-result').classList.remove('hidden'); document.getElementById('coding-answer-box').classList.remove('hidden');
+            }
         };
 
-        var aiTutor = {
-            init: () => { },
-            saveKey: () => alert('APIキーを保存しました (Gold環境)'),
-            getAdvice: () => alert('GoldモードのAI分析は現在準備中です。'),
-            updateWeaknessDisplay: () => { },
-            toggleCustomModelInput: () => { }
+        var app = {
+            data: { questions: [], results: {}, history: [], bookmarks: [], theme: 'light', resumeData: null, textSizeLevel: 1 },
+            state: { queue: [], currentIdx: 0, sessionStats: { correct: 0, wrongInfo: [] }, modeName: '', timer: null, currentSelection: new Set(), isQuizActive: false },
+            chartInstance: null, weeklyChartInstance: null,
+            textSizeClasses: ['text-sm', 'text-base', 'text-xl', 'text-2xl'],
+            textSizeLabels: ['小さめ', '標準', '大きめ', '特大'],
+
+            changeTextSize: function (delta) {
+                this.data.textSizeLevel += delta;
+                if (this.data.textSizeLevel < 0) this.data.textSizeLevel = 0;
+                if (this.data.textSizeLevel > 3) this.data.textSizeLevel = 3;
+                this.applyTextSize(); this.save();
+            },
+            applyTextSize: function () {
+                var el = document.getElementById('text-size-display'); if (el) el.innerText = this.textSizeLabels[this.data.textSizeLevel];
+                var qText = document.getElementById('q-text'); var expText = document.getElementById('explanation-text');
+                this.textSizeClasses.forEach(cls => { if (qText) qText.classList.remove(cls, 'md:text-xl'); if (expText) expText.classList.remove(cls, 'md:text-base'); });
+                var newClass = this.textSizeClasses[this.data.textSizeLevel];
+                if (qText) qText.classList.add(newClass); if (expText) expText.classList.add(newClass);
+            },
+            renderActivityStats: function () {
+                var dailyTotals = {}; var now = new Date(); var labels = []; var dataPoints = [];
+                for (var i = 6; i >= 0; i--) {
+                    var d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                    var dateStr = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                    dailyTotals[dateStr] = 0; labels.push((d.getMonth() + 1) + '/' + d.getDate());
+                }
+                this.data.history.forEach(function (h) {
+                    var d = new Date(h.date);
+                    var dateStr = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                    if (dailyTotals[dateStr] !== undefined) dailyTotals[dateStr] += h.total;
+                });
+                for (var i = 6; i >= 0; i--) {
+                    var d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+                    var dateStr = d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                    dataPoints.push(dailyTotals[dateStr]);
+                }
+
+                var ctx = document.getElementById('weeklyChart');
+                if (ctx && typeof Chart !== 'undefined') {
+                    if (this.weeklyChartInstance) this.weeklyChartInstance.destroy();
+                    var textColor = document.documentElement.classList.contains('dark') ? '#d6d3d1' : '#78716c';
+                    var gridColor = document.documentElement.classList.contains('dark') ? '#44403c' : '#f5f5f4';
+                    this.weeklyChartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: { labels: labels, datasets: [{ label: '解答数', data: dataPoints, backgroundColor: '#d97706', borderRadius: 4, barThickness: 12 }] },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0, color: textColor }, grid: { color: gridColor } }, x: { grid: { display: false }, ticks: { color: textColor } } } }
+                    });
+                }
+
+                var uniqueDates = [...new Set(this.data.history.map(h => {
+                    var d = new Date(h.date); return d.getFullYear() + '-' + (d.getMonth() + 1).toString().padStart(2, '0') + '-' + d.getDate().toString().padStart(2, '0');
+                }))];
+                var streak = 0; var currDate = new Date(now);
+                var todayStr = currDate.getFullYear() + '-' + (currDate.getMonth() + 1).toString().padStart(2, '0') + '-' + currDate.getDate().toString().padStart(2, '0');
+                var todayDone = uniqueDates.includes(todayStr);
+                if (todayDone) streak++;
+                currDate.setDate(currDate.getDate() - 1);
+                while (true) {
+                    var ds = currDate.getFullYear() + '-' + (currDate.getMonth() + 1).toString().padStart(2, '0') + '-' + currDate.getDate().toString().padStart(2, '0');
+                    if (uniqueDates.includes(ds)) { streak++; currDate.setDate(currDate.getDate() - 1); } else break;
+                }
+                var elStreak = document.getElementById('stat-streak'); if (elStreak) elStreak.innerText = streak;
+                var elBadge = document.getElementById('stat-today-badge');
+                if (elBadge) {
+                    if (todayDone) { elBadge.className = "z-10 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 text-xs rounded-full font-bold"; elBadge.innerText = "今日の学習: 達成！🎉"; }
+                    else { elBadge.className = "z-10 px-3 py-1 bg-stone-100 dark:bg-stone-800 text-stone-500 text-xs rounded-full font-bold"; elBadge.innerText = "今日の学習: 未達成💦"; }
+                }
+            },
+            init: function () {
+                try {
+                    this.loadData(); this.applyTheme(); this.switchTab('dashboard');
+                    if (typeof aiTutor !== 'undefined') setTimeout(() => aiTutor.init(), 100);
+                    if (typeof creator !== 'undefined') creator.resetForm();
+                    if (typeof codingApp !== 'undefined') codingApp.init();
+                    this.setupKeyboardShortcuts();
+                } catch (e) { console.error("Init Error", e); }
+            },
+            setupKeyboardShortcuts: function () {
+                document.addEventListener('keydown', (e) => {
+                    if (!this.state.isQuizActive) return;
+                    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+                    var key = e.key.toUpperCase();
+                    var map = { '1': 0, '2': 1, '3': 2, '4': 3, 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+                    if (key in map) {
+                        if (!document.getElementById('explanation-box').classList.contains('hidden')) return;
+                        var idx = map[key]; var btn = document.getElementById(`opt-btn-${idx}`); if (btn) this.selectOption(idx, btn);
+                    }
+                    if (key === 'ENTER') {
+                        e.preventDefault();
+                        var submitBtn = document.getElementById('btn-submit-choice');
+                        var resultBox = document.getElementById('explanation-box');
+                        if (!resultBox.classList.contains('hidden')) { this.nextQuestion(); return; }
+                        if (submitBtn) { this.submitAnswer(); }
+                    }
+                    if (key === 'B') { this.toggleBookmark(); }
+                });
+            },
+            loadData: function () {
+                var saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) { this.data = { ...this.data, ...JSON.parse(saved) }; }
+                if (!Array.isArray(this.data.history)) this.data.history = [];
+                if (!Array.isArray(this.data.bookmarks)) this.data.bookmarks = [];
+                if (!Array.isArray(this.data.questions)) this.data.questions = [];
+                if (this.data.textSizeLevel === undefined) this.data.textSizeLevel = 1;
+                this.updateDashboard(); this.applyTextSize();
+            },
+            save: function () {
+                if (this.data.history.length > 100) this.data.history = this.data.history.slice(-100);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data)); this.updateDashboard();
+            },
+            toggleTheme: function () { this.data.theme = this.data.theme === 'dark' ? 'light' : 'dark'; this.applyTheme(); this.save(); },
+            applyTheme: function () {
+                var html = document.documentElement; var circle = document.getElementById('theme-toggle-circle');
+                if (this.data.theme === 'dark') { html.classList.add('dark'); if (circle) circle.classList.add('translate-x-5'); }
+                else { html.classList.remove('dark'); if (circle) circle.classList.remove('translate-x-5'); }
+                if (this.state && !this.state.isQuizActive) setTimeout(() => this.renderActivityStats(), 50);
+            },
+            switchTab: function (tab) {
+                if (tab !== 'quiz-view') this.state.isQuizActive = false;
+                var bottomNav = document.getElementById('bottom-nav');
+                if (bottomNav) { if (tab === 'quiz-view') bottomNav.classList.add('translate-y-full'); else bottomNav.classList.remove('translate-y-full'); }
+
+                ['dashboard', 'ai', 'history', 'create', 'quiz-view', 'settings', 'coding'].forEach(id => {
+                    document.getElementById('tab-' + id)?.classList.add('hidden');
+                    var btn = document.getElementById('nav-' + id);
+                    if (btn) { btn.classList.remove('bg-white', 'text-amber-600', 'shadow-sm', 'dark:bg-stone-700', 'dark:text-white'); btn.classList.add('text-stone-600', 'dark:text-stone-400'); }
+                    var bBtn = document.getElementById('bottom-nav-' + id);
+                    if (bBtn) { bBtn.classList.remove('text-amber-600', 'dark:text-amber-400'); bBtn.classList.add('text-stone-400'); }
+                });
+
+                var target = document.getElementById('tab-' + tab);
+                if (target) {
+                    target.classList.remove('hidden');
+                    var activeBtn = document.getElementById('nav-' + tab);
+                    if (activeBtn) { activeBtn.classList.remove('text-stone-600', 'dark:text-stone-400'); activeBtn.classList.add('bg-white', 'text-amber-600', 'shadow-sm', 'dark:bg-stone-700', 'dark:text-white'); }
+                    var activeBBtn = document.getElementById('bottom-nav-' + tab);
+                    if (activeBBtn) { activeBBtn.classList.remove('text-stone-400'); activeBBtn.classList.add('text-amber-600', 'dark:text-amber-400'); }
+
+                    requestAnimationFrame(() => {
+                        if (tab === 'dashboard') { this.renderChapters(); this.updateDashboard(); }
+                        if (tab === 'history') this.renderHistory();
+                        if (tab === 'create') creator.renderUserQuestions();
+                        if (tab === 'ai') aiTutor.updateWeaknessDisplay();
+                    });
+                }
+            },
+            updateDashboard: function () {
+                var total = this.data.questions.length;
+                var answered = Object.keys(this.data.results).length;
+                var correct = Object.values(this.data.results).filter(Boolean).length;
+                document.getElementById('stat-total').innerText = total;
+                document.getElementById('stat-rate').innerText = answered ? Math.round((correct / answered) * 100) + '%' : '0%';
+                var wrongs = this.data.questions.filter(q => this.data.results[q.id] === false);
+                document.getElementById('wrong-count').innerText = wrongs.length;
+                document.getElementById('btn-review').disabled = wrongs.length === 0;
+                document.getElementById('bookmark-count').innerText = this.data.bookmarks.length;
+                document.getElementById('btn-bookmark').disabled = this.data.bookmarks.length === 0;
+                var userQCount = this.data.questions.filter(q => q.id.includes('user')).length;
+                if (document.getElementById('user-q-count')) document.getElementById('user-q-count').innerText = userQCount;
+
+                var resumeDiv = document.getElementById('resume-container');
+                if (this.data.resumeData && this.data.resumeData.queueIds?.length > 0) {
+                    resumeDiv.classList.remove('hidden');
+                    document.getElementById('resume-info').innerText = `${this.data.resumeData.modeName} - ${this.data.resumeData.currentIdx + 1}/${this.data.resumeData.queueIds.length}問目から`;
+                } else { resumeDiv.classList.add('hidden'); }
+
+                setTimeout(() => this.renderChapters(), 10);
+                setTimeout(() => this.renderActivityStats(), 10);
+            },
+            renderChapters: function () {
+                var grid = document.getElementById('chapter-grid');
+                if (!grid) return;
+                grid.innerHTML = '';
+                if (this.data.questions.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full py-12 text-center text-stone-400 bg-white dark:bg-darkcard border-2 border-dashed rounded-xl"><p>データがありません。「データ読み込み」からJSONファイルを読み込んでください。</p></div>';
+                    return;
+                }
+                var chapters = {};
+                this.data.questions.forEach(q => {
+                    if (!q || !q.id || q.id.includes('user')) return;
+                    var key = 'others'; var lower = q.id.toLowerCase(); var cat = q.category || "";
+                    if (cat.includes('模擬')) return;
+                    if (lower.startsWith('ai-')) key = 'ai'; else if (lower.startsWith('best-')) key = 'best'; else if (lower.includes('final') || cat.includes('最終')) key = 'final';
+                    else { var m = lower.match(/^(?:ch|chapter)?(\d+)[-_]/); if (m) key = parseInt(m[1]); }
+                    if (!chapters[key]) chapters[key] = { count: 0, correct: 0 };
+                    chapters[key].count++; if (this.data.results[q.id]) chapters[key].correct++;
+                });
+                Object.keys(chapters).sort((a, b) => {
+                    var order = { 'final': 100, 'best': 101, 'ai': 102, 'others': 999 };
+                    return (order[a] || parseInt(a)) - (order[b] || parseInt(b));
+                }).forEach(key => {
+                    var c = chapters[key]; var rate = Math.round((c.correct / c.count) * 100);
+                    var label = key === 'final' ? '最終章' : key === 'ai' ? 'AI生成' : key === 'best' ? '厳選' : key === 'others' ? 'その他' : CHAPTER_TITLES[key] ? `第${key}章 ${CHAPTER_TITLES[key]}` : `第${key}章`;
+                    var color = 'amber';
+                    var btn = document.createElement('button');
+                    btn.className = `drill-card bg-white dark:bg-darkcard p-4 rounded-xl border border-stone-200 dark:border-stone-700 border-b-${color}-500 text-left h-32 flex flex-col justify-between`;
+                    btn.onclick = () => this.startQuiz('chapter', key);
+                    btn.innerHTML = `<div class="font-bold text-stone-700 dark:text-stone-200 text-sm line-clamp-2">${label}</div><div><div class="flex justify-between text-xs text-stone-400 mb-1"><span>正解率</span><span>${rate}%</span></div><div class="w-full bg-stone-100 dark:bg-stone-700 rounded-full h-1.5"><div class="bg-${color}-500 h-1.5 rounded-full" style="width:${rate}%"></div></div></div>`;
+                    grid.appendChild(btn);
+                });
+            },
+            resumeQuiz: function () {
+                var rd = this.data.resumeData;
+                if (!rd || !rd.queueIds) return;
+                var restoredQueue = rd.queueIds.map(id => this.data.questions.find(q => q.id === id)).filter(Boolean);
+                if (restoredQueue.length === 0) { alert("問題データが見つかりません。"); this.data.resumeData = null; this.save(); return; }
+                this.state.queue = restoredQueue; this.state.currentIdx = rd.currentIdx; this.state.modeName = rd.modeName; this.state.sessionStats = rd.sessionStats || { correct: 0, wrongInfo: [] }; this.state.isQuizActive = true;
+                if (this.state.timer) clearInterval(this.state.timer);
+                if (rd.modeName.includes('模擬') || rd.modeName.includes('80問')) {
+                    document.getElementById('quiz-timer').classList.remove('hidden'); var t = 90 * 60;
+                    this.state.timer = setInterval(() => { t--; document.getElementById('quiz-timer').innerText = `⏳ ${Math.floor(t / 60)}:${(t % 60).toString().padStart(2, '0')}`; if (t <= 0) { clearInterval(this.state.timer); this.finishSession(); } }, 1000);
+                } else { document.getElementById('quiz-timer').classList.add('hidden'); }
+                document.getElementById('mode-display').innerText = rd.modeName;
+                this.switchTab('quiz-view'); this.renderQuestion();
+            },
+            startQuiz: function (mode, param) {
+                if (this.data.questions.length === 0) return alert('問題がありません');
+                var list = []; var name = '';
+                if (mode === 'review') { list = this.data.questions.filter(q => this.data.results[q.id] === false); name = '復習'; }
+                else if (mode === 'bookmark') { list = this.data.questions.filter(q => this.data.bookmarks.includes(q.id)); name = 'ブックマーク'; }
+                else if (mode === 'chapter') {
+                    if (param === 'final') list = this.data.questions.filter(q => q.id.includes('final') || (q.category && q.category.includes('模擬')));
+                    else if (param === 'ai') list = this.data.questions.filter(q => q.id.startsWith('ai-'));
+                    else if (param === 'best') list = this.data.questions.filter(q => q.id.startsWith('best-'));
+                    else if (param === 'others') list = this.data.questions.filter(q => !q.id.match(/^(?:ch|chapter)?\d+/) && !q.id.startsWith('ai-') && !q.id.startsWith('best-') && !q.id.includes('final') && !q.id.includes('user'));
+                    else list = this.data.questions.filter(q => { var m = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)/); return m && parseInt(m[1]) === parseInt(param); });
+                    name = CHAPTER_TITLES[param] ? `第${param}章` : (isNaN(param) ? (param === 'final' ? '最終章' : param === 'best' ? '厳選' : 'その他') : `Chapter ${param}`);
+                }
+                else if (mode.startsWith('level')) {
+                    var r1 = /^(?:ch|q)[-_]?(1|2|4|8|9)[-_]/i;
+                    var r2 = /^(?:ch|q)[-_]?(3|5|6)[-_]/i;
+                    var r3 = /^(?:ch|q)[-_]?(7|10|11)[-_]/i;
+                    if (mode === 'level-1') list = this.data.questions.filter(q => q.id.match(r1) && !q.id.includes('user'));
+                    if (mode === 'level-2') list = this.data.questions.filter(q => q.id.match(r2) && !q.id.includes('user'));
+                    if (mode === 'level-3') list = this.data.questions.filter(q => q.id.match(r3) && !q.id.includes('user'));
+                    list.sort(() => Math.random() - 0.5); list = list.slice(0, 30);
+                    name = (mode === 'level-1') ? '初級 (30問)' : (mode === 'level-2') ? '中級 (30問)' : '上級 (30問)';
+                }
+                else if (mode === 'mock') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40); name = 'クイック模擬'; }
+                else if (mode === 'mock-realistic') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 65); name = '本番形式模擬試験'; }
+                else if (mode === 'user-all') { list = this.data.questions.filter(q => q.id.includes('user')); name = 'オリジナル全問'; }
+                else if (mode === 'user-random') {
+                    var count = parseInt(param) || 10;
+                    list = this.data.questions.filter(q => q.id.includes('user')).sort(() => Math.random() - 0.5).slice(0, count);
+                    name = `オリジナル演習（${list.length}問）`;
+                }
+
+                if (list.length === 0) return alert('該当する問題がありません');
+                if (mode !== 'mock-set' && !mode.startsWith('level')) list.sort(() => Math.random() - 0.5);
+
+                this.state.queue = list; this.state.currentIdx = 0; this.state.modeName = name; this.state.sessionStats = { correct: 0, wrongInfo: [] }; this.state.currentSelection = new Set(); this.state.isQuizActive = true;
+                document.getElementById('mode-display').innerText = name;
+                if (this.state.timer) clearInterval(this.state.timer);
+                if (mode === 'mock' || mode === 'mock-realistic') {
+                    document.getElementById('quiz-timer').classList.remove('hidden'); var t = 90 * 60;
+                    this.state.timer = setInterval(() => { t--; document.getElementById('quiz-timer').innerText = `⏳ ${Math.floor(t / 60)}:${(t % 60).toString().padStart(2, '0')}`; if (t <= 0) { clearInterval(this.state.timer); this.finishSession(); } }, 1000);
+                } else { document.getElementById('quiz-timer').classList.add('hidden'); }
+                this.switchTab('quiz-view'); this.renderQuestion();
+                this.data.resumeData = { queueIds: list.map(q => q.id), currentIdx: 0, modeName: name, sessionStats: this.state.sessionStats };
+                this.save();
+            },
+            startSearchQuiz: function () {
+                var k = document.getElementById('search-input').value.toLowerCase(); if (!k) return;
+                var list = this.data.questions.filter(q => (q.text + q.explanation + q.category).toLowerCase().includes(k));
+                if (list.length === 0) return alert('見つかりませんでした');
+                this.state.queue = list; this.state.currentIdx = 0; this.state.modeName = `検索:${k}`; this.state.sessionStats = { correct: 0, wrongInfo: [] }; this.state.currentSelection = new Set(); this.state.isQuizActive = true;
+                document.getElementById('mode-display').innerText = this.state.modeName; this.switchTab('quiz-view'); this.renderQuestion();
+            },
+            quitQuiz: function () {
+                if (this.state.timer) clearInterval(this.state.timer);
+                this.state.isQuizActive = false;
+                if (this.data.resumeData) this.data.resumeData.currentIdx = this.state.currentIdx;
+                this.save(); this.switchTab('dashboard');
+            },
+            renderQuestion: function () {
+                var q = this.state.queue[this.state.currentIdx]; if (!q) return;
+                document.getElementById('q-current').innerText = this.state.currentIdx + 1; document.getElementById('q-total').innerText = this.state.queue.length; document.getElementById('q-category').innerText = q.category || 'General';
+                document.getElementById('q-text').innerText = q.text + (Array.isArray(q.answer) ? "\n(複数選択)" : "");
+                document.getElementById('quiz-progress').style.width = `${(this.state.currentIdx / this.state.queue.length) * 100}%`;
+                var bmBtn = document.getElementById('btn-quiz-bookmark');
+                if (this.data.bookmarks.includes(q.id)) { bmBtn.classList.add('text-yellow-400'); bmBtn.classList.remove('text-stone-300'); } else { bmBtn.classList.remove('text-yellow-400'); bmBtn.classList.add('text-stone-300'); }
+                var codeEl = document.getElementById('code-content');
+                if (q.code?.trim()) { document.getElementById('code-container').classList.remove('hidden'); codeEl.textContent = q.code; if (typeof Prism !== 'undefined') { Prism.highlightElement(codeEl); } } else { document.getElementById('code-container').classList.add('hidden'); }
+                var optsDiv = document.getElementById('options-list'); optsDiv.innerHTML = '';
+                document.getElementById('explanation-box').classList.add('hidden'); document.getElementById('btn-submit-answer').classList.add('hidden');
+                this.state.currentSelection = new Set();
+                if (Array.isArray(q.options)) {
+                    q.options.forEach((opt, i) => {
+                        var btn = document.createElement('button');
+                        btn.className = "option-btn w-full text-left p-4 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-darkcard hover:bg-amber-50 dark:hover:bg-amber-900/30 flex items-center shadow-sm active:scale-[0.99]";
+                        btn.onclick = () => this.selectOption(i, btn); btn.id = `opt-btn-${i}`;
+                        btn.innerHTML = `<span class="opt-mark w-8 h-8 flex-shrink-0 bg-stone-100 dark:bg-stone-700 text-stone-500 dark:text-stone-300 rounded-full flex items-center justify-center font-bold mr-4 transition">${String.fromCharCode(65 + i)}</span><span class="text-sm font-medium leading-relaxed">${opt}</span>`;
+                        optsDiv.appendChild(btn);
+                    });
+                }
+                document.getElementById('user-note-input').value = q.note || '';
+                if (this.data.resumeData) { this.data.resumeData.currentIdx = this.state.currentIdx; this.save(); }
+            },
+            selectOption: function (i, btn) {
+                var q = this.state.queue[this.state.currentIdx]; var isMulti = Array.isArray(q.answer);
+                if (isMulti) {
+                    if (this.state.currentSelection.has(i)) { this.state.currentSelection.delete(i); btn.classList.remove('option-selected'); } else { this.state.currentSelection.add(i); btn.classList.add('option-selected'); }
+                    if (this.state.currentSelection.size > 0) document.getElementById('btn-submit-answer').classList.remove('hidden'); else document.getElementById('btn-submit-answer').classList.add('hidden');
+                } else { this.check([i]); }
+            },
+            submitAnswer: function () { this.check(Array.from(this.state.currentSelection)); },
+            toggleBookmark: function () {
+                var q = this.state.queue[this.state.currentIdx]; var idx = this.data.bookmarks.indexOf(q.id);
+                if (idx > -1) { this.data.bookmarks.splice(idx, 1); document.getElementById('btn-quiz-bookmark').classList.remove('text-yellow-400'); document.getElementById('btn-quiz-bookmark').classList.add('text-stone-300'); }
+                else { this.data.bookmarks.push(q.id); document.getElementById('btn-quiz-bookmark').classList.add('text-yellow-400'); document.getElementById('btn-quiz-bookmark').classList.remove('text-stone-300'); }
+                this.save();
+            },
+            check: function (userAns) {
+                var q = this.state.queue[this.state.currentIdx]; var cor = Array.isArray(q.answer) ? q.answer : [q.answer];
+                var isCor = JSON.stringify(userAns.sort()) === JSON.stringify(cor.sort());
+                if (isCor) this.state.sessionStats.correct++; else { var c = q.category || "その他"; if (!this.state.sessionStats.wrongInfo.includes(c)) this.state.sessionStats.wrongInfo.push(c); }
+                this.data.results[q.id] = isCor; this.save();
+                document.querySelectorAll('#options-list button').forEach(b => b.disabled = true); document.getElementById('btn-submit-answer').classList.add('hidden');
+                userAns.forEach(i => {
+                    var btn = document.getElementById(`opt-btn-${i}`);
+                    if (btn) {
+                        if (cor.includes(i)) { btn.classList.add('!bg-emerald-50', '!border-emerald-500', 'dark:!bg-emerald-900/30'); btn.querySelector('.opt-mark').classList.add('!bg-emerald-500', '!text-white'); }
+                        else { btn.classList.add('!bg-red-50', '!border-red-500', 'dark:!bg-red-900/30'); btn.querySelector('.opt-mark').classList.add('!bg-red-500', '!text-white'); }
+                    }
+                });
+                cor.forEach(i => {
+                    if (!userAns.includes(i)) {
+                        var btn = document.getElementById(`opt-btn-${i}`);
+                        if (btn) { btn.classList.add('!bg-emerald-50', '!border-emerald-500', 'dark:!bg-emerald-900/30'); btn.querySelector('.opt-mark').classList.add('!bg-emerald-500', '!text-white'); }
+                    }
+                });
+                document.getElementById('explanation-box').classList.remove('hidden');
+                document.getElementById('result-badge').innerHTML = isCor ? '<span class="text-emerald-600">⭕ 正解！</span>' : '<span class="text-red-500">❌ 不正解...</span>';
+                document.getElementById('explanation-text').innerText = `正解: ${cor.map(i => String.fromCharCode(65 + i)).join(', ')}\n\n${q.explanation}`;
+
+                var imgContainer = document.getElementById('explanation-image-container'); var imgEl = document.getElementById('explanation-img');
+                if (q.explanationImage) { imgEl.src = q.explanationImage; imgContainer.classList.remove('hidden'); } else { imgContainer.classList.add('hidden'); }
+                var explanationBox = document.getElementById('explanation-box'); if (window.innerWidth < 768) explanationBox.scrollIntoView({ behavior: 'smooth' });
+            },
+            nextQuestion: function () {
+                this.state.currentIdx++;
+                if (this.state.currentIdx >= this.state.queue.length) this.finishSession(); else { this.renderQuestion(); document.getElementById('tab-quiz-view').scrollTop = 0; }
+            },
+            askAiAboutQuestion: function () {
+                var q = this.state.queue[this.state.currentIdx]; if (!q) return;
+                var userAnsText = Array.from(this.state.currentSelection).map(i => String.fromCharCode(65 + i)).join(', ');
+                var correctAnsText = Array.isArray(q.answer) ? q.answer.map(i => String.fromCharCode(65 + i)).join(', ') : String.fromCharCode(65 + q.answer);
+                var contextData = { text: q.text, code: q.code || "なし", options: q.options ? q.options.map((opt, i) => `${String.fromCharCode(65 + i)}: ${opt}`).join('\n') : "なし", userAns: userAnsText, correctAns: correctAnsText, explanation: q.explanation };
+                this.switchTab('ai'); if (typeof aiTutor !== 'undefined') { aiTutor.prefillQuestion(contextData); }
+            },
+            finishSession: function () {
+                if (this.state.timer) clearInterval(this.state.timer);
+                this.state.isQuizActive = false; this.data.resumeData = null;
+                var log = { date: Date.now(), correct: this.state.sessionStats.correct, total: this.state.queue.length, mode: this.state.modeName, weak: [...new Set(this.state.sessionStats.wrongInfo)] };
+                this.data.history.push(log); this.save();
+                var rate = Math.round((log.correct / log.total) * 100);
+                document.getElementById('res-score').innerText = log.correct; document.getElementById('res-total').innerText = log.total; document.getElementById('res-rate').innerText = rate + '%';
+
+                var isMock = this.state.modeName.includes('模擬');
+                var judgmentBox = document.getElementById('res-judgment'); var badge = document.getElementById('res-judgment-badge'); var msg = document.getElementById('res-judgment-msg');
+                var weaknessBox = document.getElementById('res-weakness-box'); var weaknessList = document.getElementById('res-weakness-list');
+
+                if (isMock) {
+                    judgmentBox.classList.remove('hidden'); var passLine = 65;
+                    if (rate >= passLine) {
+                        badge.className = 'inline-block px-6 py-2 rounded-full text-xl font-bold shadow-sm bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400';
+                        badge.innerText = '🎉 合格レベル'; msg.innerText = '素晴らしい！この調子で本番も頑張りましょう！'; document.getElementById('res-icon').innerText = '🏆'; document.getElementById('res-title').innerText = '試験終了！';
+                    } else {
+                        badge.className = 'inline-block px-6 py-2 rounded-full text-xl font-bold shadow-sm bg-rose-100 text-rose-700 dark:bg-rose-900/50 dark:text-rose-400';
+                        badge.innerText = '💦 不合格レベル'; msg.innerText = `合格まであと ${passLine - rate}% です。復習しましょう！`; document.getElementById('res-icon').innerText = '📚'; document.getElementById('res-title').innerText = '試験終了！';
+                    }
+                } else { judgmentBox.classList.add('hidden'); document.getElementById('res-icon').innerText = '🎉'; document.getElementById('res-title').innerText = 'お疲れ様でした！'; }
+
+                if (log.weak && log.weak.length > 0) {
+                    weaknessBox.classList.remove('hidden'); var weakCounts = {}; this.state.sessionStats.wrongInfo.forEach(c => weakCounts[c] = (weakCounts[c] || 0) + 1);
+                    var sortedWeaks = Object.entries(weakCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+                    weaknessList.innerHTML = sortedWeaks.map(w => `<li class="flex justify-between items-center"><span class="line-clamp-1">・${w[0]}</span><span class="text-xs bg-red-200 text-red-700 dark:bg-red-800 dark:text-red-200 px-2 py-0.5 rounded-full">${w[1]}問ミス</span></li>`).join('');
+                } else { weaknessBox.classList.add('hidden'); }
+
+                document.getElementById('session-result').classList.remove('hidden');
+            },
+            closeSessionResult: function () { document.getElementById('session-result').classList.add('hidden'); this.switchTab('history'); },
+            saveNote: function () {
+                var q = this.state.queue[this.state.currentIdx]; var note = document.getElementById('user-note-input').value;
+                var target = this.data.questions.find(item => item.id === q.id); if (target) target.note = note; this.save(); alert('メモを保存しました📝');
+            }
         };
 
         var dataManager = {
             importData: function (input) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const json = JSON.parse(e.target.result);
-                        app.data.questions = [...app.data.questions, ...(json.questions || json)];
-                        app.save(); app.updateDashboard(); alert('Gold問題集をインポートしました！');
-                    } catch (e) { alert('JSONエラー'); }
-                };
-                reader.readAsText(input.files[0]);
+                if (input.files.length === 0) return;
+                var readers = Array.from(input.files).map(file => new Promise(r => { var reader = new FileReader(); reader.onload = e => r(e.target.result); reader.readAsText(file); }));
+                Promise.all(readers).then(results => {
+                    var qCount = 0; var hCount = 0; var updateCount = 0; var newQs = [];
+                    var seenIds = new Set(app.data.questions.map(q => q.id)); var existingHistoryDates = new Set(app.data.history.map(h => h.date));
+                    results.forEach(res => {
+                        try {
+                            var json = JSON.parse(res); var questionsSource = Array.isArray(json) ? json : (json.questions || []);
+                            questionsSource.forEach(q => {
+                                if (q.id) {
+                                    if (!seenIds.has(q.id)) { newQs.push(q); seenIds.add(q.id); qCount++; }
+                                    else { var idx = app.data.questions.findIndex(existing => existing.id === q.id); if (idx !== -1) { app.data.questions[idx] = q; updateCount++; } }
+                                }
+                            });
+                            if (!Array.isArray(json) && json.history) { json.history.forEach(h => { if (!existingHistoryDates.has(h.date)) { app.data.history.push(h); existingHistoryDates.add(h.date); hCount++; } }); }
+                            if (!Array.isArray(json) && json.results) { app.data.results = { ...app.data.results, ...json.results }; }
+                            if (!Array.isArray(json) && json.bookmarks) { var newBm = json.bookmarks.filter(b => !app.data.bookmarks.includes(b)); app.data.bookmarks = [...app.data.bookmarks, ...newBm]; }
+                        } catch (e) { console.error("JSON Parse Error:", e); alert("一部のファイルを読み込めませんでした。JSON形式を確認してください。"); }
+                    });
+                    if (qCount > 0 || hCount > 0 || updateCount > 0) {
+                        if (qCount > 0) app.data.questions = [...app.data.questions, ...newQs];
+                        app.data.history.sort((a, b) => a.date - b.date); app.save();
+                        var msg = `読み込み完了！\n`; if (qCount > 0) msg += `・新規追加: ${qCount}問\n`; if (updateCount > 0) msg += `・上書き更新: ${updateCount}問\n`; if (hCount > 0) msg += `・履歴同期: ${hCount}件\n`; alert(msg);
+                        app.updateDashboard(); if (typeof aiTutor !== 'undefined') aiTutor.updateWeaknessDisplay(); if (typeof creator !== 'undefined') creator.renderUserQuestions();
+                    } else { alert('新しいデータは見つかりませんでした。\n（すでに全て最新の状態か、データの形式が異なります）'); }
+                    input.value = '';
+                });
+            },
+            resetAll: function () { if (confirm('全てのデータを削除しますか？\n（学習履歴も消えます）')) { localStorage.removeItem(STORAGE_KEY); location.reload(); } },
+            generateDemoData: function () {
+                var now = Date.now();
+                var dummyHistory = [
+                    { date: now - 10000000, correct: 5, total: 10, mode: '第1章', weak: ['Javaの基礎 (Interface, Nested Class)'] },
+                    { date: now - 5000000, correct: 2, total: 5, mode: '第3章', weak: ['関数型プログラミング (Stream API)'] },
+                    { date: now, correct: 8, total: 10, mode: '模擬試験', weak: ['並列処理 (Concurrency)', 'モジュールシステム (詳細)'] }
+                ];
+                app.data.history = [...app.data.history, ...dummyHistory]; app.save(); alert('テスト用の学習履歴を追加しました。「記録」タブを確認してください。'); app.renderHistory();
             },
             exportData: function () {
-                const blob = new Blob([JSON.stringify(app.data, null, 2)], { type: "application/json" });
-                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `java_gold_dojo.json`; a.click();
-            },
-            resetAll: function () { if (confirm('Goldデータを全削除しますか？')) { localStorage.removeItem(STORAGE_KEY); location.reload(); } },
-            generateDemoData: function () {
-                app.data.questions.push({ id: 'demo1', category: CHAPTER_TITLES[3], text: 'Stream APIの中間操作でないものは？', options: ['filter', 'map', 'forEach', 'peek'], answer: 2, explanation: 'forEachは終端操作です。' });
-                app.save(); app.updateDashboard(); alert('サンプル問題を追加しました');
+                var dataStr = JSON.stringify(app.data, null, 2); var blob = new Blob([dataStr], { type: "application/json" }); var url = URL.createObjectURL(blob);
+                var a = document.createElement('a'); a.href = url; a.download = `java_gold_data_${new Date().toISOString().slice(0, 10)}.json`; a.click();
             }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            app.init();
-            document.getElementById('create-explanation')?.addEventListener('paste', (e) => creator.handlePaste(e));
+            if (typeof app !== 'undefined') { app.init(); } else { alert("Critical Error: App module not loaded. Please check console."); }
         });
     </script>
 </body>
