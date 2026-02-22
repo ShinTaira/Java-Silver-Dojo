@@ -1078,9 +1078,34 @@
                     </div>
                 </div>
                 <div class="mt-6 mb-6">
-                    <button onclick="app.askAiAboutQuestion()" id="btn-ask-ai-context"
-                        class="w-full bg-amber-50 text-amber-700 font-bold py-3 rounded-xl border border-amber-200 flex items-center justify-center gap-2 dark:bg-amber-900/30 dark:text-amber-300"><span>🤖
-                            この問題についてAI先生に質問する</span></button>
+                    <button onclick="app.toggleInlineAi()" id="btn-inline-ai-toggle"
+                        class="w-full bg-amber-50 text-amber-700 font-bold py-3 rounded-xl border border-amber-200 flex items-center justify-center gap-2 dark:bg-amber-900/30 dark:text-amber-300 hover:bg-amber-100 transition">
+                        <span>🤖 この問題についてAI先生に質問する</span>
+                    </button>
+                    <div id="inline-ai-area"
+                        class="hidden mt-4 bg-white dark:bg-darkcard p-4 rounded-xl shadow-sm border border-stone-200 dark:border-stone-700">
+                        <textarea id="inline-ai-input"
+                            class="w-full bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-600 rounded-lg p-3 text-sm outline-none dark:text-white mb-3"
+                            rows="2" placeholder="ここがわからない、もっと詳しく教えて..."></textarea>
+                        <button onclick="app.sendInlineAiQuestion()" id="btn-inline-ai-send"
+                            class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 rounded-lg shadow-md transition disabled:opacity-50">質問を送信</button>
+
+                        <div id="inline-ai-loading" class="hidden mt-4 flex flex-col items-center">
+                            <div class="loader mb-2 border-t-amber-600"></div>
+                            <p class="text-xs text-stone-500 animate-pulse">AI先生が考えています...</p>
+                        </div>
+
+                        <div id="inline-ai-output"
+                            class="hidden mt-4 pt-4 border-t border-stone-100 dark:border-stone-700">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="text-xl">🤖</span><span
+                                    class="font-bold text-sm text-stone-700 dark:text-stone-200">AI先生の回答</span>
+                            </div>
+                            <div id="inline-ai-response"
+                                class="text-sm leading-relaxed ai-response whitespace-pre-wrap text-stone-700 dark:text-stone-300">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1907,6 +1932,12 @@
                 }
                 document.getElementById('user-note-input').value = q.note || '';
                 if (this.data.resumeData) { this.data.resumeData.currentIdx = this.state.currentIdx; this.save(); }
+                var inlineAiArea = document.getElementById('inline-ai-area');
+                if (inlineAiArea) inlineAiArea.classList.add('hidden');
+                var inlineAiOutput = document.getElementById('inline-ai-output');
+                if (inlineAiOutput) inlineAiOutput.classList.add('hidden');
+                var inlineAiInput = document.getElementById('inline-ai-input');
+                if (inlineAiInput) inlineAiInput.value = '';
             },
             selectOption: function (i, btn) {
                 var q = this.state.queue[this.state.currentIdx]; var isMulti = Array.isArray(q.answer);
@@ -1953,12 +1984,50 @@
                 this.state.currentIdx++;
                 if (this.state.currentIdx >= this.state.queue.length) this.finishSession(); else { this.renderQuestion(); document.getElementById('tab-quiz-view').scrollTop = 0; }
             },
-            askAiAboutQuestion: function () {
+            toggleInlineAi: function () {
+                var area = document.getElementById('inline-ai-area');
+                if (area.classList.contains('hidden')) {
+                    area.classList.remove('hidden');
+                    document.getElementById('inline-ai-input').focus();
+                } else {
+                    area.classList.add('hidden');
+                }
+            },
+            sendInlineAiQuestion: async function () {
+                var apiKey = localStorage.getItem('gemini_api_key');
+                if (!apiKey) { alert("AI先生機能を使うには、設定タブでGemini API Keyを設定してください。"); return; }
+                var model = localStorage.getItem('gemini_api_model') || 'gemini-2.5-flash';
+
                 var q = this.state.queue[this.state.currentIdx]; if (!q) return;
+                var userQ = document.getElementById('inline-ai-input').value.trim() || "この問題について、なぜその正解になるのか詳しく解説してください。";
+
                 var userAnsText = Array.from(this.state.currentSelection).map(i => String.fromCharCode(65 + i)).join(', ');
                 var correctAnsText = Array.isArray(q.answer) ? q.answer.map(i => String.fromCharCode(65 + i)).join(', ') : String.fromCharCode(65 + q.answer);
-                var contextData = { text: q.text, code: q.code || "なし", options: q.options ? q.options.map((opt, i) => `${String.fromCharCode(65 + i)}: ${opt}`).join('\n') : "なし", userAns: userAnsText, correctAns: correctAnsText, explanation: q.explanation };
-                this.switchTab('ai'); if (typeof aiTutor !== 'undefined') { aiTutor.prefillQuestion(contextData); }
+
+                var prompt = `あなたはJava資格試験のベテラン講師です。生徒から以下の問題について質問が来ました。\n\n【質問内容】\n${userQ}\n\n【問題データ】\n問題文:\n${q.text}\n\nコード:\n\`\`\`java\n${q.code || "なし"}\n\`\`\`\n\n選択肢:\n${q.options ? q.options.map((opt, i) => `${String.fromCharCode(65 + i)}: ${opt}`).join('\n') : "なし"}\n\n生徒の回答: ${userAnsText || "未回答"}\n正解: ${correctAnsText}\n元の解説: ${q.explanation}\n\n【指示】\n生徒の質問に対して、元の解説とは違うアプローチで、なぜその正解になるのか、どこにつまずきやすいのかを丁寧に解説してください。Markdown形式で見やすく整形してください。`;
+
+                var btnSend = document.getElementById('btn-inline-ai-send');
+                var loading = document.getElementById('inline-ai-loading');
+                var outputArea = document.getElementById('inline-ai-output');
+                var contentDiv = document.getElementById('inline-ai-response');
+
+                btnSend.disabled = true; loading.classList.remove('hidden'); outputArea.classList.add('hidden');
+
+                try {
+                    var res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    });
+                    if (!res.ok) throw new Error(res.statusText);
+                    var data = await res.json();
+                    var text = data.candidates[0].content.parts[0].text;
+
+                    if (typeof marked !== 'undefined') {
+                        contentDiv.innerHTML = marked.parse(text);
+                        if (typeof Prism !== 'undefined') setTimeout(() => { contentDiv.querySelectorAll('pre code').forEach((block) => { block.classList.add('language-java'); Prism.highlightElement(block); }); }, 10);
+                    } else { contentDiv.innerText = text; }
+                    outputArea.classList.remove('hidden');
+                } catch (e) { alert(`AI通信エラー: ${e.message}`); } finally { btnSend.disabled = false; loading.classList.add('hidden'); }
             },
             finishSession: function () {
                 if (this.state.timer) clearInterval(this.state.timer);
