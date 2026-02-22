@@ -433,6 +433,9 @@
                         <button onclick="app.switchTab('coding')" id="nav-coding"
                             class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">💻
                             実践</button>
+                        <button onclick="app.switchTab('history')" id="nav-history"
+                            class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">📈
+                            記録</button>
                         <button onclick="app.switchTab('ai')" id="nav-ai"
                             class="nav-item px-3 py-1.5 text-sm font-medium rounded-md transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">AI先生</button>
 
@@ -1060,6 +1063,13 @@
                     </div>
                 </div>
 
+                <div
+                    class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-xl p-6 text-center">
+                    <h3 class="text-lg font-bold text-indigo-800 dark:text-indigo-300 mb-2">🚪 ポータル画面に戻る</h3>
+                    <p class="text-xs text-indigo-600 dark:text-indigo-400 mb-4">試験の選択画面 (Bronze/Silver/Gold) に戻ります。</p>
+                    <a href="index.html"
+                        class="inline-block bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-indigo-700 transition">ポータルへ移動</a>
+                </div>
                 <div class="text-center text-xs text-slate-400 mt-4">
                     <p>Java Silver Dojo Ver 17.1</p>
                     <p>Storage Key: javaSilverDojo_GlobalData</p>
@@ -1110,16 +1120,10 @@
         <div id="tab-quiz-view" class="absolute inset-0 overflow-y-auto p-4 bg-[#f8fafc] dark:bg-darkbg hidden z-50">
             <div class="max-w-3xl mx-auto pb-20 fade-in mt-4">
                 <div class="flex justify-between items-center mb-6">
-                    <div class="flex gap-2">
-                        <button onclick="app.quitQuiz()"
-                            class="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold flex items-center gap-1 p-2 transition">
-                            <span class="text-lg">←</span> 中断
-                        </button>
-                        <a href="index.html"
-                            class="text-xs bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-3 py-2 rounded-lg font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition flex items-center gap-1">
-                            🏠 ホーム
-                        </a>
-                    </div>
+                    <button onclick="app.quitQuiz()"
+                        class="text-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg font-bold hover:bg-slate-300 dark:hover:bg-slate-600 transition flex items-center gap-2 shadow-sm">
+                        <span class="text-lg leading-none">←</span> 演習をやめる
+                    </button>
                     <div class="text-xs font-mono text-slate-500 dark:text-slate-400 bg-white dark:bg-darkcard border border-slate-200 dark:border-slate-600 px-3 py-1 rounded-full shadow-sm"
                         id="mode-display">Random</div>
                 </div>
@@ -1304,29 +1308,34 @@
     </main>
 
     <nav id="bottom-nav"
-        class="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-darkcard border-t border-slate-200 dark:border-slate-700 z-40 pb-safe transition-transform duration-300 transform translate-y-0 flex justify-around px-2 py-2">
+        class="md:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-darkcard border-t border-slate-200 dark:border-slate-700 z-40 pb-safe transition-transform duration-300 transform translate-y-0 flex justify-between px-1 py-2">
         <button onclick="app.switchTab('dashboard')" id="bottom-nav-dashboard"
-            class="flex flex-col items-center p-2 text-indigo-600 dark:text-indigo-400 w-1/5">
+            class="flex-1 flex flex-col items-center p-1 text-indigo-600 dark:text-indigo-400 transition">
             <span class="text-xl mb-1">🏠</span>
             <span class="text-[10px] font-bold">ホーム</span>
         </button>
         <button onclick="app.switchTab('create')" id="bottom-nav-create"
-            class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-1/5 transition">
+            class="flex-1 flex flex-col items-center p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
             <span class="text-xl mb-1">📝</span>
             <span class="text-[10px] font-bold">作成</span>
         </button>
         <button onclick="app.switchTab('coding')" id="bottom-nav-coding"
-            class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-1/5 transition">
+            class="flex-1 flex flex-col items-center p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
             <span class="text-xl mb-1">💻</span>
             <span class="text-[10px] font-bold">実践</span>
         </button>
+        <button onclick="app.switchTab('history')" id="bottom-nav-history"
+            class="flex-1 flex flex-col items-center p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
+            <span class="text-xl mb-1">📈</span>
+            <span class="text-[10px] font-bold">記録</span>
+        </button>
         <button onclick="app.switchTab('ai')" id="bottom-nav-ai"
-            class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-1/5 transition">
+            class="flex-1 flex flex-col items-center p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
             <span class="text-xl mb-1">🤖</span>
             <span class="text-[10px] font-bold">AI先生</span>
         </button>
         <button onclick="app.switchTab('settings')" id="bottom-nav-settings"
-            class="flex flex-col items-center p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-1/5 transition">
+            class="flex-1 flex flex-col items-center p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
             <span class="text-xl mb-1">⚙️</span>
             <span class="text-[10px] font-bold">設定</span>
         </button>

@@ -468,7 +468,8 @@
 
                 <div class="mb-8">
                     <h3 class="text-base font-bold text-slate-700 dark:text-slate-200 mb-3 flex items-center gap-2">
-                        <span class="text-xl">📊</span> レベル別演習 (各30問)</h3>
+                        <span class="text-xl">📊</span> レベル別演習 (各30問)
+                    </h3>
                     <div class="grid grid-cols-3 gap-4">
                         <button onclick="app.startQuiz('level-1')"
                             class="bg-gradient-to-br from-orange-300 to-amber-400 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative overflow-hidden group text-left">
@@ -506,7 +507,8 @@
                         <div>
                             <h3
                                 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-2 flex items-center gap-2">
-                                <span class="text-lg">🔤</span> 重要単語帳</h3>
+                                <span class="text-lg">🔤</span> 重要単語帳
+                            </h3>
                             <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">コードを読むための必須単語をマスターしよう！</p>
                         </div>
                         <button onclick="vocabMaster.start()"
@@ -517,7 +519,8 @@
                         <div>
                             <h3
                                 class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-1 flex items-center gap-2">
-                                <span class="text-lg">🔖</span> ブックマーク</h3>
+                                <span class="text-lg">🔖</span> ブックマーク
+                            </h3>
                             <p class="text-xs text-slate-400">保存済み: <span id="bookmark-count"
                                     class="font-bold text-slate-700 dark:text-slate-300">0</span> 問</p>
                         </div>
@@ -558,7 +561,8 @@
                         <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
                             <span>📚 オリジナル問題集</span><span
                                 class="bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 text-[10px] px-2 py-0.5 rounded font-bold">User
-                                Made</span></h3>
+                                Made</span>
+                        </h3>
                     </div>
                     <div
                         class="bg-gradient-to-br from-slate-800 to-slate-900 dark:from-slate-900 dark:to-black rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group border border-slate-700">
@@ -596,7 +600,8 @@
 
                 <div class="mb-10">
                     <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <span>⏱️ 本番形式 模擬試験</span></h3>
+                        <span>⏱️ 本番形式 模擬試験</span>
+                    </h3>
                     <div
                         class="bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
                         <div
@@ -713,7 +718,8 @@
                     <div
                         class="border-b border-slate-100 dark:border-slate-700 p-5 bg-slate-50 dark:bg-slate-800 flex justify-between items-center">
                         <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                            <span>📝 問題を作成</span></h2>
+                            <span>📝 問題を作成</span>
+                        </h2>
                         <span
                             class="text-xs bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 px-2 py-1 rounded font-bold">User
                             Studio</span>
@@ -733,7 +739,8 @@
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M19 9l-7 7-7-7"></path>
-                                        </svg></div>
+                                        </svg>
+                                    </div>
                                 </div>
                                 <input type="hidden" id="create-cat-name" value="">
                             </div>
@@ -822,7 +829,8 @@
                                 <div class="absolute top-0 right-0 p-4 opacity-5 text-9xl">💊</div>
                                 <h3
                                     class="font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2 relative z-10">
-                                    <span class="text-xl">🚑</span> 苦手克服サポート</h3>
+                                    <span class="text-xl">🚑</span> 苦手克服サポート
+                                </h3>
                                 <div id="weakness-advice-list" class="space-y-4 relative z-10"></div>
                             </div>
                         </div>
@@ -885,7 +893,8 @@
                             class="hidden bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4 mb-6 border text-slate-800 dark:text-slate-200">
                             <div class="flex justify-between items-center mb-2">
                                 <h4 class="text-xs font-bold text-orange-700 uppercase flex items-center gap-1">
-                                    <span>📝</span> 質問する問題</h4>
+                                    <span>📝</span> 質問する問題
+                                </h4>
                                 <button onclick="aiTutor.clearQuestionContext()" class="text-xs text-slate-400">✕
                                     クリア</button>
                             </div>
@@ -985,6 +994,13 @@
                     </div>
                 </div>
 
+                <div
+                    class="bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800 rounded-xl p-6 text-center">
+                    <h3 class="text-lg font-bold text-orange-800 dark:text-orange-300 mb-2">🚪 ポータル画面に戻る</h3>
+                    <p class="text-xs text-orange-600 dark:text-orange-400 mb-4">試験の選択画面 (Bronze/Silver/Gold) に戻ります。</p>
+                    <a href="index.html"
+                        class="inline-block bg-orange-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-orange-700 transition">ポータルへ移動</a>
+                </div>
                 <div class="text-center text-xs text-slate-400 mt-4">
                     <p>Java Bronze Dojo Ver 1.0</p>
                     <p>Storage Key: javaBronzeDojo_GlobalData</p>
@@ -1061,7 +1077,8 @@
 
                         <div class="bg-orange-50 dark:bg-orange-900/20 rounded-xl p-4 border border-orange-100 mb-6">
                             <h4 class="text-xs font-bold text-orange-600 uppercase flex items-center gap-1 mb-2">
-                                <span>✏️</span> 自分用メモ</h4>
+                                <span>✏️</span> 自分用メモ
+                            </h4>
                             <textarea id="user-note-input"
                                 class="w-full bg-white dark:bg-slate-800 border rounded-lg p-3 text-sm outline-none dark:text-white"
                                 rows="2" placeholder="ここが間違えやすい..."></textarea>

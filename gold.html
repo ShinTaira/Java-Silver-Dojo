@@ -451,7 +451,8 @@
 
                 <div class="mb-8">
                     <h3 class="text-base font-bold text-stone-700 dark:text-stone-200 mb-3 flex items-center gap-2">
-                        <span class="text-xl">📊</span> レベル別演習 (各30問)</h3>
+                        <span class="text-xl">📊</span> レベル別演習 (各30問)
+                    </h3>
                     <div class="grid grid-cols-3 gap-4">
                         <button onclick="app.startQuiz('level-1')"
                             class="bg-gradient-to-br from-amber-400 to-yellow-500 text-white p-4 rounded-xl shadow-lg hover:scale-[1.02] transition relative overflow-hidden group text-left">
@@ -489,7 +490,8 @@
                         <div>
                             <h3
                                 class="text-sm font-bold text-stone-700 dark:text-stone-200 mb-2 flex items-center gap-2">
-                                <span class="text-lg">🔤</span> 重要単語帳 (Gold編)</h3>
+                                <span class="text-lg">🔤</span> 重要単語帳 (Gold編)
+                            </h3>
                             <p class="text-xs text-stone-500 dark:text-stone-400 mb-4">APIや専門用語の必須単語をマスターしよう！</p>
                         </div>
                         <button onclick="vocabMaster.start()"
@@ -500,7 +502,8 @@
                         <div>
                             <h3
                                 class="text-sm font-bold text-stone-700 dark:text-stone-200 mb-2 flex items-center gap-2">
-                                <span class="text-lg">🔍</span> キーワード検索演習</h3>
+                                <span class="text-lg">🔍</span> キーワード検索演習
+                            </h3>
                             <div class="flex gap-2 mb-4">
                                 <input type="text" id="search-input"
                                     class="flex-1 bg-stone-50 dark:bg-stone-800 border rounded-lg px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-amber-500 transition dark:text-white"
@@ -554,7 +557,8 @@
                         <h3 class="text-lg font-bold text-stone-700 dark:text-stone-200 flex items-center gap-2">
                             <span>📚 オリジナル問題集</span><span
                                 class="bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 text-[10px] px-2 py-0.5 rounded font-bold">User
-                                Made</span></h3>
+                                Made</span>
+                        </h3>
                     </div>
                     <div
                         class="bg-gradient-to-br from-stone-800 to-stone-900 dark:from-stone-900 dark:to-black rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group border border-stone-700">
@@ -592,7 +596,8 @@
 
                 <div class="mb-10">
                     <h3 class="text-lg font-bold text-stone-700 dark:text-stone-200 mb-4 flex items-center gap-2">
-                        <span>⏱️ 本番形式 模擬試験</span></h3>
+                        <span>⏱️ 本番形式 模擬試験</span>
+                    </h3>
                     <div
                         class="bg-gradient-to-br from-red-600 to-rose-700 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
                         <div
@@ -709,7 +714,8 @@
                     <div
                         class="border-b border-stone-100 dark:border-stone-700 p-5 bg-stone-50 dark:bg-stone-800 flex justify-between items-center">
                         <h2 class="text-lg font-bold text-stone-700 dark:text-stone-200 flex items-center gap-2">
-                            <span>📝 問題を作成</span></h2>
+                            <span>📝 問題を作成</span>
+                        </h2>
                         <span
                             class="text-xs bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 px-2 py-1 rounded font-bold">User
                             Studio</span>
@@ -729,7 +735,8 @@
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M19 9l-7 7-7-7"></path>
-                                        </svg></div>
+                                        </svg>
+                                    </div>
                                 </div>
                                 <input type="hidden" id="create-cat-name" value="">
                             </div>
@@ -818,7 +825,8 @@
                                 <div class="absolute top-0 right-0 p-4 opacity-5 text-9xl">💊</div>
                                 <h3
                                     class="font-bold text-stone-700 dark:text-stone-200 mb-4 flex items-center gap-2 relative z-10">
-                                    <span class="text-xl">🚑</span> 苦手克服サポート</h3>
+                                    <span class="text-xl">🚑</span> 苦手克服サポート
+                                </h3>
                                 <div id="weakness-advice-list" class="space-y-4 relative z-10"></div>
                             </div>
                         </div>
@@ -881,7 +889,8 @@
                             class="hidden bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 mb-6 border text-stone-800 dark:text-stone-200">
                             <div class="flex justify-between items-center mb-2">
                                 <h4 class="text-xs font-bold text-yellow-700 uppercase flex items-center gap-1">
-                                    <span>📝</span> 質問する問題</h4>
+                                    <span>📝</span> 質問する問題
+                                </h4>
                                 <button onclick="aiTutor.clearQuestionContext()" class="text-xs text-stone-400">✕
                                     クリア</button>
                             </div>
@@ -992,6 +1001,13 @@
                     class="hidden text-center text-xl font-mono font-bold text-stone-700 mb-6 bg-amber-50 py-2 rounded-lg border border-amber-200 dark:bg-amber-900/20 dark:text-stone-200">
                     ⏳ 90:00</div>
 
+                <div
+                    class="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-xl p-6 text-center">
+                    <h3 class="text-lg font-bold text-amber-800 dark:text-amber-300 mb-2">🚪 ポータル画面に戻る</h3>
+                    <p class="text-xs text-amber-600 dark:text-amber-400 mb-4">試験の選択画面 (Bronze/Silver/Gold) に戻ります。</p>
+                    <a href="index.html"
+                        class="inline-block bg-amber-600 text-white px-8 py-3 rounded-xl font-bold shadow-md hover:bg-amber-700 transition">ポータルへ移動</a>
+                </div>
                 <div class="text-center text-[10px] text-stone-400 mb-2 font-mono hidden md:block">[Key: 1-4:Select,
                     Enter:Submit/Next]</div>
 
@@ -1043,7 +1059,8 @@
 
                         <div class="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-4 border border-amber-100 mb-6">
                             <h4 class="text-xs font-bold text-amber-500 uppercase flex items-center gap-1 mb-2">
-                                <span>✏️</span> 自分用メモ</h4>
+                                <span>✏️</span> 自分用メモ
+                            </h4>
                             <textarea id="user-note-input"
                                 class="w-full bg-white dark:bg-stone-800 border rounded-lg p-3 text-sm outline-none dark:text-white"
                                 rows="2" placeholder="ここが間違えやすい..."></textarea>
