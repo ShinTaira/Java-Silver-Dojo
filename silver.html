@@ -642,156 +642,163 @@
                                     </p>
                                 </div>
                                 <div class="flex flex-col gap-3">
-                                    <div class="flex flex-col sm:flex-row items-center gap-3">
-                                        <div
-                                            class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 w-full sm:w-auto">
-                                            <label
-                                                class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">出題数</label>
-                                            <select id="shiro-quiz-count"
-                                                class="bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-xs rounded border border-slate-300 dark:border-slate-600 px-2 py-1 outline-none w-full">
-                                                <option value="10">10問</option>
-                                                <option value="30">30問</option>
-                                                <option value="80">80問（本番形式）</option>
-                                            </select>
+                                    <div class="flex flex-col gap-3">
+                                        <div class="flex flex-col sm:flex-row items-center gap-3">
+                                            <div
+                                                class="flex items-center gap-2 bg-white/10 p-2 rounded-lg border border-white/20 w-full sm:w-auto">
+                                                <label
+                                                    class="text-[10px] font-bold text-slate-400 uppercase whitespace-nowrap">出題数</label>
+                                                <select id="user-quiz-count"
+                                                    class="bg-slate-800 text-white text-xs rounded border border-slate-600 px-2 py-1 outline-none w-full">
+                                                    <option value="10">10問</option>
+                                                    <option value="30">30問</option>
+                                                    <option value="80">80問（本番形式）</option>
+                                                </select>
+                                            </div>
+                                            <div class="flex gap-2 w-full sm:w-auto">
+                                                <button
+                                                    onclick="app.startQuiz('user-random', document.getElementById('user-quiz-count').value)"
+                                                    class="flex-1 sm:flex-none px-4 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-sm font-bold transition whitespace-nowrap">ランダム出題</button>
+                                                <button onclick="app.startQuiz('user-all')"
+                                                    class="flex-1 sm:flex-none px-4 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white rounded-lg text-sm font-bold shadow-lg transition whitespace-nowrap">全問解く</button>
+                                            </div>
                                         </div>
-                                        <div class="flex gap-2 w-full sm:w-auto">
+                                        <div class="flex flex-col sm:flex-row items-center gap-3">
+                                            <div
+                                                class="flex items-center gap-2 bg-white/10 p-2 rounded-lg border border-white/20 w-full sm:w-auto">
+                                                <label
+                                                    class="text-[10px] font-bold text-slate-400 uppercase whitespace-nowrap">章を選択</label>
+                                                <select id="user-chapter-select"
+                                                    class="bg-slate-800 text-white text-xs rounded border border-slate-600 px-2 py-1 outline-none w-full">
+                                                    <option value="all">全て</option>
+                                                    <option value="2">第2章</option>
+                                                    <option value="3">第3章</option>
+                                                    <option value="4">第4章</option>
+                                                    <option value="5">第5章</option>
+                                                    <option value="6">第6章</option>
+                                                    <option value="7">第7章</option>
+                                                    <option value="8">第8章</option>
+                                                    <option value="9">第9章</option>
+                                                    <option value="10">第10章</option>
+                                                    <option value="11">第11章</option>
+                                                    <option value="12">第12章</option>
+                                                    <option value="13">第13章</option>
+                                                </select>
+                                            </div>
                                             <button
-                                                onclick="app.startQuiz('shiro-random', document.getElementById('shiro-quiz-count').value)"
-                                                class="flex-1 sm:flex-none px-4 py-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg text-sm font-bold transition whitespace-nowrap">ランダム出題</button>
-                                            <button onclick="app.startQuiz('shiro-all')"
-                                                class="flex-1 sm:flex-none px-4 py-2.5 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm font-bold shadow-md transition whitespace-nowrap">全問解く</button>
+                                                onclick="app.startQuiz('user-chapter', document.getElementById('user-chapter-select').value)"
+                                                class="w-full sm:w-auto px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white border border-slate-500 rounded-lg text-sm font-bold transition">この章を解く</button>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col sm:flex-row items-center gap-3">
-                                        <div
-                                            class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 w-full sm:w-auto">
-                                            <label
-                                                class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">章を選択</label>
-                                            <select id="shiro-chapter-select"
-                                                class="bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-xs rounded border border-slate-300 dark:border-slate-600 px-2 py-1 outline-none w-full">
-                                                <option value="1">第1章</option>
-                                                <option value="2">第2章</option>
-                                                <option value="3">第3章</option>
-                                                <option value="4">第4章</option>
-                                                <option value="5">第5章</option>
-                                                <option value="6">第6章</option>
-                                                <option value="7">第7章</option>
-                                                <option value="8">第8章</option>
-                                                <option value="9">第9章</option>
-                                                <option value="10">第10章</option>
-                                                <option value="11">第11章</option>
-                                                <option value="12">第12章</option>
-                                                <option value="13">第13章</option>
-                                            </select>
-                                        </div>
-                                        <button
-                                            onclick="app.startQuiz('shiro-chapter', document.getElementById('shiro-chapter-select').value)"
-                                            class="w-full sm:w-auto px-5 py-2.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-200 dark:border-indigo-800 rounded-lg text-sm font-bold transition">この章を解く</button>
-                                    </div>
+                                    <button
+                                        onclick="app.startQuiz('shiro-chapter', document.getElementById('shiro-chapter-select').value)"
+                                        class="w-full sm:w-auto px-5 py-2.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-200 dark:border-indigo-800 rounded-lg text-sm font-bold transition">この章を解く</button>
                                 </div>
                             </div>
                         </div>
-
-                        <div
-                            class="bg-gradient-to-br from-slate-100 to-white dark:from-slate-800 dark:to-slate-900 rounded-2xl p-6 text-slate-800 dark:text-white shadow-lg relative overflow-hidden group border border-slate-200 dark:border-slate-700">
-                            <div
-                                class="absolute top-0 right-0 p-8 opacity-5 text-9xl transform translate-x-10 -translate-y-4 select-none">
-                                ⬜️</div>
-                            <div
-                                class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                                <div>
-                                    <h4 class="text-xl font-bold mb-1">白本 問題集</h4>
-                                    <p class="text-slate-500 dark:text-slate-400 text-sm">白本の問題のみを出題<br><span
-                                            class="text-xs opacity-70">※登録数: <span id="shiro-q-count">0</span> 問</span>
-                                    </p>
-                                </div>
-                                <div class="flex flex-col gap-3">
-                                    <div class="flex flex-col sm:flex-row items-center gap-3">
-                                        <div
-                                            class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 w-full sm:w-auto">
-                                            <label
-                                                class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">出題数</label>
-                                            <select id="shiro-quiz-count"
-                                                class="bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-xs rounded border border-slate-300 dark:border-slate-600 px-2 py-1 outline-none w-full">
-                                                <option value="10">10問</option>
-                                                <option value="30">30問</option>
-                                                <option value="80">80問（本番形式）</option>
-                                            </select>
-                                        </div>
-                                        <div class="flex gap-2 w-full sm:w-auto">
-                                            <button
-                                                onclick="app.startQuiz('shiro-random', document.getElementById('shiro-quiz-count').value)"
-                                                class="flex-1 sm:flex-none px-4 py-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg text-sm font-bold transition whitespace-nowrap">ランダム出題</button>
-                                            <button onclick="app.startQuiz('shiro-all')"
-                                                class="flex-1 sm:flex-none px-4 py-2.5 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm font-bold shadow-md transition whitespace-nowrap">全問解く</button>
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-col sm:flex-row items-center gap-3">
-                                        <div
-                                            class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 w-full sm:w-auto">
-                                            <label
-                                                class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">章を選択</label>
-                                            <select id="shiro-chapter-select"
-                                                class="bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-xs rounded border border-slate-300 dark:border-slate-600 px-2 py-1 outline-none w-full">
-                                                <option value="1">第1章</option>
-                                                <option value="2">第2章</option>
-                                                <option value="3">第3章</option>
-                                                <option value="4">第4章</option>
-                                                <option value="5">第5章</option>
-                                                <option value="6">第6章</option>
-                                                <option value="7">第7章</option>
-                                                <option value="8">第8章</option>
-                                                <option value="9">第9章</option>
-                                                <option value="10">第10章</option>
-                                                <option value="11">第11章</option>
-                                                <option value="12">第12章</option>
-                                                <option value="13">第13章</option>
-                                            </select>
-                                        </div>
-                                        <button
-                                            onclick="app.startQuiz('shiro-chapter', document.getElementById('shiro-chapter-select').value)"
-                                            class="w-full sm:w-auto px-5 py-2.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-200 dark:border-indigo-800 rounded-lg text-sm font-bold transition">この章を解く</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-                </div>
-                <div class="mb-10">
-                    <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
-                        <span>⏱️ 本番形式 模擬試験</span>
-                    </h3>
+
                     <div
-                        class="bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
+                        class="bg-gradient-to-br from-slate-100 to-white dark:from-slate-800 dark:to-slate-900 rounded-2xl p-6 text-slate-800 dark:text-white shadow-lg relative overflow-hidden group border border-slate-200 dark:border-slate-700">
                         <div
-                            class="absolute right-0 top-0 p-4 text-8xl opacity-10 group-hover:scale-110 transition select-none">
-                            🎯</div>
+                            class="absolute top-0 right-0 p-8 opacity-5 text-9xl transform translate-x-10 -translate-y-4 select-none">
+                            ⬜️</div>
                         <div
-                            class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                             <div>
-                                <h4 class="text-xl font-bold mb-1">Silver 本番チャレンジ</h4>
-                                <p class="text-red-100 text-sm">実際の試験に近い形式（65問 / 90分）で実力を測定します。<br>合格ライン: 65%以上</p>
+                                <h4 class="text-xl font-bold mb-1">白本 問題集</h4>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm">白本の問題のみを出題<br><span
+                                        class="text-xs opacity-70">※登録数: <span id="shiro-q-count">0</span> 問</span>
+                                </p>
                             </div>
-                            <button onclick="app.startQuiz('mock-realistic')"
-                                class="shrink-0 px-6 py-3 bg-white text-red-600 rounded-xl font-bold shadow-lg hover:bg-red-50 transition active:scale-95">試験開始
-                                ▶</button>
+                            <div class="flex flex-col gap-3">
+                                <div class="flex flex-col sm:flex-row items-center gap-3">
+                                    <div
+                                        class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 w-full sm:w-auto">
+                                        <label
+                                            class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">出題数</label>
+                                        <select id="shiro-quiz-count"
+                                            class="bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-xs rounded border border-slate-300 dark:border-slate-600 px-2 py-1 outline-none w-full">
+                                            <option value="10">10問</option>
+                                            <option value="30">30問</option>
+                                            <option value="80">80問（本番形式）</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex gap-2 w-full sm:w-auto">
+                                        <button
+                                            onclick="app.startQuiz('shiro-random', document.getElementById('shiro-quiz-count').value)"
+                                            class="flex-1 sm:flex-none px-4 py-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-lg text-sm font-bold transition whitespace-nowrap">ランダム出題</button>
+                                        <button onclick="app.startQuiz('shiro-all')"
+                                            class="flex-1 sm:flex-none px-4 py-2.5 bg-slate-600 hover:bg-slate-500 text-white rounded-lg text-sm font-bold shadow-md transition whitespace-nowrap">全問解く</button>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col sm:flex-row items-center gap-3">
+                                    <div
+                                        class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-2 rounded-lg border border-slate-200 dark:border-slate-700 w-full sm:w-auto">
+                                        <label
+                                            class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase whitespace-nowrap">章を選択</label>
+                                        <select id="shiro-chapter-select"
+                                            class="bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-xs rounded border border-slate-300 dark:border-slate-600 px-2 py-1 outline-none w-full">
+                                            <option value="all">全て</option>
+                                            <option value="1">第1章</option>
+                                            <option value="2">第2章</option>
+                                            <option value="3">第3章</option>
+                                            <option value="4">第4章</option>
+                                            <option value="5">第5章</option>
+                                            <option value="6">第6章</option>
+                                            <option value="7">第7章</option>
+                                            <option value="8">第8章</option>
+                                            <option value="9">第9章</option>
+                                            <option value="10">第10章</option>
+                                            <option value="11">第11章</option>
+                                            <option value="12">第12章</option>
+                                            <option value="13">第13章</option>
+                                        </select>
+                                    </div>
+                                    <button
+                                        onclick="app.startQuiz('shiro-chapter', document.getElementById('shiro-chapter-select').value)"
+                                        class="w-full sm:w-auto px-5 py-2.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 border border-indigo-200 dark:border-indigo-800 rounded-lg text-sm font-bold transition">この章を解く</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Chapters Grid -->
-                <div class="mb-12">
-                    <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">📖 章ごとの練習 (Java Silver 公式準拠)
-                    </h3>
-                    <div id="chapter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                        <div
-                            class="col-span-full py-12 text-center text-slate-400 bg-white dark:bg-darkcard border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">
-                            <p>データを読み込むとここに章が表示されます</p>
+                </div>
+            </div>
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4 flex items-center gap-2">
+                    <span>⏱️ 本番形式 模擬試験</span>
+                </h3>
+                <div
+                    class="bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden group">
+                    <div
+                        class="absolute right-0 top-0 p-4 text-8xl opacity-10 group-hover:scale-110 transition select-none">
+                        🎯</div>
+                    <div
+                        class="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h4 class="text-xl font-bold mb-1">Silver 本番チャレンジ</h4>
+                            <p class="text-red-100 text-sm">実際の試験に近い形式（65問 / 90分）で実力を測定します。<br>合格ライン: 65%以上</p>
                         </div>
+                        <button onclick="app.startQuiz('mock-realistic')"
+                            class="shrink-0 px-6 py-3 bg-white text-red-600 rounded-xl font-bold shadow-lg hover:bg-red-50 transition active:scale-95">試験開始
+                            ▶</button>
                     </div>
                 </div>
             </div>
+
+            <!-- Chapters Grid -->
+            <div class="mb-12">
+                <h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">📖 章ごとの練習 (Java Silver 公式準拠)
+                </h3>
+                <div id="chapter-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    <div
+                        class="col-span-full py-12 text-center text-slate-400 bg-white dark:bg-darkcard border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">
+                        <p>データを読み込むとここに章が表示されます</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
 
         <!-- CODING TAB -->
@@ -2829,6 +2836,10 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     list = this.data.questions.filter(q => q.id.includes('user')).sort(() => Math.random() - 0.5).slice(0, count);
                     name = `オリジナル演習（${list.length}問）`;
                 }
+                else if (mode === 'user-chapter') {
+                    list = this.data.questions.filter(q => q.id.includes('user') && q.id.startsWith(`user-${param}-`));
+                    name = `黒本 第${param}章`;
+                }
                 else if (mode === 'shiro-all') { list = this.data.questions.filter(q => q.id.includes('shiro')); name = '白本 全問'; }
                 else if (mode === 'shiro-random') {
                     var count = parseInt(param) || 10;
@@ -2837,8 +2848,13 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 }
 
                 else if (mode === 'shiro-chapter') {
-                    list = this.data.questions.filter(q => q.id.includes('shiro') && q.id.startsWith(`shiro-ch${param}-`));
-                    name = `白本 第${param}章`;
+                    if (param === 'all') {
+                        list = this.data.questions.filter(q => q.id.includes('shiro'));
+                        name = '白本 全章';
+                    } else {
+                        list = this.data.questions.filter(q => q.id.includes('shiro') && q.id.startsWith(`shiro-ch${param}-`));
+                        name = `白本 第${param}章`;
+                    }
                 }
 
                 if (list.length === 0) return alert('該当する問題がありません');
