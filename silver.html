@@ -2836,12 +2836,18 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     name = `オリジナル演習（${list.length}問）`;
                 }
                 else if (mode === 'user-chapter') {
-                    // ★黒本プルダウンの「全て」対応
+                    // プルダウンで選択された章番号（1, 2, 3...）を取得
+                    var chapterNum = param;
+
                     if (param === 'all') {
                         list = this.data.questions.filter(q => q.id.includes('user'));
                         name = '黒本 全章';
                     } else {
-                        list = this.data.questions.filter(q => q.id.startsWith(`user-${param}-`));
+                        // 【修正ポイント】IDの先頭一致ではなく、カテゴリ名に「第○章」が含まれているかで判定する
+                        list = this.data.questions.filter(q => {
+                            return q.id.includes('user') &&
+                                (q.category && q.category.includes(`第${chapterNum}章`));
+                        });
                         name = `黒本 第${param}章`;
                     }
                 }
