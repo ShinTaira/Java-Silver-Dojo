@@ -2757,7 +2757,7 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 var chapters = {};
                 this.data.questions.forEach(q => {
                     if (!q || !q.id) return;
-                    if (q.id.includes('user')) return; // 自作問題を集計から除外
+                    if (q.id.includes('user')) return; // 黒本（自作）は別枠なので除外
                     var key = 'others';
                     var lower = q.id.toLowerCase();
                     var cat = q.category || "";
@@ -2765,7 +2765,11 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     if (lower.startsWith('ai-')) key = 'ai';
                     else if (lower.startsWith('best-')) key = 'best';
                     else if (lower.includes('final') || cat.includes('最終')) key = 'final';
-                    else { var m = lower.match(/^(?:ch|chapter)?(\d+)[-_]/); if (m) key = parseInt(m[1]); }
+                    else {
+                        // 正規表現を修正: shiro-ch1-1 や ch2-1 等から数字を確実に抽出
+                        var m = lower.match(/(?:ch|chapter)(\d+)/);
+                        if (m) key = parseInt(m[1]);
+                    }
                     if (!chapters[key]) chapters[key] = { count: 0, correct: 0 };
                     chapters[key].count++;
                     if (this.data.results[q.id]) chapters[key].correct++;
@@ -2784,15 +2788,14 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     else if (key === 'best') { label = '厳選'; color = 'orange'; }
                     else if (key === 'others') { label = 'その他'; color = 'slate'; }
                     else {
-                        // Use official chapter titles
                         label = CHAPTER_TITLES[key] ? `第${key}章 ${CHAPTER_TITLES[key]}` : `第${key}章`;
                     }
 
                     var btn = document.createElement('button');
                     btn.className = `drill-card bg-white dark:bg-darkcard p-4 rounded-xl border border-slate-200 dark:border-slate-700 border-b-${color}-500 text-left h-32 flex flex-col justify-between`;
-                    btn.onclick = () => this.startQuiz('chapter', key);
+                    // 白本として開始させる
+                    btn.onclick = () => this.startQuiz('shiro-chapter', key);
 
-                    // Truncate long labels for display if needed, but let CSS handle wrap usually
                     btn.innerHTML = `<div class="font-bold text-slate-700 dark:text-slate-200 text-sm line-clamp-2">${label}</div><div><div class="flex justify-between text-xs text-slate-400 mb-1"><span>正解率</span><span>${rate}%</span></div><div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5"><div class="bg-${color}-500 h-1.5 rounded-full" style="width:${rate}%"></div></div></div>`;
                     grid.appendChild(btn);
                 });
@@ -2807,27 +2810,25 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     else if (param === 'ai') list = this.data.questions.filter(q => q.id.startsWith('ai-'));
                     else if (param === 'best') list = this.data.questions.filter(q => q.id.startsWith('best-'));
                     else if (param === 'others') list = this.data.questions.filter(q => !q.id.match(/^(?:ch|chapter)?\d+/) && !q.id.startsWith('ai-') && !q.id.startsWith('best-') && !q.id.includes('final') && !q.id.includes('user'));
-                    else list = this.data.questions.filter(q => { var m = q.id.toLowerCase().match(/^(?:ch|chapter)?(\d+)/); return m && parseInt(m[1]) === parseInt(param); });
-
-                    name = CHAPTER_TITLES[param] ? `第${param}章` : (isNaN(param) ? (param === 'final' ? '最終章' : param === 'best' ? '厳選' : 'その他') : `Chapter ${param}`);
+                    else list = this.data.questions.filter(q => {
+                        var m = q.id.toLowerCase().match(/(?:ch|chapter)(\d+)/);
+                        return m && parseInt(m[1]) === parseInt(param);
+                    });
+                    name = CHAPTER_TITLES[param] ? `第${param}章` : `Chapter ${param}`;
                 }
                 else if (mode.startsWith('level')) {
-                    // Adjust regex for 11 chapters structure
-                    var r1 = /^(?:ch|q)[-_]?(1|2|3|4)[-_]/i; // Ch 1-4
-                    var r2 = /^(?:ch|q)[-_]?(5|6|7|9)[-_]/i; // Ch 5-7, 9 (Array, OOP, API)
-                    var r3 = /^(?:ch|q)[-_]?(8|10|11)[-_]/i; // Ch 8, 10, 11 (Lambda, Exception, Module)
+                    var r1 = /^(?:shiro-ch|user-)(1|2|3|4)[-_]/i;
+                    var r2 = /^(?:shiro-ch|user-)(5|6|7|9)[-_]/i;
+                    var r3 = /^(?:shiro-ch|user-)(8|10|11)[-_]/i;
 
-                    if (mode === 'level-1') list = this.data.questions.filter(q => q.id.match(r1) && !q.id.includes('user'));
-                    if (mode === 'level-2') list = this.data.questions.filter(q => q.id.match(r2) && !q.id.includes('user'));
-                    if (mode === 'level-3') list = this.data.questions.filter(q => q.id.match(r3) && !q.id.includes('user'));
-                    // Add Limit & Shuffle for Levels
+                    if (mode === 'level-1') list = this.data.questions.filter(q => q.id.match(r1));
+                    if (mode === 'level-2') list = this.data.questions.filter(q => q.id.match(r2));
+                    if (mode === 'level-3') list = this.data.questions.filter(q => q.id.match(r3));
                     list.sort(() => Math.random() - 0.5);
                     list = list.slice(0, 30);
-                    name = (mode === 'level-1') ? '初級 (30問)' : (mode === 'level-2') ? '中級 (30問)' : '上級 (30問)';
+                    name = (mode === 'level-1') ? '初級' : (mode === 'level-2') ? '中級' : '上級';
                 }
-                else if (mode === 'mock') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 40); name = 'クイック模擬'; }
-                else if (mode === 'mock-realistic') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 65); name = '本番形式模擬試験'; }
-                else if (mode === 'mock-set') { list = this.data.questions.filter(q => q.category === param); modeName = param; }
+                else if (mode === 'mock-realistic') { list = [...this.data.questions].sort(() => Math.random() - 0.5).slice(0, 65); name = '模擬試験'; }
                 else if (mode === 'user-all') { list = this.data.questions.filter(q => q.id.includes('user')); name = 'オリジナル全問'; }
                 else if (mode === 'user-random') {
                     var count = parseInt(param) || 10;
@@ -2835,8 +2836,14 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     name = `オリジナル演習（${list.length}問）`;
                 }
                 else if (mode === 'user-chapter') {
-                    list = this.data.questions.filter(q => q.id.includes('user') && q.id.startsWith(`user-${param}-`));
-                    name = `黒本 第${param}章`;
+                    // ★黒本プルダウンの「全て」対応
+                    if (param === 'all') {
+                        list = this.data.questions.filter(q => q.id.includes('user'));
+                        name = '黒本 全章';
+                    } else {
+                        list = this.data.questions.filter(q => q.id.startsWith(`user-${param}-`));
+                        name = `黒本 第${param}章`;
+                    }
                 }
                 else if (mode === 'shiro-all') { list = this.data.questions.filter(q => q.id.includes('shiro')); name = '白本 全問'; }
                 else if (mode === 'shiro-random') {
@@ -2844,21 +2851,19 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                     list = this.data.questions.filter(q => q.id.includes('shiro')).sort(() => Math.random() - 0.5).slice(0, count);
                     name = `白本演習（${list.length}問）`;
                 }
-
                 else if (mode === 'shiro-chapter') {
+                    // ★白本プルダウンの「全て」対応
                     if (param === 'all') {
                         list = this.data.questions.filter(q => q.id.includes('shiro'));
                         name = '白本 全章';
                     } else {
-                        list = this.data.questions.filter(q => q.id.includes('shiro') && q.id.startsWith(`shiro-ch${param}-`));
+                        list = this.data.questions.filter(q => q.id.includes('shiro') && q.id.match(new RegExp(`ch${param}-`, 'i')));
                         name = `白本 第${param}章`;
                     }
                 }
 
                 if (list.length === 0) return alert('該当する問題がありません');
-                if (mode !== 'mock-set' && !mode.startsWith('level')) list.sort(() => Math.random() - 0.5);
-
-                this.state.queue = list;
+                this.state.queue = list.sort(() => Math.random() - 0.5);
                 this.state.currentIdx = 0;
                 this.state.modeName = name;
                 this.state.sessionStats = { correct: 0, wrongInfo: [] };
@@ -2866,7 +2871,8 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                 this.state.isQuizActive = true;
                 document.getElementById('mode-display').innerText = name;
                 if (this.state.timer) clearInterval(this.state.timer);
-                if (mode === 'mock' || mode === 'mock-realistic') {
+
+                if (mode.includes('mock')) {
                     document.getElementById('quiz-timer').classList.remove('hidden');
                     var t = 90 * 60;
                     this.state.timer = setInterval(() => {
@@ -2874,10 +2880,11 @@ ${mistakesStr || "（まだ間違いデータがありません）"}
                         if (t <= 0) { clearInterval(this.state.timer); this.finishSession(); }
                     }, 1000);
                 } else { document.getElementById('quiz-timer').classList.add('hidden'); }
+
                 this.switchTab('quiz-view');
                 this.renderQuestion();
                 this.data.resumeData = {
-                    queueIds: list.map(q => q.id), // IDだけ保存
+                    queueIds: this.state.queue.map(q => q.id),
                     currentIdx: 0,
                     modeName: name,
                     sessionStats: this.state.sessionStats
